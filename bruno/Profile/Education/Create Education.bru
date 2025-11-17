@@ -1,0 +1,22 @@
+meta {
+  name: Create Education
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/profile/education
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "institution": "Stanford University",
+    "degree": "Bachelor of Science",
+    "field": "Computer Science",
+    "startDate": "2016-09-01",
+    "endDate": "2020-06-01",
+    "gpa": "3.8"
+  }
+}

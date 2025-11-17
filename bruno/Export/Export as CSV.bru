@@ -1,0 +1,15 @@
+meta {
+  name: Export as CSV
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/export?format=csv
+  body: none
+  auth: none
+}
+
+params:query {
+  format: csv
+}

@@ -1,0 +1,28 @@
+meta {
+  name: Extract PDF Text
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/pdf-extract
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  file: @file(/path/to/your/resume.pdf)
+}
+
+docs {
+  # Extract PDF Text
+  
+  This endpoint extracts text from a PDF file using Python.
+  
+  ## Usage
+  1. Click on the "file" field in the body
+  2. Select "Choose File" and pick a PDF from your computer
+  3. Send the request
+  
+  The response will contain the extracted text from the PDF.
+}

@@ -1,0 +1,22 @@
+meta {
+  name: Update Profile
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/api/profile
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "phone": "+1234567890",
+    "location": "San Francisco, CA",
+    "summary": "Experienced software engineer with 5+ years in full-stack development"
+  }
+}

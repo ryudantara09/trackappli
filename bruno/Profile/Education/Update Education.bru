@@ -1,0 +1,22 @@
+meta {
+  name: Update Education
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/api/profile/education/:id
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "degree": "Master of Science",
+    "gpa": "4.0"
+  }
+}

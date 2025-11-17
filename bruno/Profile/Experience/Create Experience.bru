@@ -1,0 +1,22 @@
+meta {
+  name: Create Experience
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/profile/experience
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "company": "Tech Corp",
+    "position": "Senior Software Engineer",
+    "startDate": "2020-01-01",
+    "endDate": "2023-12-31",
+    "description": "Led development of microservices architecture",
+    "location": "San Francisco, CA"
+  }
+}

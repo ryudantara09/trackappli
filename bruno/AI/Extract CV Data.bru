@@ -1,0 +1,41 @@
+meta {
+  name: Extract CV Data
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/profile/cv
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsImtpZCI6InhRTytBOXhhdDNVRForeEgiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL21teGJqdHptYXJxdmV6a2Fiam56LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI4OWM2YzI1ZS0xZjY2LTQ5YjMtYWVlMi0zODQ5OTFlODY4MTMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzYzMDQxMjc5LCJpYXQiOjE3NjMwMzc2NzksImVtYWlsIjoidGVzdEB0ZXN0LnR0IiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3NjMwMzc2Nzl9XSwic2Vzc2lvbl9pZCI6ImZjMzFmODMyLWY4Y2YtNGM0NS04YTU5LWJlNWI3M2NlZDk2ZCIsImlzX2Fub255bW91cyI6ZmFsc2V9.Vdun1Q6KpzK8Cm1AcHzFGi3P-C5RyKPN1kY21srR4Iw
+}
+
+body:multipart-form {
+  cv: @file(C:/Users/medba/Downloads/CV_2025-10-25_Mohamed_Maatar.pdf)
+}
+
+docs {
+  # Extract CV Data
+  
+  This endpoint extracts structured data from a CV/resume PDF file using AI.
+  
+  ## Requirements
+  - Requires authentication (you need to be logged in)
+  - File must be a PDF
+  - Maximum file size: 10MB
+  
+  ## Usage
+  1. Click on the "cv" field in the body
+  2. Select "Choose File" and pick a PDF resume from your computer
+  3. Send the request
+  
+  The response will contain extracted profile data (experience, education, skills, etc.)
+  
+  ## Note
+  This endpoint requires authentication. You'll need to implement login first or
+  temporarily disable the auth check for testing.
+}

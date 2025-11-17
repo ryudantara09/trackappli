@@ -1,0 +1,21 @@
+meta {
+  name: Update Skill
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/api/profile/skills/:id
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "level": "expert"
+  }
+}
