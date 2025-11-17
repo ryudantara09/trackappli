@@ -1,128 +1,163 @@
 from http.server import BaseHTTPRequestHandler
 import json
 import base64
-import io
+import tempfile
+import os
 import sys
+from pathlib import Path
+import re
 
+# Try different import methods for PyMuPDF
 try:
-    import pdfplumber
-    PDF_LIBRARY = 'pdfplumber'
+    import fitz
 except ImportError:
     try:
-        import PyPDF2
-        PDF_LIBRARY = 'PyPDF2'
+        import pymupdf as fitz
     except ImportError:
-        PDF_LIBRARY = None
+        try:
+            from pymupdf import fitz
+        except ImportError:
+            # For Vercel deployment, we'll handle this gracefully
+            fitz = None
 
+def clean_text(text):
+    """Clean extracted text to remove problematic characters"""
+    if not text:
+        return ""
+
+    # Replace problematic Unicode characters with similar ASCII equivalents
+    replacements = {
+        "\ue04c": "-",  # Replace private use character with dash
+        "\ue000": " ",  # Replace private use character with space
+        "\ue001": " ",
+        "\ue002": " ",
+        "\u2022": "•",  # Bullet point
+        "\u2013": "-",  # En dash
+        "\u2014": "-",  # Em dash
+        "\u2019": "'",  # Right single quotation mark
+        "\u201c": '"',  # Left double quotation mark
+        "\u201d": '"',  # Right double quotation mark
+        "\u00a0": " ",  # Non-breaking space
+    }
+
+    # Apply replacements
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+
+    # Remove any remaining private use characters (U+E000-U+F8FF)
+    text = re.sub(r"[\ue000-\uf8ff]", " ", text)
+
+    # Clean up whitespace
+    text = re.sub(r"\s+", " ", text)  # Multiple spaces to single space
+    text = text.strip()
+
+    return text
+
+def remove_empty_lines(text):
+    lines = text.splitlines()
+    # Filter out empty/whitespace-only lines using a list comprehension
+    non_empty_lines = [line for line in lines if line.strip()]
+    # Join the lines back into a single string with newlines
+    cleaned_text = "\n".join(non_empty_lines)
+    return cleaned_text
+
+def extract_text_with_fitz(pdf_bytes):
+    """Extract content from a PDF as HTML and return cleaned text"""
+    if fitz is None:
+        raise ImportError("PyMuPDF (fitz) not available")
+    
+    try:
+        # Open PDF from bytes
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+
+        full_html = ""
+        for page in doc:
+            full_html += page.get_text("html")
+
+        doc.close()
+
+        # Use regex to find and remove all <img> tags, ignoring case
+        full_html = re.sub(
+            r"<img[^>]*>", "", full_html, flags=re.IGNORECASE | re.DOTALL
+        )
+        full_html = re.sub(
+            r"<span[^>]*>", "", full_html, flags=re.IGNORECASE | re.DOTALL
+        )
+        full_html = re.sub(r"</span>", "", full_html, flags=re.IGNORECASE | re.DOTALL)
+        full_html = re.sub(
+            r"style\s*=\s*([\"']).*?\1", "", full_html, flags=re.IGNORECASE | re.DOTALL
+        )
+        full_html = re.sub(
+            r"<p\s*>&#x[0-9a-fA-F]+;</p>",
+            "",
+            full_html,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        full_html = re.sub(
+            r"^\s*[\r\n]+", "", full_html, flags=re.IGNORECASE | re.DOTALL
+        )
+        full_html = remove_empty_lines(full_html)
+        print('\n\n\nPYTHON CALLED HERE!!!\n\n\n')
+
+        return full_html
+
+    except Exception as e:
+        raise Exception(f"fitz extraction failed: {e}")
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
-        """Handle POST requests for PDF text extraction"""
         try:
-            # Read request body
-            content_length = int(self.headers.get('Content-Length', 0))
-            body = self.rfile.read(content_length)
-            
-            # Parse JSON request
-            try:
-                data = json.loads(body.decode('utf-8'))
-            except json.JSONDecodeError:
-                self.send_error_response(400, 'Invalid JSON in request body')
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            request_body = json.loads(post_data)
+
+            # Extract the base64-encoded PDF content
+            pdf_base64 = request_body.get('pdf_base64')
+
+            if not pdf_base64:
+                self.send_response(400)
+                self.send_header('Content-type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                response = {'error': 'Missing pdf_base64 in request body'}
+                self.wfile.write(json.dumps(response).encode('utf-8'))
                 return
-            
-            # Validate required fields
-            if 'pdf' not in data:
-                self.send_error_response(400, 'Missing required field: pdf')
-                return
-            
-            # Decode base64 PDF
-            try:
-                pdf_bytes = base64.b64decode(data['pdf'])
-            except Exception as e:
-                self.send_error_response(400, f'Invalid base64 encoding: {str(e)}')
-                return
-            
+
+            # Decode the base64 PDF content
+            pdf_bytes = base64.b64decode(pdf_base64)
+
             # Extract text from PDF
-            try:
-                extracted_text = self.extract_text_from_pdf(pdf_bytes)
-            except Exception as e:
-                self.send_error_response(500, f'PDF extraction failed: {str(e)}')
+            extracted_text = extract_text_with_fitz(pdf_bytes)
+            
+            if not extracted_text or len(extracted_text.strip()) < 50:
+                self.send_response(400)
+                self.send_header('Content-type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                response = {'error': 'Unable to extract sufficient text from PDF'}
+                self.wfile.write(json.dumps(response).encode('utf-8'))
                 return
-            
-            # Return success response
-            self.send_json_response(200, {
-                'success': True,
-                'text': extracted_text,
-                'library': PDF_LIBRARY
-            })
-            
+
+            # Clean the final text
+            final_text = clean_text(extracted_text)
+
+            # Send the extracted text as a response
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            response = {'extracted_text': final_text}
+            self.wfile.write(json.dumps(response).encode('utf-8'))
+
         except Exception as e:
-            self.send_error_response(500, f'Internal server error: {str(e)}')
-    
-    def extract_text_from_pdf(self, pdf_bytes):
-        """Extract text from PDF bytes using available library"""
-        if PDF_LIBRARY is None:
-            raise Exception('No PDF library available (pdfplumber or PyPDF2 required)')
-        
-        pdf_file = io.BytesIO(pdf_bytes)
-        extracted_text = []
-        
-        if PDF_LIBRARY == 'pdfplumber':
-            # Use pdfplumber (preferred for better text extraction)
-            try:
-                with pdfplumber.open(pdf_file) as pdf:
-                    if len(pdf.pages) == 0:
-                        raise Exception('PDF has no pages')
-                    
-                    for page in pdf.pages:
-                        text = page.extract_text()
-                        if text:
-                            extracted_text.append(text)
-                    
-                    if not extracted_text:
-                        raise Exception('No text could be extracted from PDF (may be image-based)')
-                    
-                    return '\n\n'.join(extracted_text)
-            except Exception as e:
-                raise Exception(f'pdfplumber extraction failed: {str(e)}')
-        
-        elif PDF_LIBRARY == 'PyPDF2':
-            # Fallback to PyPDF2
-            try:
-                pdf_reader = PyPDF2.PdfReader(pdf_file)
-                
-                if len(pdf_reader.pages) == 0:
-                    raise Exception('PDF has no pages')
-                
-                for page in pdf_reader.pages:
-                    text = page.extract_text()
-                    if text:
-                        extracted_text.append(text)
-                
-                if not extracted_text:
-                    raise Exception('No text could be extracted from PDF (may be image-based)')
-                
-                return '\n\n'.join(extracted_text)
-            except Exception as e:
-                raise Exception(f'PyPDF2 extraction failed: {str(e)}')
-    
-    def send_json_response(self, status_code, data):
-        """Send JSON response"""
-        self.send_response(status_code)
-        self.send_header('Content-Type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.end_headers()
-        self.wfile.write(json.dumps(data).encode('utf-8'))
-    
-    def send_error_response(self, status_code, message):
-        """Send error response"""
-        self.send_json_response(status_code, {
-            'success': False,
-            'error': message
-        })
-    
+            self.send_response(500)
+            self.send_header('Content-type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            response = {'error': f'PDF extraction failed: {str(e)}'}
+            self.wfile.write(json.dumps(response).encode('utf-8'))
+
     def do_OPTIONS(self):
-        """Handle CORS preflight requests"""
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
