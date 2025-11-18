@@ -12,11 +12,8 @@ import { validateRequestBody, createEducationSchema } from '../../../../src/util
  */
 export async function GET() {
   try {
-    // Authenticate user
-    const { userId } = await requireAuth();
-
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
+    // Authenticate user and get authenticated Supabase client
+    const { userId, supabase } = await requireAuth();
 
     // Initialize repository
     const educationRepo = new EducationRepository(supabase);
@@ -39,11 +36,8 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   try {
-    // Authenticate user
-    const { userId } = await requireAuth();
-
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
+    // Authenticate user and get authenticated Supabase client
+    const { userId, supabase } = await requireAuth();
 
     // Validate request body
     const body = await validateRequestBody(request, createEducationSchema);

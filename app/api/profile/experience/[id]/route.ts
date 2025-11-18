@@ -15,11 +15,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Authenticate user
-    await requireAuth();
-
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
+    // Authenticate user and get authenticated Supabase client
+    const { supabase } = await requireAuth();
 
     // Initialize repository
     const experienceRepo = new ExperienceRepository(supabase);
@@ -49,20 +46,11 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Authenticate user
-    await requireAuth();
-
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
+    // Authenticate user and get authenticated Supabase client
+    const { supabase } = await requireAuth();
 
     // Validate request body
     const body = await validateRequestBody(request, updateWorkExperienceSchema);
-
-    // Initialize service for validation
-    const profileService = new ProfileService(supabase);
-    
-    // Validate work experience data
-    profileService.validateWorkExperience(body);
 
     // Initialize repository
     const experienceRepo = new ExperienceRepository(supabase);
@@ -88,11 +76,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Authenticate user
-    await requireAuth();
-
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
+    // Authenticate user and get authenticated Supabase client
+    const { supabase } = await requireAuth();
 
     // Initialize repository
     const experienceRepo = new ExperienceRepository(supabase);

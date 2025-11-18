@@ -12,11 +12,8 @@ import { validateRequestBody, createTechnicalSkillSchema } from '../../../../src
  */
 export async function GET() {
   try {
-    // Authenticate user
-    const { userId } = await requireAuth();
-
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
+    // Authenticate user and get authenticated Supabase client
+    const { userId, supabase } = await requireAuth();
 
     // Initialize repository
     const skillsRepo = new SkillsRepository(supabase);
@@ -39,11 +36,8 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   try {
-    // Authenticate user
-    const { userId } = await requireAuth();
-
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
+    // Authenticate user and get authenticated Supabase client
+    const { userId, supabase } = await requireAuth();
 
     // Validate request body
     const body = await validateRequestBody(request, createTechnicalSkillSchema);

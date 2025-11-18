@@ -7,13 +7,17 @@ meta {
 post {
   url: {{baseUrl}}/api/profile/skills
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
 }
 
 body:json {
   {
     "name": "TypeScript",
-    "level": "advanced",
+    "proficiency": "ADVANCED",
     "category": "Programming Languages"
   }
 }

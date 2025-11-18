@@ -116,7 +116,7 @@ CREATE TABLE technical_skills (
   
   category TEXT NOT NULL,
   name TEXT NOT NULL,
-  proficiency TEXT NOT NULL,
+  proficiency TEXT,
   years_of_exp INTEGER,
   description TEXT,
   verified BOOLEAN NOT NULL DEFAULT FALSE

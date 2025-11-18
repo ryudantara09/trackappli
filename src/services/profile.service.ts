@@ -337,15 +337,14 @@ export class ProfileService {
     if (!data.name || data.name.trim().length === 0) {
       throw new ValidationError('Skill name is required');
     }
-    if (!data.proficiency || data.proficiency.trim().length === 0) {
-      throw new ValidationError('Skill proficiency is required');
-    }
 
-    // Validate proficiency level
-    if (!Object.values(SKILL_PROFICIENCY).includes(data.proficiency as any)) {
-      throw new ValidationError(
-        `Invalid proficiency level. Must be one of: ${Object.values(SKILL_PROFICIENCY).join(', ')}`
-      );
+    // Validate proficiency level only if provided
+    if (data.proficiency && data.proficiency.trim().length > 0) {
+      if (!Object.values(SKILL_PROFICIENCY).includes(data.proficiency as any)) {
+        throw new ValidationError(
+          `Invalid proficiency level. Must be one of: ${Object.values(SKILL_PROFICIENCY).join(', ')}`
+        );
+      }
     }
 
     // Validate years of experience if provided

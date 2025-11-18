@@ -7,16 +7,20 @@ meta {
 post {
   url: {{baseUrl}}/api/applications
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
 }
 
 body:json {
   {
     "company": "Tech Corp",
     "position": "Software Engineer",
-    "status": "applied",
+    "status": "APPLIED",
     "applicationDate": "2024-01-15",
-    "jobUrl": "https://example.com/job",
+    "positionUrl": "https://example.com/job",
     "location": "Remote",
     "salary": "100000-150000",
     "notes": "Great opportunity"

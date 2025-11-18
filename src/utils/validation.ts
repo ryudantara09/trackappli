@@ -235,7 +235,7 @@ export const updateEducationSchema = z.object({
 export const createTechnicalSkillSchema = z.object({
   category: z.string().min(1, 'Category is required'),
   name: z.string().min(1, 'Skill name is required'),
-  proficiency: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'EXPERT']),
+  proficiency: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'EXPERT']).optional(),
   years_of_exp: z.number().int().min(0).max(100).optional(),
   description: z.string().optional(),
   verified: z.boolean().default(false),
@@ -251,6 +251,21 @@ export const updateTechnicalSkillSchema = z.object({
   years_of_exp: z.number().int().min(0).max(100).optional(),
   description: z.string().optional(),
   verified: z.boolean().optional(),
+});
+
+/**
+ * Schema for updating user profile
+ */
+export const updateProfileSchema = z.object({
+  first_name: z.string().max(100).optional(),
+  last_name: z.string().max(100).optional(),
+  email: z.string().email().optional(),
+  phone: z.string().max(20).optional(),
+  location: z.string().max(200).optional(),
+  summary: z.string().max(1000).optional(),
+  website: z.string().url().optional(),
+  linkedin_url: z.string().url().optional(),
+  github_url: z.string().url().optional(),
 });
 
 /**

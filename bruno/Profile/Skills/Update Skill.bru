@@ -7,7 +7,11 @@ meta {
 put {
   url: {{baseUrl}}/api/profile/skills/:id
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
 }
 
 params:path {
@@ -16,6 +20,6 @@ params:path {
 
 body:json {
   {
-    "level": "expert"
+    "proficiency": "EXPERT"
   }
 }

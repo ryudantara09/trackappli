@@ -14,13 +14,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Authenticate user
-    const { userId } = await requireAuth();
+    // Authenticate user and get authenticated Supabase client
+    const { userId, supabase } = await requireAuth();
 
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
-
-    // Initialize service
+    // Initialize service with authenticated Supabase client
     const applicationsService = new ApplicationsService(supabase);
 
     // Parse application ID
@@ -52,13 +49,10 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Authenticate user
-    const { userId } = await requireAuth();
+    // Authenticate user and get authenticated Supabase client
+    const { userId, supabase } = await requireAuth();
 
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
-
-    // Initialize service
+    // Initialize service with authenticated Supabase client
     const applicationsService = new ApplicationsService(supabase);
 
     // Parse application ID
@@ -97,13 +91,10 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Authenticate user
-    const { userId } = await requireAuth();
+    // Authenticate user and get authenticated Supabase client
+    const { userId, supabase } = await requireAuth();
 
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
-
-    // Initialize service
+    // Initialize service with authenticated Supabase client
     const applicationsService = new ApplicationsService(supabase);
 
     // Parse application ID

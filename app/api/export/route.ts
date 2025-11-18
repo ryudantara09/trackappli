@@ -21,11 +21,8 @@ import { createCSVHeaders } from '../../../src/utils/csv';
  */
 export async function GET(request: NextRequest) {
   try {
-    // Authenticate user
-    const { userId } = await requireAuth();
-
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
+    // Authenticate user and get authenticated Supabase client
+    const { userId, supabase } = await requireAuth();
 
     // Initialize export service
     const exportService = new ExportService(supabase);

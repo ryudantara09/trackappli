@@ -7,14 +7,18 @@ meta {
 post {
   url: {{baseUrl}}/api/profile/experience
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
 }
 
 body:json {
   {
     "company": "Tech Corp",
     "position": "Senior Software Engineer",
-    "startDate": "2020-01-01",
+    "start_date": "2020-01-01",
     "endDate": "2023-12-31",
     "description": "Led development of microservices architecture",
     "location": "San Francisco, CA"

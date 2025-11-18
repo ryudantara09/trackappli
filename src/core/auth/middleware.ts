@@ -1,15 +1,17 @@
-import { User } from '@supabase/supabase-js';
+import { User, SupabaseClient } from '@supabase/supabase-js';
 import { createRouteHandlerClient } from './supabase';
 import { AuthenticationError, logError } from '../../utils/errors';
 import { createClient } from '@supabase/supabase-js';
 import { headers } from 'next/headers';
+import { Database } from '../database/types';
 
 /**
- * Authentication result containing user information
+ * Authentication result containing user information and supabase client
  */
 export interface AuthResult {
   user: User;
   userId: string;
+  supabase: SupabaseClient<Database>;
 }
 
 /**
@@ -30,17 +32,21 @@ export interface AuthResult {
  */
 export async function requireAuth(): Promise<AuthResult> {
   try {
-    // Support Bearer token auth for API testing (development only)
-    // In production, users will authenticate via cookies from the browser
-    if (process.env.NODE_ENV === 'development') {
-      const headersList = await headers();
-      const authorization = headersList.get('authorization');
+    // Support Bearer token auth for API access
+    // Check for Bearer token first (for API clients, mobile apps, etc.)
+    const headersList = await headers();
+    const authorization = headersList.get('authorization');
+    
+    if (authorization?.startsWith('Bearer ')) {
+      // Only allow Bearer token auth in development OR if explicitly enabled
+      const allowBearerToken = process.env.NODE_ENV === 'development' || 
+                               process.env.ALLOW_BEARER_TOKEN_AUTH === 'true';
       
-      if (authorization?.startsWith('Bearer ')) {
+      if (allowBearerToken) {
         const token = authorization.substring(7);
         
         // Create a client with the bearer token
-        const supabase = createClient(
+        const supabase = createClient<Database>(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
           {
@@ -61,6 +67,7 @@ export async function requireAuth(): Promise<AuthResult> {
         return {
           user,
           userId: user.id,
+          supabase,
         };
       }
     }
@@ -95,6 +102,7 @@ export async function requireAuth(): Promise<AuthResult> {
     return {
       user,
       userId: user.id,
+      supabase,
     };
   } catch (error) {
     if (error instanceof AuthenticationError) {
@@ -147,6 +155,7 @@ export async function optionalAuth(): Promise<AuthResult | null> {
     return {
       user,
       userId: user.id,
+      supabase,
     };
   } catch (error) {
     logError('optionalAuth', error, { context: 'unexpected' });

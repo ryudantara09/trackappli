@@ -75,12 +75,37 @@ This Bruno collection contains all API endpoints for testing the TrackAppli appl
 5. Test AI extraction features
 6. Test export functionality
 
+## Authentication
+
+Most endpoints require authentication. To test authenticated endpoints:
+
+1. **Get an access token:**
+   - Use the `Auth/Login` endpoint with valid credentials
+   - Copy the `access_token` from the response
+
+2. **Set the token in environment:**
+   - Go to your environment (Local or Production)
+   - Set the `authToken` variable to your access token
+   - All authenticated endpoints will automatically use this token
+
+3. **Endpoints that require authentication:**
+   - All Applications endpoints
+   - All Profile endpoints (Skills, Education, Experience, CV)
+   - All Export endpoints
+
+4. **Endpoints that don't require authentication:**
+   - Health Check
+   - Login
+   - AI Extract Job Posting
+   - PDF Extract Text (Python service)
+   - Test Gemini
+
 ## Notes
 
 - Replace `:id` path parameters with actual IDs from your database
 - For PDF extraction, select a PDF file in the multipart form body
 - AI endpoints require `GOOGLE_GEMINI_API` environment variable to be set
-- Some endpoints may require authentication (to be implemented)
+- Access tokens expire - get a new one if you receive 401 errors
 
 ## Tips
 

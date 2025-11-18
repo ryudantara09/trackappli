@@ -1,10 +1,10 @@
 meta {
-  name: Update Profile
+  name: Create Profile
   type: http
-  seq: 2
+  seq: 1
 }
 
-put {
+post {
   url: {{baseUrl}}/api/profile
   body: json
   auth: bearer
@@ -16,9 +16,9 @@ auth:bearer {
 
 body:json {
   {
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john.doe@example.com",
+    "first_name": "asdasd",
+    "last_name": "dsadsa",
+    "email": "asd.dsa@example.com",
     "phone": "+1234567890",
     "location": "San Francisco, CA",
     "summary": "Experienced software engineer with 5+ years in full-stack development"

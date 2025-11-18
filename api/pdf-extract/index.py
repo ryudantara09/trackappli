@@ -20,6 +20,7 @@ except ImportError:
             # For Vercel deployment, we'll handle this gracefully
             fitz = None
 
+
 def clean_text(text):
     """Clean extracted text to remove problematic characters"""
     if not text:
@@ -53,6 +54,7 @@ def clean_text(text):
 
     return text
 
+
 def remove_empty_lines(text):
     lines = text.splitlines()
     # Filter out empty/whitespace-only lines using a list comprehension
@@ -61,11 +63,12 @@ def remove_empty_lines(text):
     cleaned_text = "\n".join(non_empty_lines)
     return cleaned_text
 
+
 def extract_text_with_fitz(pdf_bytes):
     """Extract content from a PDF as HTML and return cleaned text"""
     if fitz is None:
         raise ImportError("PyMuPDF (fitz) not available")
-    
+
     try:
         # Open PDF from bytes
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
@@ -77,89 +80,102 @@ def extract_text_with_fitz(pdf_bytes):
         doc.close()
 
         # Use regex to find and remove all <img> tags, ignoring case
-        full_html = re.sub(
-            r"<img[^>]*>", "", full_html, flags=re.IGNORECASE | re.DOTALL
-        )
-        full_html = re.sub(
-            r"<span[^>]*>", "", full_html, flags=re.IGNORECASE | re.DOTALL
-        )
+        full_html = re.sub(r"<img[^>]*>", "", full_html, flags=re.IGNORECASE | re.DOTALL)
+        full_html = re.sub(r"<span[^>]*>", "", full_html, flags=re.IGNORECASE | re.DOTALL)
         full_html = re.sub(r"</span>", "", full_html, flags=re.IGNORECASE | re.DOTALL)
-        full_html = re.sub(
-            r"style\s*=\s*([\"']).*?\1", "", full_html, flags=re.IGNORECASE | re.DOTALL
-        )
+        full_html = re.sub(r"style\s*=\s*([\"']).*?\1", "", full_html, flags=re.IGNORECASE | re.DOTALL)
         full_html = re.sub(
             r"<p\s*>&#x[0-9a-fA-F]+;</p>",
             "",
             full_html,
             flags=re.IGNORECASE | re.DOTALL,
         )
-        full_html = re.sub(
-            r"^\s*[\r\n]+", "", full_html, flags=re.IGNORECASE | re.DOTALL
-        )
+        full_html = re.sub(r"^\s*[\r\n]+", "", full_html, flags=re.IGNORECASE | re.DOTALL)
         full_html = remove_empty_lines(full_html)
-        print('\n\n\nPYTHON CALLED HERE!!!\n\n\n')
+        # print("\n\n\nPYTHON CALLED HERE!!!\n\n\n")
 
         return full_html
 
     except Exception as e:
         raise Exception(f"fitz extraction failed: {e}")
 
+
+def process_pdf_extraction(request_body):
+    """Process PDF extraction from request body"""
+    try:
+        # Extract the base64-encoded PDF content
+        pdf_base64 = request_body.get("pdf")
+
+        if not pdf_base64:
+            return {"success": False, "error": "Missing pdf field in request body"}
+
+        # Decode the base64 PDF content
+        pdf_bytes = base64.b64decode(pdf_base64)
+
+        # Extract text from PDF
+        extracted_text = extract_text_with_fitz(pdf_bytes)
+
+        if not extracted_text or len(extracted_text.strip()) < 50:
+            return {"success": False, "error": "Unable to extract sufficient text from PDF"}
+
+        # Clean the final text
+        final_text = clean_text(extracted_text)
+
+        return {"success": True, "text": final_text, "library": "PyMuPDF"}
+
+    except Exception as e:
+        return {"success": False, "error": f"PDF extraction failed: {str(e)}"}
+
+
+# For running as a standalone script (called from Node.js)
+if __name__ == "__main__":
+    try:
+        # Read JSON from stdin
+        input_data = sys.stdin.read()
+        request_body = json.loads(input_data)
+
+        # Process the request
+        result = process_pdf_extraction(request_body)
+
+        # Output JSON result to stdout
+        print(json.dumps(result))
+        sys.exit(0)
+    except Exception as e:
+        error_result = {"success": False, "error": f"Script execution failed: {str(e)}"}
+        print(json.dumps(error_result))
+        sys.exit(1)
+
+
+# For Vercel serverless function
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         try:
-            content_length = int(self.headers['Content-Length'])
+            content_length = int(self.headers["Content-Length"])
             post_data = self.rfile.read(content_length)
             request_body = json.loads(post_data)
 
-            # Extract the base64-encoded PDF content
-            pdf_base64 = request_body.get('pdf_base64')
+            # Process the request
+            result = process_pdf_extraction(request_body)
 
-            if not pdf_base64:
-                self.send_response(400)
-                self.send_header('Content-type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                response = {'error': 'Missing pdf_base64 in request body'}
-                self.wfile.write(json.dumps(response).encode('utf-8'))
-                return
-
-            # Decode the base64 PDF content
-            pdf_bytes = base64.b64decode(pdf_base64)
-
-            # Extract text from PDF
-            extracted_text = extract_text_with_fitz(pdf_bytes)
-            
-            if not extracted_text or len(extracted_text.strip()) < 50:
-                self.send_response(400)
-                self.send_header('Content-type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                response = {'error': 'Unable to extract sufficient text from PDF'}
-                self.wfile.write(json.dumps(response).encode('utf-8'))
-                return
-
-            # Clean the final text
-            final_text = clean_text(extracted_text)
-
-            # Send the extracted text as a response
-            self.send_response(200)
-            self.send_header('Content-type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
+            # Send response
+            status_code = 200 if result.get("success") else 400
+            self.send_response(status_code)
+            self.send_header("Content-type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
-            response = {'extracted_text': final_text}
-            self.wfile.write(json.dumps(response).encode('utf-8'))
+            self.wfile.write(json.dumps(result).encode("utf-8"))
 
         except Exception as e:
             self.send_response(500)
-            self.send_header('Content-type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header("Content-type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
-            response = {'error': f'PDF extraction failed: {str(e)}'}
-            self.wfile.write(json.dumps(response).encode('utf-8'))
+            response = {"success": False, "error": f"Request handling failed: {str(e)}"}
+            self.wfile.write(json.dumps(response).encode("utf-8"))
 
     def do_OPTIONS(self):
         self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()

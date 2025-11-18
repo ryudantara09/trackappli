@@ -12,13 +12,10 @@ import { EXTENSION_HEADER } from '../../../src/config/constants';
  */
 export async function GET(request: NextRequest) {
   try {
-    // Authenticate user
-    const { userId } = await requireAuth();
+    // Authenticate user and get authenticated Supabase client
+    const { userId, supabase } = await requireAuth();
 
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
-
-    // Initialize service
+    // Initialize service with authenticated Supabase client
     const applicationsService = new ApplicationsService(supabase);
 
     // Parse and validate query parameters
@@ -51,13 +48,10 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    // Authenticate user
-    const { userId } = await requireAuth();
+    // Authenticate user - this returns both user and a properly authenticated supabase client
+    const { userId, supabase } = await requireAuth();
 
-    // Get Supabase client
-    const supabase = await createRouteHandlerClient();
-
-    // Initialize service
+    // Initialize service with authenticated Supabase client
     const applicationsService = new ApplicationsService(supabase);
 
     // Validate request body

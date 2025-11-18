@@ -1,19 +1,15 @@
 meta {
-  name: Delete Experience
+  name: Delete Profile
   type: http
   seq: 4
 }
 
 delete {
-  url: {{baseUrl}}/api/profile/experience/:id
+  url: {{baseUrl}}/api/profile
   body: none
   auth: bearer
 }
 
 auth:bearer {
   token: {{authToken}}
-}
-
-params:path {
-  id: 1
 }
