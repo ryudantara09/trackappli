@@ -12,7 +12,7 @@ import { validateRequestBody, updateEducationSchema } from '../../../../../src/u
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -21,8 +21,11 @@ export async function GET(
     // Initialize repository
     const educationRepo = new EducationRepository(supabase);
 
+    // Await params
+    const { id } = await params;
+
     // Get education (RLS ensures user can only access their own)
-    const education = await educationRepo.findById(params.id);
+    const education = await educationRepo.findById(id);
 
     if (!education) {
       throw new NotFoundError('Education');
@@ -43,7 +46,7 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -55,8 +58,11 @@ export async function PUT(
     // Initialize repository
     const educationRepo = new EducationRepository(supabase);
 
+    // Await params
+    const { id } = await params;
+
     // Update education (RLS ensures user can only update their own)
-    const education = await educationRepo.update(params.id, body);
+    const education = await educationRepo.update(id, body);
 
     return NextResponse.json({
       success: true,
@@ -73,7 +79,7 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -82,8 +88,11 @@ export async function DELETE(
     // Initialize repository
     const educationRepo = new EducationRepository(supabase);
 
+    // Await params
+    const { id } = await params;
+
     // Delete education (RLS ensures user can only delete their own)
-    await educationRepo.delete(params.id);
+    await educationRepo.delete(id);
 
     return NextResponse.json({
       success: true,

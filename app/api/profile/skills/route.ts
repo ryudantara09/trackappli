@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
     // Validate skill data
     const skillData = {
       user_id: userId,
+      proficiency: 'BEGINNER' as const, // Default proficiency
       ...body,
     };
     profileService.validateTechnicalSkill(skillData);

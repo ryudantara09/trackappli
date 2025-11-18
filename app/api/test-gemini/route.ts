@@ -11,16 +11,18 @@ export async function GET() {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // Try to list models
-    const models = await genAI.listModels();
+    // Try to get a model to verify API key works
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    
+    // Simple test prompt
+    const result = await model.generateContent('Say "API is working" if you can read this.');
+    const response = result.response;
+    const text = response.text();
     
     return NextResponse.json({
       success: true,
-      models: models.map(m => ({
-        name: m.name,
-        displayName: m.displayName,
-        supportedGenerationMethods: m.supportedGenerationMethods,
-      })),
+      message: 'Gemini API is configured correctly',
+      testResponse: text,
     });
   } catch (error: any) {
     return NextResponse.json({

@@ -12,7 +12,7 @@ import { validateRequestBody, updateTechnicalSkillSchema } from '../../../../../
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -21,8 +21,11 @@ export async function GET(
     // Initialize repository
     const skillsRepo = new SkillsRepository(supabase);
 
+    // Await params
+    const { id } = await params;
+
     // Get skill (RLS ensures user can only access their own)
-    const skill = await skillsRepo.findById(params.id);
+    const skill = await skillsRepo.findById(id);
 
     if (!skill) {
       throw new NotFoundError('Technical skill');
@@ -43,7 +46,7 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -55,8 +58,11 @@ export async function PUT(
     // Initialize repository
     const skillsRepo = new SkillsRepository(supabase);
 
+    // Await params
+    const { id } = await params;
+
     // Update skill (RLS ensures user can only update their own)
-    const skill = await skillsRepo.update(params.id, body);
+    const skill = await skillsRepo.update(id, body);
 
     return NextResponse.json({
       success: true,
@@ -73,7 +79,7 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -82,8 +88,11 @@ export async function DELETE(
     // Initialize repository
     const skillsRepo = new SkillsRepository(supabase);
 
+    // Await params
+    const { id } = await params;
+
     // Delete skill (RLS ensures user can only delete their own)
-    await skillsRepo.delete(params.id);
+    await skillsRepo.delete(id);
 
     return NextResponse.json({
       success: true,

@@ -37,6 +37,15 @@ export interface GetApplicationsParams {
 }
 
 /**
+ * Cache entry structure
+ */
+interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+  expiresAt: number;
+}
+
+/**
  * Centralized API Client
  * 
  * Provides methods for all backend API operations with:
@@ -44,22 +53,87 @@ export interface GetApplicationsParams {
  * - Error handling and typed errors
  * - Authentication token management
  * - Type-safe request/response handling
+ * - Response caching for improved performance
  */
 class ApiClient {
   private baseUrl = '/api';
+  private cache = new Map<string, CacheEntry<any>>();
+  private defaultCacheTTL = 5 * 60 * 1000; // 5 minutes
+
+  /**
+   * Get cached data if available and not expired
+   * 
+   * @param key - Cache key
+   * @returns Cached data or null if not found/expired
+   */
+  private getCached<T>(key: string): T | null {
+    const entry = this.cache.get(key);
+    if (!entry) return null;
+
+    // Check if cache is expired
+    if (Date.now() > entry.expiresAt) {
+      this.cache.delete(key);
+      return null;
+    }
+
+    return entry.data as T;
+  }
+
+  /**
+   * Set cache entry
+   * 
+   * @param key - Cache key
+   * @param data - Data to cache
+   * @param ttl - Time to live in milliseconds (optional)
+   */
+  private setCache<T>(key: string, data: T, ttl?: number): void {
+    const cacheTTL = ttl ?? this.defaultCacheTTL;
+    const entry: CacheEntry<T> = {
+      data,
+      timestamp: Date.now(),
+      expiresAt: Date.now() + cacheTTL,
+    };
+    this.cache.set(key, entry);
+  }
+
+  /**
+   * Clear cache for a specific key or all cache
+   * 
+   * @param key - Cache key (optional, clears all if not provided)
+   */
+  public clearCache(key?: string): void {
+    if (key) {
+      this.cache.delete(key);
+    } else {
+      this.cache.clear();
+    }
+  }
 
   /**
    * Generic request method with error handling
    * 
    * @param endpoint - API endpoint path
    * @param options - Fetch options
+   * @param useCache - Whether to use cache for GET requests
    * @returns Parsed JSON response
    * @throws ApiError on request failure
    */
   private async request<T>(
     endpoint: string,
-    options?: RequestInit
+    options?: RequestInit,
+    useCache: boolean = true
   ): Promise<T> {
+    // Check cache for GET requests
+    const method = options?.method?.toUpperCase() || 'GET';
+    const cacheKey = `${method}:${endpoint}`;
+    
+    if (method === 'GET' && useCache) {
+      const cached = this.getCached<T>(cacheKey);
+      if (cached) {
+        return cached;
+      }
+    }
+
     try {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         ...options,
@@ -81,6 +155,22 @@ class ApiClient {
           data.code,
           data.details
         );
+      }
+
+      // Cache successful GET requests
+      if (method === 'GET' && useCache) {
+        this.setCache(cacheKey, data);
+      }
+
+      // Invalidate cache on mutations
+      if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+        // Clear all application-related cache
+        this.clearCache('GET:/applications');
+        // Clear specific application cache if ID is in endpoint
+        const idMatch = endpoint.match(/\/applications\/(\d+)/);
+        if (idMatch) {
+          this.clearCache(`GET:/applications/${idMatch[1]}`);
+        }
       }
 
       return data;

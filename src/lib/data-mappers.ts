@@ -118,6 +118,12 @@ export class ApplicationMapper {
     if (frontend.tags !== undefined) {
       backendData.tags = frontend.tags;
     }
+    if (frontend.cvPath !== undefined) {
+      backendData.cv_path = frontend.cvPath;
+    }
+    if (frontend.coverLetterPath !== undefined) {
+      backendData.cover_letter_path = frontend.coverLetterPath;
+    }
 
     return backendData;
   }

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -17,9 +18,14 @@ module.exports = {
         'status-withdrawn': '#6B7280',
         'neutral-bg-light': '#F9FAFB',
         'neutral-bg-dark': '#111827',
+        'neutral-surface-dark': '#1F2937',
         'neutral-border-light': '#E5E7EB',
         'neutral-border-dark': '#374151',
         'neutral-gray': '#6B7280',
+        'neutral-text-primary-light': '#111827',
+        'neutral-text-primary-dark': '#F9FAFB',
+        'neutral-text-secondary-dark': '#9CA3AF',
+        'brand-highlight': '#F59E0B',
         'error': '#EF4444',
       },
       fontFamily: {
@@ -56,4 +62,7 @@ module.exports = {
     },
   },
   plugins: [],
+  safelist: [
+    'text-highlight',
+  ],
 };

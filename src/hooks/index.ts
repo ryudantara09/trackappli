@@ -23,5 +23,9 @@ export type {
   UseToastReturn 
 } from './useToast';
 
+export { useProfile } from './useProfile';
+
+export { useCVExtraction } from './useCVExtraction';
+
 // Re-export useAuth from contexts for convenience
 export { useAuth } from '../contexts/AuthContext';

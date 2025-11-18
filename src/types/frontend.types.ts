@@ -67,6 +67,8 @@ export interface ApplicationFormData {
   softSkills?: string[];
   jobType?: JobType;
   tags?: string[];
+  cvPath?: string;
+  coverLetterPath?: string;
 }
 
 /**
