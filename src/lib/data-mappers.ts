@@ -48,7 +48,7 @@ export class ApplicationMapper {
       company: backend.companyName || '',
       location: backend.jobLocation || '',
       status: this.mapStatusToFrontend(backend.status),
-      dateApplied: backend.appliedAt.toISOString(),
+      dateApplied: backend.appliedAt ? backend.appliedAt.toISOString() : new Date().toISOString(),
       url: backend.positionUrl,
       description: backend.description || undefined,
       notes: backend.notes || undefined,
