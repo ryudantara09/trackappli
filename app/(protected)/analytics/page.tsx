@@ -1,7 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@/components/ui/Icon';
+import { apiClient } from '@/lib/api-client';
+import { ApplicationMapper } from '@/lib/data-mappers';
+import { FrontendApplication, ApplicationStatus } from '@/types/frontend.types';
+import { AsyncContent } from '@/components/ui/AsyncContent';
 
 interface StatCard {
   title: string;
@@ -12,42 +16,123 @@ interface StatCard {
 }
 
 const AnalyticsPage: React.FC = () => {
-  // Mock data for demonstration
-  const stats: StatCard[] = [
-    { title: 'Response Rate', value: '68%', change: '+12%', trend: 'up', positive: true },
-    { title: 'Avg. Time to Response', value: '5.2 days', change: '-1.3 days', trend: 'down', positive: true },
-    { title: 'Interview Rate', value: '42%', change: '+8%', trend: 'up', positive: true },
-    { title: 'Success Rate', value: '15%', change: '+3%', trend: 'up', positive: true },
-  ];
+  const [applications, setApplications] = useState<FrontendApplication[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const recentActivity = [
-    { company: 'Google', action: 'Moved to Interview', date: '2 hours ago', type: 'success' },
-    { company: 'Meta', action: 'Application Submitted', date: '1 day ago', type: 'info' },
-    { company: 'Netflix', action: 'Rejected', date: '2 days ago', type: 'error' },
-    { company: 'Amazon', action: 'Offer Received', date: '3 days ago', type: 'success' },
-  ];
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        setLoading(true);
+        const apps = await apiClient.getApplications();
+        setApplications(apps);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to fetch applications:', err);
+        setError('Failed to load analytics data');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const topCompanies = [
-    { name: 'Google', applications: 12, interviews: 5, offers: 2 },
-    { name: 'Meta', applications: 8, interviews: 3, offers: 1 },
-    { name: 'Amazon', applications: 10, interviews: 4, offers: 1 },
-    { name: 'Microsoft', applications: 7, interviews: 2, offers: 0 },
-    { name: 'Apple', applications: 6, interviews: 2, offers: 1 },
-  ];
+    fetchApplications();
+  }, []);
 
-  const monthlyData = [
-    { month: 'Jan', applied: 15, interviews: 6, offers: 2 },
-    { month: 'Feb', applied: 18, interviews: 8, offers: 3 },
-    { month: 'Mar', applied: 22, interviews: 10, offers: 4 },
-    { month: 'Apr', applied: 25, interviews: 12, offers: 5 },
-    { month: 'May', applied: 20, interviews: 9, offers: 3 },
-    { month: 'Jun', applied: 28, interviews: 14, offers: 6 },
-  ];
+  // Calculate real stats from applications
+  const calculateStats = (): StatCard[] => {
+    if (applications.length === 0) {
+      return [
+        { title: 'Total Applications', value: '0', change: '0%', trend: 'up', positive: true },
+        { title: 'Interview Rate', value: '0%', change: '0%', trend: 'up', positive: true },
+        { title: 'Offer Rate', value: '0%', change: '0%', trend: 'up', positive: true },
+        { title: 'Success Rate', value: '0%', change: '0%', trend: 'up', positive: true },
+      ];
+    }
 
-  const maxApplied = Math.max(...monthlyData.map(d => d.applied));
+    const total = applications.length;
+    const interviews = applications.filter(app => 
+      app.status === ApplicationStatus.INTERVIEW
+    ).length;
+    const offers = applications.filter(app => 
+      app.status === ApplicationStatus.OFFER
+    ).length;
+    const rejected = applications.filter(app => 
+      app.status === ApplicationStatus.REJECTED
+    ).length;
+
+    const interviewRate = total > 0 ? Math.round((interviews / total) * 100) : 0;
+    const offerRate = total > 0 ? Math.round((offers / total) * 100) : 0;
+    const successRate = total > 0 ? Math.round((offers / total) * 100) : 0;
+
+    return [
+      { title: 'Total Applications', value: total.toString(), change: '0%', trend: 'up', positive: true },
+      { title: 'Interview Rate', value: `${interviewRate}%`, change: '0%', trend: 'up', positive: true },
+      { title: 'Offer Rate', value: `${offerRate}%`, change: '0%', trend: 'up', positive: true },
+      { title: 'Success Rate', value: `${successRate}%`, change: '0%', trend: 'up', positive: true },
+    ];
+  };
+
+  // Get recent activity from applications
+  const getRecentActivity = () => {
+    return applications
+      .sort((a, b) => new Date(b.dateApplied).getTime() - new Date(a.dateApplied).getTime())
+      .slice(0, 5)
+      .map(app => ({
+        company: app.company,
+        action: `Status: ${app.status}`,
+        date: new Date(app.dateApplied).toLocaleDateString(),
+        type: app.status === ApplicationStatus.OFFER ? 'success' :
+              app.status === ApplicationStatus.REJECTED ? 'error' : 'info'
+      }));
+  };
+
+  // Get top companies by application count
+  const getTopCompanies = () => {
+    const companyMap = new Map<string, { applications: number; interviews: number; offers: number }>();
+    
+    applications.forEach(app => {
+      const existing = companyMap.get(app.company) || { applications: 0, interviews: 0, offers: 0 };
+      existing.applications++;
+      if (app.status === ApplicationStatus.INTERVIEW) existing.interviews++;
+      if (app.status === ApplicationStatus.OFFER) existing.offers++;
+      companyMap.set(app.company, existing);
+    });
+
+    return Array.from(companyMap.entries())
+      .map(([name, stats]) => ({ name, ...stats }))
+      .sort((a, b) => b.applications - a.applications)
+      .slice(0, 5);
+  };
+
+  // Get monthly data
+  const getMonthlyData = () => {
+    const monthMap = new Map<string, { applied: number; interviews: number; offers: number }>();
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    applications.forEach(app => {
+      const date = new Date(app.dateApplied);
+      const monthKey = `${months[date.getMonth()]} ${date.getFullYear()}`;
+      const existing = monthMap.get(monthKey) || { applied: 0, interviews: 0, offers: 0 };
+      existing.applied++;
+      if (app.status === ApplicationStatus.INTERVIEW) existing.interviews++;
+      if (app.status === ApplicationStatus.OFFER) existing.offers++;
+      monthMap.set(monthKey, existing);
+    });
+
+    return Array.from(monthMap.entries())
+      .map(([month, stats]) => ({ month, ...stats }))
+      .slice(-6);
+  };
+
+  const stats = calculateStats();
+  const recentActivity = getRecentActivity();
+  const topCompanies = getTopCompanies();
+  const monthlyData = getMonthlyData();
+  const maxApplied = monthlyData.length > 0 ? Math.max(...monthlyData.map(d => d.applied)) : 1;
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-8">
+    <AsyncContent isLoading={loading} error={error}>
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-neutral-text-primary-light">Analytics & Insights</h1>
@@ -186,7 +271,8 @@ const AnalyticsPage: React.FC = () => {
           </table>
         </div>
       </div>
-    </div>
+      </div>
+    </AsyncContent>
   );
 };
 
