@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 import { FrontendApplication, ApplicationStatus } from '@/types/frontend.types';
@@ -16,12 +16,13 @@ import {
 } from '@/components/ui/Icon';
 
 interface ApplicationDetailsPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function ApplicationDetailsPage({ params }: ApplicationDetailsPageProps) {
+  const { id } = use(params);
   const router = useRouter();
   const { showSuccess, showError } = useToastContext();
   
@@ -33,12 +34,12 @@ export default function ApplicationDetailsPage({ params }: ApplicationDetailsPag
   // Fetch application data
   useEffect(() => {
     loadApplication();
-  }, [params.id]);
+  }, [id]);
 
   const loadApplication = async () => {
     try {
       setLoading(true);
-      const data = await apiClient.getApplication(params.id);
+      const data = await apiClient.getApplication(id);
       setApplication(data);
     } catch (error) {
       showError(error instanceof Error ? error.message : 'Failed to load application');
@@ -59,7 +60,7 @@ export default function ApplicationDetailsPage({ params }: ApplicationDetailsPag
 
   const handleUpdateApplication = async (updatedApp: FrontendApplication) => {
     try {
-      const updated = await apiClient.updateApplication(params.id, {
+      const updated = await apiClient.updateApplication(id, {
         position: updatedApp.position,
         company: updatedApp.company,
         location: updatedApp.location,
@@ -88,7 +89,7 @@ export default function ApplicationDetailsPage({ params }: ApplicationDetailsPag
 
     try {
       setIsDeleting(true);
-      await apiClient.deleteApplication(params.id);
+      await apiClient.deleteApplication(id);
       showSuccess('Application deleted successfully!');
       router.push('/applications');
     } catch (error) {
@@ -101,7 +102,7 @@ export default function ApplicationDetailsPage({ params }: ApplicationDetailsPag
     if (!application) return;
 
     try {
-      const updated = await apiClient.updateApplication(params.id, {
+      const updated = await apiClient.updateApplication(id, {
         status: newStatus,
       });
       

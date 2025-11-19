@@ -36,22 +36,26 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-neutral-gray">Loading profile...</div>
+      <div className="px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-center h-full min-h-[50vh] text-neutral-gray">
+          Loading profile...
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-red-500">Error: {error}</div>
+      <div className="px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex items-center justify-center h-full min-h-[50vh] text-red-500">
+          Error: {error}
+        </div>
       </div>
     );
   }
 
   return (
-    <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark">
           Profile
@@ -97,7 +101,7 @@ export default function ProfilePage() {
       {activeTab === 'skills' && profile && (
         <SkillsTab skills={profile.technicalSkills} />
       )}
-    </main>
+    </div>
   );
 }
 

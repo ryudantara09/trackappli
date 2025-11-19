@@ -48,22 +48,22 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
 
   return (
     <div 
-      className={`bg-neutral-surface-light p-3 sm:p-4 lg:p-5 rounded-xl border transition-all ${
+      className={`bg-neutral-surface-light dark:bg-neutral-surface-dark p-3 sm:p-4 lg:p-5 rounded-xl border transition-all ${
         onClick 
           ? isActive 
             ? 'border-primary-blue ring-2 ring-primary-blue shadow-md cursor-pointer' 
-            : 'border-neutral-border-light hover:shadow-md hover:border-primary-blue/50 cursor-pointer'
-          : 'border-neutral-border-light hover:shadow-md'
+            : 'border-neutral-border-light dark:border-neutral-border-dark hover:shadow-md hover:border-primary-blue/50 cursor-pointer'
+          : 'border-neutral-border-light dark:border-neutral-border-dark hover:shadow-md'
       }`}
       onClick={onClick}
     >
-      <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
         <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${finalBgClass}`}>
           <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${finalColorClass}`} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-1 sm:gap-2">
-            <p className="text-2xl sm:text-3xl font-bold text-neutral-text-primary-light">{value}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark">{value}</p>
             {trend && (
               <div className={`flex items-center gap-0.5 text-xs font-semibold ${
                 trend.direction === 'up' ? 'text-green-600' : 'text-red-600'
@@ -77,7 +77,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
               </div>
             )}
           </div>
-          <p className="text-xs sm:text-sm text-neutral-gray truncate">{title}</p>
+          <p className="text-xs sm:text-sm text-neutral-gray dark:text-neutral-text-secondary-dark truncate">{title}</p>
         </div>
       </div>
     </div>

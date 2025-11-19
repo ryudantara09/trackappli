@@ -52,12 +52,12 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
             placeholder="Search by position, company, or skills..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-10 pr-10 py-2.5 border border-neutral-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-shadow"
+            className="w-full pl-10 pr-10 py-2.5 border border-neutral-border-light dark:border-neutral-border-dark rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-shadow bg-white dark:bg-neutral-surface-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark placeholder:text-neutral-gray"
           />
           {searchQuery && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-gray hover:text-neutral-text-primary-light"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-gray hover:text-neutral-text-primary-light dark:hover:text-neutral-text-primary-dark"
             >
               <XMarkIcon className="w-5 h-5" />
             </button>
@@ -69,7 +69,7 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
           <select
             value={sortBy}
             onChange={(e) => onSortChange(e.target.value as SortOption)}
-            className="px-3 py-2.5 border border-neutral-border-light rounded-lg text-neutral-gray hover:border-primary-blue focus:outline-none focus:ring-2 focus:ring-primary-blue appearance-none bg-white cursor-pointer pr-8 bg-no-repeat bg-right"
+            className="px-3 py-2.5 border border-neutral-border-light dark:border-neutral-border-dark rounded-lg text-neutral-gray dark:text-neutral-text-primary-dark hover:border-primary-blue focus:outline-none focus:ring-2 focus:ring-primary-blue appearance-none bg-white dark:bg-neutral-surface-dark cursor-pointer pr-8 bg-no-repeat bg-right"
             style={{ 
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5' /%3E%3C/svg%3E")`,
               backgroundSize: '1.25rem',
@@ -88,26 +88,26 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
             className={`px-3 sm:px-4 py-2.5 border rounded-lg flex items-center gap-2 transition-all whitespace-nowrap ${
               hasActiveFilters
                 ? 'bg-primary-blue text-white border-primary-blue'
-                : 'border-neutral-border-light text-neutral-gray hover:border-primary-blue hover:text-primary-blue'
+                : 'border-neutral-border-light dark:border-neutral-border-dark text-neutral-gray dark:text-neutral-text-secondary-dark hover:border-primary-blue hover:text-primary-blue'
             }`}
           >
             <FunnelIcon className="w-5 h-5 flex-shrink-0" />
             <span className="font-medium hidden xs:inline">Filters</span>
             {hasActiveFilters && (
-              <span className="px-1.5 py-0.5 bg-white text-primary-blue text-xs font-bold rounded-full">
+              <span className="px-1.5 py-0.5 bg-white dark:bg-neutral-surface-dark text-primary-blue dark:text-primary-light text-xs font-bold rounded-full">
                 {(selectedStatus !== 'all' ? 1 : 0) + (dateRange !== 'all' ? 1 : 0)}
               </span>
             )}
           </button>
 
           {/* View Mode Toggle */}
-          <div className="flex border border-neutral-border-light rounded-lg overflow-hidden flex-shrink-0">
+          <div className="flex border border-neutral-border-light dark:border-neutral-border-dark rounded-lg overflow-hidden flex-shrink-0">
             <button
               onClick={() => onViewModeChange('kanban')}
               className={`px-2 sm:px-3 py-2.5 flex items-center gap-1 sm:gap-2 transition-colors ${
                 viewMode === 'kanban'
                   ? 'bg-primary-blue text-white'
-                  : 'bg-white text-neutral-gray hover:bg-gray-50'
+                  : 'bg-white dark:bg-neutral-surface-dark text-neutral-gray dark:text-neutral-text-secondary-dark hover:bg-gray-50 dark:hover:bg-neutral-border-dark'
               }`}
               title="Kanban View"
             >
@@ -116,10 +116,10 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
             </button>
             <button
               onClick={() => onViewModeChange('list')}
-              className={`px-2 sm:px-3 py-2.5 flex items-center gap-1 sm:gap-2 border-l border-neutral-border-light transition-colors ${
+              className={`px-2 sm:px-3 py-2.5 flex items-center gap-1 sm:gap-2 border-l border-neutral-border-light dark:border-neutral-border-dark transition-colors ${
                 viewMode === 'list'
                   ? 'bg-primary-blue text-white'
-                  : 'bg-white text-neutral-gray hover:bg-gray-50'
+                  : 'bg-white dark:bg-neutral-surface-dark text-neutral-gray dark:text-neutral-text-secondary-dark hover:bg-gray-50 dark:hover:bg-neutral-border-dark'
               }`}
               title="List View"
             >
@@ -132,17 +132,17 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
 
       {/* Expandable Filters Panel */}
       {showFilters && (
-        <div className="bg-neutral-surface-light border border-neutral-border-light rounded-lg p-4 space-y-4 animate-slide-down">
+        <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark border border-neutral-border-light dark:border-neutral-border-dark rounded-lg p-4 space-y-4 animate-slide-down">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Status Filter */}
             <div>
-              <label className="block text-sm font-medium text-neutral-text-primary-light mb-2">
+              <label className="block text-sm font-medium text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-2">
                 Status
               </label>
               <select
                 value={selectedStatus}
                 onChange={(e) => onStatusChange(e.target.value as ApplicationStatus | 'all')}
-                className="w-full px-3 py-2 border border-neutral-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                className="w-full px-3 py-2 border border-neutral-border-light dark:border-neutral-border-dark rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               >
                 <option value="all">All Statuses</option>
                 <option value={ApplicationStatus.APPLIED}>Applied</option>
@@ -155,13 +155,13 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
 
             {/* Date Range Filter */}
             <div>
-              <label className="block text-sm font-medium text-neutral-text-primary-light mb-2">
+              <label className="block text-sm font-medium text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-2">
                 Date Range
               </label>
               <select
                 value={dateRange}
                 onChange={(e) => onDateRangeChange(e.target.value as any)}
-                className="w-full px-3 py-2 border border-neutral-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                className="w-full px-3 py-2 border border-neutral-border-light dark:border-neutral-border-dark rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               >
                 <option value="all">All Time</option>
                 <option value="7days">Last 7 Days</option>

@@ -318,3 +318,36 @@ export function validateFile(
     );
   }
 }
+
+const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export const getArticlesQuerySchema = z.object({
+  limit: z
+    .string()
+    .optional()
+    .default('3')
+    .transform(Number)
+    .pipe(z.number().int().positive().max(50)),
+});
+
+export const createArticleSchema = z.object({
+  title: z.string().min(4, 'Title is required').max(200),
+  summary: z.string().max(500).optional(),
+  content: z.string().min(20, 'Content must be at least 20 characters'),
+  slug: z
+    .string()
+    .min(3)
+    .max(120)
+    .regex(slugPattern, 'Slug may only contain lowercase letters, numbers, and hyphens')
+    .optional(),
+  coverImageUrl: z.string().url('Cover image must be a valid URL').optional(),
+  publishedAt: isoDateTimeSchema.optional(),
+  authorName: z.string().max(120).optional(),
+});
+
+export const updateArticleSchema = createArticleSchema
+  .partial()
+  .refine(
+    (data) => Object.keys(data).length > 0,
+    { message: 'At least one field must be provided for update' }
+  );

@@ -104,13 +104,13 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onClick={handleCardClick}
-      className={`relative bg-neutral-surface-light border border-neutral-border-light rounded-xl p-4 transition-all hover:shadow-md hover:border-primary-blue/50 cursor-move mb-4 group ${isDragging ? 'opacity-50' : ''}`}
+      className={`relative bg-neutral-surface-light dark:bg-neutral-surface-dark border border-neutral-border-light dark:border-neutral-border-dark rounded-xl p-4 transition-all hover:shadow-md hover:border-primary-blue/50 dark:hover:border-primary-light/40 cursor-move mb-4 group ${isDragging ? 'opacity-50' : ''}`}
     >
       {/* Quick Actions Menu */}
       <div className="absolute top-3 right-3">
         <button
           onClick={handleMenuClick}
-          className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-neutral-border-light transition-opacity"
+          className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-neutral-border-light dark:hover:bg-neutral-border-dark transition-opacity"
         >
           <EllipsisVerticalIcon className="w-5 h-5 text-neutral-gray" />
         </button>
@@ -124,10 +124,10 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
                 setShowMenu(false);
               }}
             />
-            <div className="absolute right-0 mt-1 w-48 bg-white border border-neutral-border-light rounded-lg shadow-lg z-20 overflow-hidden">
+            <div className="absolute right-0 mt-1 w-48 bg-white dark:bg-neutral-surface-dark border border-neutral-border-light dark:border-neutral-border-dark rounded-lg shadow-lg z-20 overflow-hidden">
               <button
                 onClick={(e) => handleAction(e, handleCardClick)}
-                className="w-full px-4 py-2.5 text-left hover:bg-gray-50 flex items-center gap-3 text-sm"
+                className="w-full px-4 py-2.5 text-left hover:bg-gray-50 dark:hover:bg-neutral-border-dark flex items-center gap-3 text-sm"
               >
                 <EyeIcon className="w-4 h-4 text-neutral-gray" />
                 <span>View Details</span>
@@ -135,7 +135,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
               {onEdit && (
                 <button
                   onClick={(e) => handleAction(e, () => onEdit(id))}
-                  className="w-full px-4 py-2.5 text-left hover:bg-gray-50 flex items-center gap-3 text-sm border-t border-neutral-border-light"
+                  className="w-full px-4 py-2.5 text-left hover:bg-gray-50 dark:hover:bg-neutral-border-dark flex items-center gap-3 text-sm border-t border-neutral-border-light dark:border-neutral-border-dark"
                 >
                   <PencilIcon className="w-4 h-4 text-neutral-gray" />
                   <span>Quick Edit</span>
@@ -144,7 +144,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
               {onDelete && (
                 <button
                   onClick={(e) => handleAction(e, () => onDelete(id))}
-                  className="w-full px-4 py-2.5 text-left hover:bg-red-50 flex items-center gap-3 text-sm text-red-600 border-t border-neutral-border-light"
+                  className="w-full px-4 py-2.5 text-left hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center gap-3 text-sm text-red-600 border-t border-neutral-border-light dark:border-neutral-border-dark"
                 >
                   <TrashIcon className="w-4 h-4" />
                   <span>Delete</span>
@@ -158,15 +158,15 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
       <div className="flex items-start gap-4">
         <CompanyLogo company={company} />
         <div className="flex-grow pr-8">
-          <h3 className="font-bold text-neutral-text-primary-light leading-tight">{position}</h3>
-          <p className="text-sm text-neutral-gray mt-1">{company}</p>
+          <h3 className="font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark leading-tight">{position}</h3>
+          <p className="text-sm text-neutral-gray dark:text-neutral-text-secondary-dark mt-1">{company}</p>
           <div className="flex items-center gap-3 mt-2">
-            <p className="flex items-center text-xs text-neutral-gray">
+            <p className="flex items-center text-xs text-neutral-gray dark:text-neutral-text-secondary-dark">
               <MapPinIcon className="w-3 h-3 mr-1.5 text-neutral-gray/80" />
               <span>{location}</span>
             </p>
             {dateApplied && (
-              <p className="flex items-center text-xs text-neutral-gray">
+              <p className="flex items-center text-xs text-neutral-gray dark:text-neutral-text-secondary-dark">
                 <CalendarIcon className="w-3 h-3 mr-1.5 text-neutral-gray/80" />
                 <span>{formatDate(dateApplied)}</span>
               </p>

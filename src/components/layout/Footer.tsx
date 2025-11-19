@@ -3,7 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BriefcaseIcon, TwitterIcon, LinkedinIcon, GithubIcon } from '../ui/Icon';
+import { TwitterIcon, LinkedinIcon, GithubIcon } from '../ui/Icon';
+import { BrandLogo } from '../ui/BrandLogo';
 
 const FooterLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => {
   const pathname = usePathname();
@@ -103,10 +104,9 @@ export const Footer: React.FC = () => {
           </div>
         </div>
         <div className="mt-16 border-t border-neutral-border-dark pt-8 flex flex-col sm:flex-row justify-between items-center">
-          <div className="flex items-center">
-            <BriefcaseIcon className="h-6 w-6 text-primary-blue" />
-            <span className="ml-2 text-lg font-bold text-white">trakaply</span>
-            <span className="ml-4 text-sm text-neutral-text-secondary-dark">
+          <div className="flex items-center gap-4">
+            <BrandLogo className="h-6 w-auto" variant="auto" priority={false} />
+            <span className="text-sm text-neutral-text-secondary-dark">
               &copy; {new Date().getFullYear()} All rights reserved.
             </span>
           </div>
