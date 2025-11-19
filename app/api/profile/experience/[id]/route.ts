@@ -12,7 +12,7 @@ import { validateRequestBody, updateWorkExperienceSchema } from '../../../../../
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -21,8 +21,11 @@ export async function GET(
     // Initialize repository
     const experienceRepo = new ExperienceRepository(supabase);
 
+    // Await params
+    const { id } = await params;
+
     // Get work experience (RLS ensures user can only access their own)
-    const experience = await experienceRepo.findById(params.id);
+    const experience = await experienceRepo.findById(id);
 
     if (!experience) {
       throw new NotFoundError('Work experience');
@@ -43,7 +46,7 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -55,8 +58,11 @@ export async function PUT(
     // Initialize repository
     const experienceRepo = new ExperienceRepository(supabase);
 
+    // Await params
+    const { id } = await params;
+
     // Update work experience (RLS ensures user can only update their own)
-    const experience = await experienceRepo.update(params.id, body);
+    const experience = await experienceRepo.update(id, body);
 
     return NextResponse.json({
       success: true,
@@ -73,7 +79,7 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -82,8 +88,11 @@ export async function DELETE(
     // Initialize repository
     const experienceRepo = new ExperienceRepository(supabase);
 
+    // Await params
+    const { id } = await params;
+
     // Delete work experience (RLS ensures user can only delete their own)
-    await experienceRepo.delete(params.id);
+    await experienceRepo.delete(id);
 
     return NextResponse.json({
       success: true,
