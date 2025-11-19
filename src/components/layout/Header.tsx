@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '../ui/Button';
 import { PlusIcon, ArrowDownTrayIcon, BriefcaseIcon, MoonIcon, SunIcon } from '../ui/Icon';
 import { useAuth } from '../../contexts/AuthContext';
@@ -22,12 +23,19 @@ export const Header: React.FC<HeaderProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated } = useAuth();
   const { darkMode, toggleDarkMode } = useTheme();
+  const pathname = usePathname();
+  const router = useRouter();
   
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, anchor: string) => {
-    e.preventDefault();
-    const element = document.querySelector(anchor);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (pathname === '/') {
+      e.preventDefault();
+      const element = document.querySelector(anchor);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // Allow default navigation to home page with anchor
+      // No preventDefault() here
     }
   };
 
@@ -61,33 +69,33 @@ export const Header: React.FC<HeaderProps> = ({
               <BrandLogo className="h-7 w-auto" />
             </Link>
             <nav className="hidden md:flex items-center space-x-8">
-              <a 
-                href="#features" 
+              <Link 
+                href="/#features" 
                 onClick={(e) => handleAnchorClick(e, '#features')} 
                 className={`text-base font-medium ${textColor} hover:text-primary-blue cursor-pointer`}
               >
                 Features
-              </a>
-              <a 
-                href="#testimonials" 
+              </Link>
+              <Link 
+                href="/#testimonials" 
                 onClick={(e) => handleAnchorClick(e, '#testimonials')} 
                 className={`text-base font-medium ${textColor} hover:text-primary-blue cursor-pointer`}
               >
                 Testimonials
-              </a>
+              </Link>
               <Link 
                 href="/blog" 
                 className={`text-base font-medium ${textColor} hover:text-primary-blue cursor-pointer`}
               >
                 Blog
               </Link>
-              <a 
-                href="#faq" 
+              <Link 
+                href="/#faq" 
                 onClick={(e) => handleAnchorClick(e, '#faq')} 
                 className={`text-base font-medium ${textColor} hover:text-primary-blue cursor-pointer`}
               >
                 FAQ
-              </a>
+              </Link>
             </nav>
             <div className="hidden md:flex items-center gap-4">
               <button
