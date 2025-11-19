@@ -131,6 +131,7 @@ const AnalyticsPage: React.FC = () => {
   const maxApplied = monthlyData.length > 0 ? Math.max(...monthlyData.map(d => d.applied)) : 1;
 
   return (
+    <AsyncContent isLoading={loading} error={error}>
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
