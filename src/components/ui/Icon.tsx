@@ -22,6 +22,7 @@ export {
   Grid2X2 as Squares2X2Icon,
   Heart as HeartIcon,
   LayoutDashboard as DashboardIcon,
+  Link as LinkIcon,
   Linkedin as LinkedinIcon,
   List as ListBulletIcon,
   Lock as LockClosedIcon,
