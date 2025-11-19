@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Header } from '@/components/layout/Header';
 import { createAnonClient } from '@/core/database/client';
 import { BlogService } from '@/services/blog.service';
 import type { BlogArticle } from '@/types/frontend.types';
@@ -33,6 +34,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
 
   return (
     <div className="bg-neutral-bg-light dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark min-h-screen">
+      <Header variant="landing" />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-0 py-16 space-y-6">
         <p className="text-sm uppercase tracking-[0.4em] text-primary-blue">Trakaply Blog</p>
         <h1 className="text-4xl font-extrabold leading-tight">{article.title}</h1>

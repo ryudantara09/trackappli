@@ -21,6 +21,56 @@ import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToastContext } from '@/contexts/ToastContext';
 
+const SocialButton: React.FC<{ icon: React.ReactNode; label: string }> = ({
+  icon,
+  label,
+}) => (
+  <button
+    type="button"
+    className="w-full inline-flex items-center justify-center px-4 py-2 border border-neutral-border-light rounded-md shadow-sm bg-neutral-surface-light text-sm font-medium text-neutral-gray hover:bg-neutral-bg-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue"
+    disabled
+  >
+    {icon}
+    <span className="ml-2 sm:ml-3 truncate">{label}</span>
+  </button>
+);
+
+const InputField: React.FC<{
+  id: string;
+  name: string;
+  type: string;
+  label: string;
+  autoComplete: string;
+  icon: React.ReactNode;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}> = ({ id, name, type, label, autoComplete, icon, value, onChange }) => (
+  <div>
+    <label
+      htmlFor={id}
+      className="block text-sm font-medium text-neutral-text-primary-light sr-only"
+    >
+      {label}
+    </label>
+    <div className="relative mt-1">
+      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        {icon}
+      </div>
+      <input
+        id={id}
+        name={name}
+        type={type}
+        autoComplete={autoComplete}
+        required
+        placeholder={label}
+        value={value}
+        onChange={onChange}
+        className="block w-full rounded-md border-neutral-border-light pl-10 shadow-sm focus:border-primary-blue focus:ring-primary-blue sm:text-sm py-3"
+      />
+    </div>
+  </div>
+);
+
 const AuthPageContent: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [fullName, setFullName] = useState('');
@@ -90,56 +140,6 @@ const AuthPageContent: React.FC = () => {
       setIsLoading(false);
     }
   };
-
-  const SocialButton: React.FC<{ icon: React.ReactNode; label: string }> = ({
-    icon,
-    label,
-  }) => (
-    <button
-      type="button"
-      className="w-full inline-flex items-center justify-center px-4 py-2 border border-neutral-border-light rounded-md shadow-sm bg-neutral-surface-light text-sm font-medium text-neutral-gray hover:bg-neutral-bg-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue"
-      disabled
-    >
-      {icon}
-      <span className="ml-2 sm:ml-3 truncate">{label}</span>
-    </button>
-  );
-
-  const InputField: React.FC<{
-    id: string;
-    name: string;
-    type: string;
-    label: string;
-    autoComplete: string;
-    icon: React.ReactNode;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  }> = ({ id, name, type, label, autoComplete, icon, value, onChange }) => (
-    <div>
-      <label
-        htmlFor={id}
-        className="block text-sm font-medium text-neutral-text-primary-light sr-only"
-      >
-        {label}
-      </label>
-      <div className="relative mt-1">
-        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          {icon}
-        </div>
-        <input
-          id={id}
-          name={name}
-          type={type}
-          autoComplete={autoComplete}
-          required
-          placeholder={label}
-          value={value}
-          onChange={onChange}
-          className="block w-full rounded-md border-neutral-border-light pl-10 shadow-sm focus:border-primary-blue focus:ring-primary-blue sm:text-sm py-3"
-        />
-      </div>
-    </div>
-  );
 
   return (
     <div className="min-h-screen flex bg-neutral-bg-light dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark overflow-x-hidden">

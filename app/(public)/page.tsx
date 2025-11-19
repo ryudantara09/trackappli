@@ -491,7 +491,7 @@ export default function HomePage() {
           </div>
         </Section>
 
-        <Section className="bg-neutral-bg-dark text-white rounded-t-[48px]">
+        <Section id="features" className="bg-neutral-bg-dark text-white rounded-t-[48px]">
           <SectionTitle
             badge="Why Trakaply"
             title="Powering better learning experiences"
@@ -555,7 +555,7 @@ export default function HomePage() {
 
         <SectionDivider />
 
-        <Section>
+        <Section id="testimonials">
           <SectionTitle
             badge="Testimonials"
             title="What our educators say about Trakaply"

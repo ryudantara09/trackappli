@@ -75,6 +75,12 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 Testimonials
               </a>
+              <Link 
+                href="/blog" 
+                className={`text-base font-medium ${textColor} hover:text-primary-blue cursor-pointer`}
+              >
+                Blog
+              </Link>
               <a 
                 href="#faq" 
                 onClick={(e) => handleAnchorClick(e, '#faq')} 

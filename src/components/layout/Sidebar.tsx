@@ -81,8 +81,8 @@ export const Sidebar: React.FC = () => {
           <NavItem
             icon={<NotebookPenIcon className="w-6 h-6" />}
             label="Blog"
-            href="/blog"
-            active={pathname === '/blog'}
+            href="/dashboard/blog"
+            active={pathname === '/dashboard/blog'}
           />
         )}
         <NavItem
