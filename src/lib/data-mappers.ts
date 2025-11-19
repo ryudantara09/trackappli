@@ -44,20 +44,20 @@ export class ApplicationMapper {
   static toFrontend(backend: BackendApplication): FrontendApplication {
     return {
       id: backend.id.toString(),
-      position: backend.positionTitle || '',
-      company: backend.companyName || '',
-      location: backend.jobLocation || '',
-      status: this.mapStatusToFrontend(backend.status),
-      dateApplied: backend.appliedAt ? backend.appliedAt.toISOString() : new Date().toISOString(),
-      url: backend.positionUrl,
+      position: backend.position_title || '',
+      company: backend.company_name || '',
+      location: backend.job_location || '',
+      status: this.mapStatusToFrontend(backend.status as BackendStatus),
+      dateApplied: backend.applied_at ? new Date(backend.applied_at).toISOString() : new Date().toISOString(),
+      url: backend.position_url,
       description: backend.description || undefined,
       notes: backend.notes || undefined,
-      skills: backend.techStack || undefined,
-      softSkills: backend.softSkills || undefined,
-      jobType: backend.jobType ? this.mapJobTypeToFrontend(backend.jobType) : undefined,
+      skills: backend.tech_stack || undefined,
+      softSkills: backend.soft_skills || undefined,
+      jobType: backend.job_type ? this.mapJobTypeToFrontend(backend.job_type as BackendJobType) : undefined,
       tags: backend.tags || undefined,
-      cvPath: backend.cvPath || undefined,
-      coverLetterPath: backend.coverLetterPath || undefined,
+      cvPath: backend.cv_path || undefined,
+      coverLetterPath: backend.cover_letter_path || undefined,
     };
   }
 
@@ -68,12 +68,12 @@ export class ApplicationMapper {
    * from toFrontend().
    * 
    * Field mappings:
-   * - position → position_title
-   * - company → company_name
-   * - location → job_location
-   * - dateApplied: string → applied_at: string
-   * - url → position_url
-   * - skills → tech_stack
+   * - position → positionTitle
+   * - company → companyName
+   * - location → jobLocation
+   * - dateApplied: string → appliedAt: string
+   * - url → positionUrl
+   * - skills → techStack
    * - status: Applied → APPLIED (enum mapping)
    * 
    * @param frontend - Frontend Application or form data
@@ -82,23 +82,25 @@ export class ApplicationMapper {
   static toBackend(frontend: Partial<FrontendApplication> | ApplicationFormData) {
     const backendData: Record<string, any> = {};
 
+    // Always set positionUrl, default to empty string if missing
+    // This ensures the API receives the field and can return a proper validation error
+    backendData.positionUrl = frontend.url || '';
+
     if (frontend.position !== undefined) {
-      backendData.position_title = frontend.position;
+      backendData.positionTitle = frontend.position;
     }
     if (frontend.company !== undefined) {
-      backendData.company_name = frontend.company;
+      backendData.companyName = frontend.company;
     }
     if (frontend.location !== undefined) {
-      backendData.job_location = frontend.location;
+      backendData.jobLocation = frontend.location;
     }
-    if (frontend.url !== undefined) {
-      backendData.position_url = frontend.url;
-    }
+    // Removed conditional check for url since we set it above
     if (frontend.status !== undefined) {
       backendData.status = this.mapStatusToBackend(frontend.status);
     }
     if (frontend.dateApplied !== undefined) {
-      backendData.applied_at = frontend.dateApplied;
+      backendData.appliedAt = frontend.dateApplied;
     }
     if (frontend.description !== undefined) {
       backendData.description = frontend.description;
@@ -107,22 +109,22 @@ export class ApplicationMapper {
       backendData.notes = frontend.notes;
     }
     if (frontend.skills !== undefined) {
-      backendData.tech_stack = frontend.skills;
+      backendData.techStack = frontend.skills;
     }
     if (frontend.softSkills !== undefined) {
-      backendData.soft_skills = frontend.softSkills;
+      backendData.softSkills = frontend.softSkills;
     }
     if (frontend.jobType !== undefined) {
-      backendData.job_type = this.mapJobTypeToBackend(frontend.jobType);
+      backendData.jobType = this.mapJobTypeToBackend(frontend.jobType);
     }
     if (frontend.tags !== undefined) {
       backendData.tags = frontend.tags;
     }
     if (frontend.cvPath !== undefined) {
-      backendData.cv_path = frontend.cvPath;
+      backendData.cvPath = frontend.cvPath;
     }
     if (frontend.coverLetterPath !== undefined) {
-      backendData.cover_letter_path = frontend.coverLetterPath;
+      backendData.coverLetterPath = frontend.coverLetterPath;
     }
 
     return backendData;

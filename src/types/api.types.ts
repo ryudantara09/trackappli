@@ -20,24 +20,24 @@ export interface PaginatedResponse<T> {
 
 export interface Application {
   id: number;
-  userId: string;
-  positionUrl: string;
-  positionTitle: string | null;
-  companyName: string | null;
-  jobLocation: string | null;
-  appliedAt: Date;
-  status: ApplicationStatus;
-  cvPath: string | null;
-  coverLetterPath: string | null;
+  user_id: string;
+  position_url: string;
+  position_title: string | null;
+  company_name: string | null;
+  job_location: string | null;
+  applied_at: string; // API returns ISO string, not Date object usually
+  status: string; // API returns string, not enum usually
+  cv_path: string | null;
+  cover_letter_path: string | null;
   notes: string | null;
   description: string | null;
-  techStack: string[] | null;
-  softSkills: string[] | null;
-  jobType: JobType | null;
+  tech_stack: string[] | null; // Json in DB, but likely parsed to array in API response?
+  soft_skills: string[] | null;
+  job_type: string | null;
   tags: string[] | null;
-  extractedJson: Record<string, unknown> | null;
-  createdAt: Date;
-  updatedAt: Date;
+  extracted_json: Record<string, unknown> | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreateApplicationRequest {
