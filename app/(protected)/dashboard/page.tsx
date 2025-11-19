@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { Header } from '@/components/layout/Header';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { SummaryCard } from '@/components/features/applications/SummaryCard';
 import { KanbanColumn } from '@/components/features/applications/KanbanColumn';
 import { ListView } from '@/components/features/applications/ListView';
@@ -246,12 +247,12 @@ const DashboardPage: React.FC = () => {
   if (loading) {
     return (
       <div className="px-4 sm:px-6 lg:px-8 py-8">
-        <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-blue"></div>
-            <p className="mt-4 text-neutral-gray">Loading applications...</p>
-          </div>
+            <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
+            <div className="flex items-center justify-center h-64">
+              <div className="text-center">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-blue"></div>
+                <p className="mt-4 text-neutral-gray">Loading applications...</p>
+              </div>
         </div>
       </div>
     );
@@ -261,19 +262,19 @@ const DashboardPage: React.FC = () => {
   if (error) {
     return (
       <div className="px-4 sm:px-6 lg:px-8 py-8">
-        <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="text-red-500 text-5xl mb-4">⚠️</div>
+            <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
+            <div className="flex items-center justify-center h-64">
+              <div className="text-center">
+                <div className="text-red-500 text-5xl mb-4">⚠️</div>
             <h3 className="text-xl font-semibold text-neutral-text-primary-light mb-2">Failed to Load Applications</h3>
-            <p className="text-neutral-gray mb-4">{error}</p>
-            <button
-              onClick={() => refresh()}
-              className="px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-dark transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
+                <p className="text-neutral-gray mb-4">{error}</p>
+                <button
+                  onClick={() => refresh()}
+                  className="px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-dark transition-colors"
+                >
+                  Try Again
+                </button>
+              </div>
         </div>
       </div>
     );
@@ -281,72 +282,77 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8 text-neutral-text-primary-light dark:text-neutral-text-primary-dark bg-neutral-bg-light dark:bg-neutral-bg-dark">
-      <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
-
-      {/* Summary Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 mb-6">
+            <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
+      
+      <PageHeader 
+        title="Dashboard" 
+        description="Overview of your job applications and progress"
+      />
+            
+            {/* Summary Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 mb-6">
         <SummaryCard title="Total Applications" value={filteredApplications.length} />
-        {summaryStats.map(stat => (
-          <SummaryCard
-            key={stat.status}
-            title={stat.status}
-            value={stat.count}
-            status={stat.status}
-            onClick={() => handleSummaryCardClick(stat.status)}
-            isActive={selectedStatus === stat.status}
-          />
-        ))}
-      </div>
+                {summaryStats.map(stat => (
+                    <SummaryCard 
+                      key={stat.status} 
+                      title={stat.status} 
+                      value={stat.count} 
+                      status={stat.status}
+                      onClick={() => handleSummaryCardClick(stat.status)}
+                      isActive={selectedStatus === stat.status}
+                    />
+                ))}
+            </div>
 
-      {/* Application Counter */}
-      {hasApplications && hasActiveFilters && (
-        <div className="mb-4 text-sm text-neutral-gray">
+            {/* Application Counter */}
+            {hasApplications && hasActiveFilters && (
+              <div className="mb-4 text-sm text-neutral-gray">
           Showing <span className="font-semibold text-neutral-text-primary-light">{filteredApplications.length}</span> of{' '}
           <span className="font-semibold text-neutral-text-primary-light">{applications.length}</span> applications
-        </div>
-      )}
+              </div>
+            )}
 
-      {/* Search and Filters */}
-      {hasApplications && (
-        <SearchFilterBar
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          selectedStatus={selectedStatus}
-          onStatusChange={setSelectedStatus}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
-          dateRange={dateRange}
-          onDateRangeChange={setDateRange}
-          sortBy={sortBy}
-          onSortChange={setSortBy}
-        />
-      )}
+            {/* Search and Filters */}
+            {hasApplications && (
+              <SearchFilterBar
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                selectedStatus={selectedStatus}
+                onStatusChange={setSelectedStatus}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
+                dateRange={dateRange}
+                onDateRangeChange={setDateRange}
+                sortBy={sortBy}
+                onSortChange={setSortBy}
+              />
+            )}
 
-      {/* Content Area */}
-      {!hasApplications ? (
-        <EmptyState type="no-applications" onAction={() => setIsModalOpen(true)} />
-      ) : !hasFilteredResults ? (
-        <EmptyState type="no-results" searchQuery={searchQuery} />
-      ) : viewMode === 'kanban' ? (
-        /* Kanban Board */
-        <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-4">
-          {kanbanColumns.map(({ status, apps }) => (
-            <KanbanColumn
-              key={status}
-              status={status}
-              applications={apps}
-              onDelete={handleDeleteApplication}
-              onEdit={handleEditApplication}
-              onStatusChange={handleStatusChange}
-            />
-          ))}
-        </div>
-      ) : (
-        /* List View */
-        <div className="pb-8">
+            {/* Content Area */}
+            {!hasApplications ? (
+              <EmptyState type="no-applications" onAction={() => setIsModalOpen(true)} />
+            ) : !hasFilteredResults ? (
+              <EmptyState type="no-results" searchQuery={searchQuery} />
+            ) : viewMode === 'kanban' ? (
+              /* Kanban Board */
+              <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-4">
+                  {kanbanColumns.map(({ status, apps }) => (
+                      <KanbanColumn 
+                        key={status} 
+                        status={status} 
+                        applications={apps}
+                        onDelete={handleDeleteApplication}
+                        onEdit={handleEditApplication}
+                        onStatusChange={handleStatusChange}
+                      />
+                  ))}
+              </div>
+            ) : (
+              /* List View */
+              <div className="pb-8">
           <ListView applications={filteredApplications} onDelete={handleDeleteApplication} onEdit={handleEditApplication} />
-        </div>
-      )}
+              </div>
+            )}
 
       <AddApplicationModal
         isOpen={isModalOpen}

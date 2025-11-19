@@ -6,6 +6,8 @@ import { apiClient } from '@/lib/api-client';
 import { ApplicationMapper } from '@/lib/data-mappers';
 import { FrontendApplication, ApplicationStatus } from '@/types/frontend.types';
 import { AsyncContent } from '@/components/ui/AsyncContent';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { Header } from '@/components/layout/Header';
 
 interface StatCard {
   title: string;
@@ -46,7 +48,7 @@ const AnalyticsPage: React.FC = () => {
         { title: 'Interview Rate', value: '0%', change: '0%', trend: 'up', positive: true },
         { title: 'Offer Rate', value: '0%', change: '0%', trend: 'up', positive: true },
         { title: 'Success Rate', value: '0%', change: '0%', trend: 'up', positive: true },
-      ];
+  ];
     }
 
     const total = applications.length;
@@ -133,11 +135,11 @@ const AnalyticsPage: React.FC = () => {
   return (
     <AsyncContent isLoading={loading} error={error}>
     <div className="px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-neutral-text-primary-light">Analytics & Insights</h1>
-        <p className="text-neutral-gray mt-2">Track your job search performance and trends</p>
-      </div>
+      <Header />
+      <PageHeader 
+        title="Analytics & Insights" 
+        description="Track your job search performance and trends"
+      />
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -271,7 +273,7 @@ const AnalyticsPage: React.FC = () => {
           </table>
         </div>
       </div>
-      </div>
+    </div>
     </AsyncContent>
   );
 };

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Toast } from '@/components/ui/Toast';
+import { PageHeader } from '@/components/ui/PageHeader';
 import type { ToastState } from '@/types/frontend.types';
 import { exportToCSV } from '../../../src/utils/exportUtils';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -39,10 +40,10 @@ const SettingsPage: React.FC = () => {
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="max-w-4xl">
-        <div className="mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Settings</h1>
-          <p className="text-neutral-gray dark:text-neutral-text-secondary-dark mt-1">Manage your account settings and preferences</p>
-        </div>
+        <PageHeader 
+          title="Settings" 
+          description="Manage your account settings and preferences"
+        />
 
         {/* Theme Settings */}
         <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-4 sm:p-6 mb-6">
