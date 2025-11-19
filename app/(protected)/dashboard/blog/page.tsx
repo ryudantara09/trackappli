@@ -86,6 +86,13 @@ export default function BlogAdminPage() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    const plainTextContent = form.content.replace(/<[^>]*>/g, '').trim();
+    if (plainTextContent.length < 20) {
+      showError('Content must be at least 20 characters long');
+      return;
+    }
+
     setIsSaving(true);
     try {
       const payload = {
@@ -98,31 +105,40 @@ export default function BlogAdminPage() {
         authorName: authorLabel,
       };
 
-      const url = editingSlug ? `/api/blog/${editingSlug}` : '/api/blog';
-      const method = editingSlug ? 'PUT' : 'POST';
+      const isEditing = Boolean(editingSlug);
+      const targetSlug = editingSlug ?? '';
+      const url = isEditing ? `/api/blog/${targetSlug}` : '/api/blog';
+      const method = isEditing ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(payload),
       });
 
+      const data = await response.json().catch(() => null);
+
       if (!response.ok) {
-        throw new Error('Save failed');
+        throw new Error(data?.error || 'Save failed');
       }
 
-      showSuccess(editingSlug ? 'Article updated' : 'Article published');
+      const newArticle = data?.data;
+
+      showSuccess(isEditing ? 'Article updated' : 'Article published');
       resetForm();
-      const data = await response.json();
-      setArticles((prev) => {
-        const remaining = prev.filter((article) => article.slug !== editingSlug);
-        if (data?.data) {
-          return editingSlug ? [data.data, ...remaining] : [data.data, ...prev];
-        }
-        return prev;
-      });
+      if (newArticle) {
+        setArticles((prev) => {
+          if (isEditing) {
+            const remaining = prev.filter((article) => article.slug !== targetSlug);
+            return [newArticle, ...remaining];
+          }
+          return [newArticle, ...prev];
+        });
+      }
     } catch (error) {
-      showError('Unable to save article');
+      const message = error instanceof Error ? error.message : 'Unable to save article';
+      showError(message);
       if (process.env.NODE_ENV === 'development') {
         console.error(error);
       }

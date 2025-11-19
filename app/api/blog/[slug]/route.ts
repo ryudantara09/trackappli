@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAnonClient } from '@/core/database/client';
-import { createAdminClient } from '@/core/auth/supabase';
+import { createRouteHandlerClient } from '@/core/auth/supabase';
 import { BlogService } from '@/services/blog.service';
 import { createErrorResponse, NotFoundError } from '@/utils/errors';
 import { requireAuth } from '@/core/auth/middleware';
@@ -42,7 +42,7 @@ export async function PUT(
     assertAdminUser(auth.user);
 
     const payload = await validateRequestBody(request, updateArticleSchema);
-    const supabase = createAdminClient();
+    const supabase = await createRouteHandlerClient();
     const blogService = new BlogService(supabase);
 
     const article = await blogService.updateArticle(params.slug, {
@@ -70,7 +70,7 @@ export async function DELETE(
     const auth = await requireAuth();
     assertAdminUser(auth.user);
 
-    const supabase = createAdminClient();
+    const supabase = await createRouteHandlerClient();
     const blogService = new BlogService(supabase);
     await blogService.deleteArticle(params.slug);
 

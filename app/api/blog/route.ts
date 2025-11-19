@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAnonClient } from '@/core/database/client';
-import { createAdminClient } from '@/core/auth/supabase';
+import { createRouteHandlerClient } from '@/core/auth/supabase';
 import { BlogService } from '@/services/blog.service';
 import { createErrorResponse } from '@/utils/errors';
 import { requireAuth } from '@/core/auth/middleware';
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     assertAdminUser(auth.user);
 
     const body = await validateRequestBody(request, createArticleSchema);
-    const supabase = createAdminClient();
+    const supabase = await createRouteHandlerClient();
     const blogService = new BlogService(supabase);
 
     const article = await blogService.createArticle({

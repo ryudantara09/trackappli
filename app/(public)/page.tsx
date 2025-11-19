@@ -605,26 +605,39 @@ export default function HomePage() {
             {articles.map((insight) => (
               <article
                 key={insight.slug}
-                className="rounded-3xl border border-neutral-border-light dark:border-neutral-border-dark p-6 bg-white dark:bg-neutral-surface-dark space-y-3"
+                className="rounded-3xl border border-neutral-border-light dark:border-neutral-border-dark overflow-hidden bg-white dark:bg-neutral-surface-dark"
               >
-                <p className="text-xs uppercase tracking-[0.4em] text-neutral-gray dark:text-neutral-text-secondary-dark">
-                  {new Date(insight.publishedAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </p>
-                <h3 className="text-xl font-semibold">
-                  <Link href={`/blog/${insight.slug}`} className="hover:text-primary-blue transition-colors">
-                    {insight.title}
+                {insight.coverImageUrl && (
+                  <Link href={`/blog/${insight.slug}`}>
+                    <div className="w-full h-48 overflow-hidden">
+                      <img
+                        src={insight.coverImageUrl}
+                        alt={insight.title}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
                   </Link>
-                </h3>
-                <p className="text-neutral-gray dark:text-neutral-text-secondary-dark">
-                  {insight.summary || "Explore the latest insight from the Trakaply team."}
-                </p>
-                <Button as="a" href={`/blog/${insight.slug}`} variant="secondary" size="small" className="w-fit">
-                  Read
-                </Button>
+                )}
+                <div className="p-6 space-y-3">
+                  <p className="text-xs uppercase tracking-[0.4em] text-neutral-gray dark:text-neutral-text-secondary-dark">
+                    {new Date(insight.publishedAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </p>
+                  <h3 className="text-xl font-semibold">
+                    <Link href={`/blog/${insight.slug}`} className="hover:text-primary-blue transition-colors">
+                      {insight.title}
+                    </Link>
+                  </h3>
+                  <p className="text-neutral-gray dark:text-neutral-text-secondary-dark">
+                    {insight.summary || "Explore the latest insight from the Trakaply team."}
+                  </p>
+                  <Button as="a" href={`/blog/${insight.slug}`} variant="secondary" size="small" className="w-fit">
+                    Read
+                  </Button>
+                </div>
               </article>
             ))}
           </div>

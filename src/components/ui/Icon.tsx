@@ -11,6 +11,7 @@ export {
   CalendarDays as CalendarIcon,
   Check as CheckIcon,
   ChevronDown as ChevronDownIcon,
+  Clock as ClockIcon,
   Download as ArrowDownTrayIcon,
   EllipsisVertical as EllipsisVerticalIcon,
   FilePenLine as NotebookPenIcon,
