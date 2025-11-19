@@ -71,8 +71,20 @@ export function useJobExtraction(): UseJobExtractionReturn {
         throw new Error('No data extracted from job posting');
       }
 
-      setExtractedData(result.data);
-      return result.data;
+      // Map snake_case from API to camelCase for frontend
+      const mappedData: JobExtractionResponse = {
+        positionTitle: result.data.position_title,
+        company: result.data.company,
+        location: result.data.location,
+        jobType: result.data.job_type,
+        techStack: result.data.tech_stack,
+        softSkills: result.data.soft_skills,
+        description: result.data.description,
+        salaryRange: result.data.salary_range,
+      };
+
+      setExtractedData(mappedData);
+      return mappedData;
     } catch (err) {
       const errorMessage = err instanceof Error 
         ? err.message 
