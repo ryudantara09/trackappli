@@ -79,3 +79,17 @@ export interface ToastState {
   type: 'success' | 'error' | 'info';
   visible: boolean;
 }
+
+export interface BlogArticle {
+  id: string;
+  title: string;
+  slug: string;
+  summary?: string;
+  coverImageUrl?: string;
+  content: string;
+  authorId?: string;
+  authorName?: string;
+  publishedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
+}

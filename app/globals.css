@@ -99,6 +99,12 @@ body {
   background-clip: text;
 }
 
+.bg-hero-grid {
+  background-image: radial-gradient(circle at 1px 1px, rgba(37, 99, 235, 0.1) 1px, transparent 0);
+  background-size: 32px 32px;
+  position: relative;
+}
+
 /* Shimmer animation for skeleton loading */
 @keyframes shimmer {
   0% {

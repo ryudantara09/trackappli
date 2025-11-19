@@ -131,8 +131,7 @@ const AnalyticsPage: React.FC = () => {
   const maxApplied = monthlyData.length > 0 ? Math.max(...monthlyData.map(d => d.applied)) : 1;
 
   return (
-    <AsyncContent isLoading={loading} error={error}>
-      <div className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-neutral-text-primary-light">Analytics & Insights</h1>
@@ -275,5 +274,4 @@ const AnalyticsPage: React.FC = () => {
     </AsyncContent>
   );
 };
-
 export default AnalyticsPage;

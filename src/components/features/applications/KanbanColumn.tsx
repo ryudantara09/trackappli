@@ -55,16 +55,16 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   
   return (
     <div className="w-80 min-w-[320px] flex-shrink-0">
-      <div className={`flex items-center justify-between p-3 rounded-t-lg border-b-4 ${details.border} bg-neutral-surface-light`}>
+      <div className={`flex items-center justify-between p-3 rounded-t-lg border-b-4 ${details.border} bg-neutral-surface-light dark:bg-neutral-surface-dark`}>
         <div className="flex items-center gap-2">
           <h2 className={`font-semibold ${details.color}`}>{status}</h2>
-          <span className="text-sm font-medium bg-neutral-border-light text-neutral-gray px-2 py-0.5 rounded-full">
+          <span className="text-sm font-medium bg-neutral-border-light text-neutral-gray px-2 py-0.5 rounded-full dark:bg-neutral-border-dark dark:text-neutral-text-secondary-dark">
             {applications.length}
           </span>
         </div>
       </div>
       <div 
-        className={`p-1 bg-neutral-bg-light min-h-[400px] rounded-b-lg transition-colors ${
+        className={`p-1 bg-neutral-bg-light dark:bg-neutral-bg-dark min-h-[400px] rounded-b-lg transition-colors ${
           isDragOver ? 'bg-primary-light/20 ring-2 ring-primary-blue ring-inset' : ''
         }`}
         onDragOver={handleDragOver}

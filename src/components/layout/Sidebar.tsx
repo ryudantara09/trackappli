@@ -3,15 +3,17 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { 
-  BriefcaseIcon, 
-  DashboardIcon, 
-  UserCircleIcon, 
-  Cog6ToothIcon, 
-  ChartBarIcon 
+import {
+  BriefcaseIcon,
+  DashboardIcon,
+  UserCircleIcon,
+  Cog6ToothIcon,
+  ChartBarIcon,
+  NotebookPenIcon,
 } from '../ui/Icon';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../ui/Button';
+import { BrandLogo } from '../ui/BrandLogo';
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -35,7 +37,7 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, href, active }) => (
 );
 
 export const Sidebar: React.FC = () => {
-  const { logout, user } = useAuth();
+  const { logout, user, isAdmin } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -53,10 +55,7 @@ export const Sidebar: React.FC = () => {
     <aside className="w-64 bg-neutral-surface-light dark:bg-neutral-surface-dark border-r border-neutral-border-light dark:border-neutral-border-dark flex-shrink-0 flex flex-col">
       <div className="h-16 flex items-center px-6 border-b border-neutral-border-light dark:border-neutral-border-dark">
         <Link href="/" className="flex items-center cursor-pointer">
-          <BriefcaseIcon className="h-8 w-8 text-primary-blue" />
-          <span className="ml-3 text-2xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark">
-            trakaply
-          </span>
+          <BrandLogo className="h-7 w-auto" priority={false} />
         </Link>
       </div>
       <nav className="flex-1 px-4 py-6 space-y-2">
@@ -78,6 +77,14 @@ export const Sidebar: React.FC = () => {
           href="/analytics"
           active={pathname === '/analytics'}
         />
+        {isAdmin && (
+          <NavItem
+            icon={<NotebookPenIcon className="w-6 h-6" />}
+            label="Blog"
+            href="/blog"
+            active={pathname === '/blog'}
+          />
+        )}
         <NavItem
           icon={<UserCircleIcon className="w-6 h-6" />}
           label="Profile"

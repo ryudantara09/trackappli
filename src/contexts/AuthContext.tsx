@@ -6,9 +6,10 @@
 
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 import { User } from '@supabase/supabase-js';
 import { getSupabase, signIn, signUp, signOut, getUser } from '../lib/auth-client';
+import { isAdminEmail } from '../utils/admin';
 
 interface AuthContextType {
   user: User | null;
@@ -17,6 +18,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -86,6 +88,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const isAdmin = useMemo(() => isAdminEmail(user?.email ?? undefined), [user]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -95,6 +99,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         login,
         signup,
         logout,
+        isAdmin,
       }}
     >
       {children}

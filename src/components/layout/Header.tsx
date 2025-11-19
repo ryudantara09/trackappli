@@ -6,6 +6,7 @@ import { Button } from '../ui/Button';
 import { PlusIcon, ArrowDownTrayIcon, BriefcaseIcon, MoonIcon, SunIcon } from '../ui/Icon';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
+import { BrandLogo } from '../ui/BrandLogo';
 
 interface HeaderProps {
   onAddApplicationClick?: () => void;
@@ -42,19 +43,22 @@ export const Header: React.FC<HeaderProps> = ({
   
   if (variant === 'landing') {
     const headerClasses = `fixed top-0 w-full z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white/80 backdrop-blur-sm shadow-md' : 'bg-transparent'
+      isScrolled ? 'bg-white/80 dark:bg-neutral-bg-dark/80 backdrop-blur-sm shadow-md' : 'bg-transparent'
     }`;
-    const textColor = isScrolled ? 'text-neutral-text-primary-light' : 'text-neutral-text-primary-light';
+    const textColor = isScrolled
+      ? 'text-neutral-text-primary-light dark:text-neutral-text-primary-dark'
+      : 'text-neutral-text-primary-light dark:text-neutral-text-primary-dark';
 
     return (
       <header className={headerClasses}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`flex justify-between items-center py-4 ${isScrolled ? 'border-b border-neutral-border-light/50' : ''}`}>
+          <div
+            className={`flex justify-between items-center py-4 ${
+              isScrolled ? 'border-b border-neutral-border-light/50 dark:border-neutral-border-dark/60' : ''
+            }`}
+          >
             <Link href="/" className="flex items-center cursor-pointer">
-              <BriefcaseIcon className="h-8 w-8 text-primary-blue" />
-              <span className={`ml-3 text-2xl font-bold ${textColor}`}>
-                trakaply
-              </span>
+              <BrandLogo className="h-7 w-auto" />
             </Link>
             <nav className="hidden md:flex items-center space-x-8">
               <a 
@@ -83,9 +87,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 onClick={toggleDarkMode}
                 className={`p-2 rounded-lg transition-colors ${
-                  isScrolled 
-                    ? 'hover:bg-neutral-bg-light' 
-                    : 'hover:bg-white/20'
+                  isScrolled ? 'hover:bg-neutral-bg-light dark:hover:bg-neutral-border-dark' : 'hover:bg-white/20 dark:hover:bg-white/10'
                 }`}
                 aria-label="Toggle theme"
               >
@@ -105,7 +107,11 @@ export const Header: React.FC<HeaderProps> = ({
                     <Button 
                       size="medium" 
                       variant="secondary" 
-                      className={isScrolled ? '' : '!text-neutral-text-primary-light !border-neutral-gray hover:!bg-white/20'}
+                      className={
+                        isScrolled
+                          ? ''
+                          : '!text-neutral-text-primary-light dark:!text-neutral-text-primary-dark !border-neutral-gray dark:!border-neutral-border-dark hover:!bg-white/20 dark:hover:!bg-white/10'
+                      }
                     >
                       Sign In
                     </Button>
@@ -127,7 +133,9 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div className="min-w-0">
           <h1 className="text-2xl sm:text-3xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark truncate">Applications</h1>
-          <p className="text-neutral-gray mt-1 text-sm sm:text-base">Track and manage your job applications here.</p>
+          <p className="text-neutral-gray dark:text-neutral-text-secondary-dark mt-1 text-sm sm:text-base">
+            Track and manage your job applications here.
+          </p>
         </div>
         <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
           <button
