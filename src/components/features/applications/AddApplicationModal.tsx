@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { ApplicationStatus, ApplicationFormData } from '@/types/frontend.types';
 import { Button } from '@/components/ui/Button';
-import { XMarkIcon } from '@/components/ui/Icon';
+import { XMarkIcon, PencilIcon, SparklesIcon } from '@/components/ui/Icon';
 import { FileUpload } from '@/components/ui/FileUpload';
 import { useJobExtraction } from '@/hooks/useJobExtraction';
 import { useToastContext } from '@/contexts/ToastContext';
@@ -13,6 +13,8 @@ interface AddApplicationModalProps {
   onClose: () => void;
   onAddApplication: (application: ApplicationFormData) => void;
 }
+
+type TabType = 'extract' | 'manual';
 
 const initialFormState: ApplicationFormData = {
   position: '',
@@ -30,9 +32,10 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
   onClose, 
   onAddApplication
 }) => {
+  const [activeTab, setActiveTab] = useState<TabType>('extract');
   const [formState, setFormState] = useState(initialFormState);
-  const [showExtractModal, setShowExtractModal] = useState(false);
   const [extractionText, setExtractionText] = useState('');
+  const [extractJobUrl, setExtractJobUrl] = useState('');
   
   const { showSuccess, showError } = useToastContext();
   const { extractJobPosting, extracting, error: extractionError, clearExtractedData } = useJobExtraction();
@@ -42,8 +45,9 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
       // Reset state on close
       setTimeout(() => {
         setFormState(initialFormState);
-        setShowExtractModal(false);
+        setActiveTab('extract');
         setExtractionText('');
+        setExtractJobUrl('');
         clearExtractedData();
       }, 300); // Delay to allow for closing animation
     }
@@ -61,10 +65,6 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
     }));
   };
 
-  const handleExtractClick = () => {
-    setShowExtractModal(true);
-  };
-
   const handleExtractSubmit = async () => {
     if (!extractionText.trim()) {
       showError('Please paste job posting text');
@@ -74,7 +74,7 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
     const data = await extractJobPosting(extractionText);
     
     if (data) {
-      // Populate form with extracted data
+      // Populate form with extracted data and switch to manual tab
       setFormState(prev => ({
         ...prev,
         position: data.positionTitle || prev.position,
@@ -83,22 +83,16 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
         description: data.description || prev.description,
         skills: data.techStack || prev.skills,
         softSkills: data.softSkills || prev.softSkills,
-        // Note: jobType from API is a string, would need mapping to JobType enum if needed
-        // For now, we'll skip it to avoid type issues
+        url: extractJobUrl || prev.url,
       }));
       
-      setShowExtractModal(false);
+      setActiveTab('manual');
       setExtractionText('');
+      setExtractJobUrl('');
       showSuccess('Job details extracted successfully! Review and edit as needed.');
     } else if (extractionError) {
       showError(extractionError);
     }
-  };
-
-  const handleCancelExtract = () => {
-    setShowExtractModal(false);
-    setExtractionText('');
-    clearExtractedData();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -117,39 +111,106 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
       {/* Main Add Application Modal */}
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
         <div 
-          className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col transition-all duration-300 transform scale-95 opacity-0 animate-fade-in-scale"
+          className="bg-white dark:bg-neutral-surface-dark rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col transition-all duration-300 transform scale-95 opacity-0 animate-fade-in-scale"
           style={{ animationFillMode: 'forwards' }}
           onClick={e => e.stopPropagation()}
         >
-          <div className="p-6 border-b flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Add New Application</h2>
-            <button onClick={onClose} className="text-neutral-gray hover:text-black">
+          <div className="p-6 border-b border-neutral-border-light dark:border-neutral-border-dark flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Add New Application</h2>
+            <button onClick={onClose} className="text-neutral-gray hover:text-black dark:hover:text-white">
               <XMarkIcon className="w-6 h-6" />
             </button>
           </div>
 
-        <div className="p-6 overflow-y-auto">
-          {/* AI Extraction Button */}
-          <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-medium text-blue-900">AI-Powered Job Extraction</h3>
-                <p className="text-xs text-blue-700 mt-1">
-                  Paste a job posting and let AI extract the details automatically
-                </p>
-              </div>
-              <Button 
-                onClick={handleExtractClick}
-                variant="secondary"
-                size="small"
-                type="button"
-              >
-                Extract Job Details
-              </Button>
-            </div>
+          {/* Tabs */}
+          <div className="flex border-b border-neutral-border-light dark:border-neutral-border-dark">
+            <button
+              onClick={() => setActiveTab('extract')}
+              className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+                activeTab === 'extract'
+                  ? 'text-primary-blue border-b-2 border-primary-blue bg-blue-50 dark:bg-blue-900/20'
+                  : 'text-neutral-gray hover:text-neutral-text-primary-light dark:hover:text-neutral-text-primary-dark'
+              }`}
+            >
+              <SparklesIcon className="w-5 h-5 inline-block mr-2" />
+              Extract with AI
+            </button>
+            <button
+              onClick={() => setActiveTab('manual')}
+              className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+                activeTab === 'manual'
+                  ? 'text-primary-blue border-b-2 border-primary-blue bg-blue-50 dark:bg-blue-900/20'
+                  : 'text-neutral-gray hover:text-neutral-text-primary-light dark:hover:text-neutral-text-primary-dark'
+              }`}
+            >
+              <PencilIcon className="w-5 h-5 inline-block mr-2" />
+              Add Manually
+            </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="p-6 overflow-y-auto">
+          {activeTab === 'extract' ? (
+            // Extract with AI Tab
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-semibold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-2">
+                  Extract Job Details with AI
+                </h3>
+                <p className="text-sm text-neutral-gray dark:text-neutral-text-secondary-dark mb-6">
+                  Paste the entire job posting text below and AI will extract the details automatically
+                </p>
+              </div>
+
+              <div>
+                <label htmlFor="extractionText" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Job Posting Text
+                </label>
+                <textarea
+                  id="extractionText"
+                  rows={12}
+                  value={extractionText}
+                  onChange={(e) => setExtractionText(e.target.value)}
+                  placeholder="Paste the entire job posting text here (from job board, company website, email, etc.)..."
+                  className="block w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
+                  disabled={extracting}
+                />
+                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  Tip: Copy the entire job posting including title, company, requirements, and description for best results
+                </p>
+              </div>
+
+              <div>
+                <label htmlFor="extractJobUrl" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Job URL (Optional)
+                </label>
+                <input
+                  type="url"
+                  id="extractJobUrl"
+                  value={extractJobUrl}
+                  onChange={(e) => setExtractJobUrl(e.target.value)}
+                  placeholder="https://example.com/job-posting"
+                  className="block w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
+                  disabled={extracting}
+                />
+              </div>
+
+              {extractionError && (
+                <p className="mt-2 text-sm text-red-600">{extractionError}</p>
+              )}
+
+              <div className="flex justify-end pt-4">
+                <Button 
+                  onClick={handleExtractSubmit}
+                  size="medium"
+                  disabled={extracting || !extractionText.trim()}
+                >
+                  {extracting ? 'Extracting...' : 'Extract & Fill Form'}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            // Manual Entry Tab
+            <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InputField 
                 label="Position" 
@@ -245,82 +306,21 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
               />
             </div>
           </form>
+          )}
         </div>
         
-        <div className="p-6 border-t bg-gray-50 flex justify-end items-center">
-          <Button onClick={onClose} variant="secondary" className="mr-4">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} type="submit" size="medium">
-            Save Application
-          </Button>
-        </div>
+        {activeTab === 'manual' && (
+          <div className="p-6 border-t border-neutral-border-light dark:border-neutral-border-dark bg-gray-50 dark:bg-neutral-bg-dark flex justify-end items-center">
+            <Button onClick={onClose} variant="secondary" className="mr-4">
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit} type="submit" size="medium">
+              Save Application
+            </Button>
+          </div>
+        )}
         </div>
       </div>
-
-      {/* AI Extraction Modal */}
-      {showExtractModal && (
-        <div className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4" onClick={handleCancelExtract}>
-          <div 
-            className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col transition-all duration-300 transform scale-95 opacity-0 animate-fade-in-scale"
-            style={{ animationFillMode: 'forwards' }}
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="p-6 border-b flex justify-between items-center">
-              <div>
-                <h2 className="text-xl font-semibold">Extract Job Details</h2>
-                <p className="text-sm text-gray-600 mt-1">
-                  Paste the job posting text below and AI will extract the details
-                </p>
-              </div>
-              <button onClick={handleCancelExtract} className="text-neutral-gray hover:text-black">
-                <XMarkIcon className="w-6 h-6" />
-              </button>
-            </div>
-
-            <div className="p-6 overflow-y-auto flex-1">
-              <div>
-                <label htmlFor="extractionText" className="block text-sm font-medium text-gray-700 mb-2">
-                  Job Posting Text
-                </label>
-                <textarea
-                  id="extractionText"
-                  rows={15}
-                  value={extractionText}
-                  onChange={(e) => setExtractionText(e.target.value)}
-                  placeholder="Paste the job posting text here (from job board, company website, email, etc.)..."
-                  className="block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
-                  disabled={extracting}
-                />
-                {extractionError && (
-                  <p className="mt-2 text-sm text-red-600">{extractionError}</p>
-                )}
-                <p className="mt-2 text-xs text-gray-500">
-                  Tip: Copy the entire job posting including title, company, requirements, and description for best results
-                </p>
-              </div>
-            </div>
-            
-            <div className="p-6 border-t bg-gray-50 flex justify-end items-center">
-              <Button 
-                onClick={handleCancelExtract} 
-                variant="secondary" 
-                className="mr-4"
-                disabled={extracting}
-              >
-                Cancel
-              </Button>
-              <Button 
-                onClick={handleExtractSubmit} 
-                size="medium"
-                disabled={extracting || !extractionText.trim()}
-              >
-                {extracting ? 'Extracting...' : 'Extract & Fill Form'}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <style>{`
         @keyframes fade-in-scale {
