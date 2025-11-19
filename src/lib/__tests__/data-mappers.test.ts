@@ -16,24 +16,24 @@ describe('ApplicationMapper', () => {
     it('should transform backend application to frontend format', () => {
       const backendApp: BackendApplication = {
         id: 123,
-        userId: 'user-123',
-        positionUrl: 'https://example.com/job',
-        positionTitle: 'Senior Developer',
-        companyName: 'Tech Corp',
-        jobLocation: 'San Francisco, CA',
-        appliedAt: new Date('2024-01-15T10:00:00Z'),
+        user_id: 'user-123',
+        position_url: 'https://example.com/job',
+        position_title: 'Senior Developer',
+        company_name: 'Tech Corp',
+        job_location: 'San Francisco, CA',
+        applied_at: '2024-01-15T10:00:00Z',
         status: 'APPLIED',
-        cvPath: '/uploads/cv.pdf',
-        coverLetterPath: '/uploads/cover.pdf',
+        cv_path: '/uploads/cv.pdf',
+        cover_letter_path: '/uploads/cover.pdf',
         notes: 'Great opportunity',
         description: 'Full stack role',
-        techStack: ['React', 'Node.js'],
-        softSkills: ['Communication', 'Leadership'],
-        jobType: 'FULL_TIME',
+        tech_stack: ['React', 'Node.js'],
+        soft_skills: ['Communication', 'Leadership'],
+        job_type: 'FULL_TIME',
         tags: ['remote', 'senior'],
-        extractedJson: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        extracted_json: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
       const frontendApp = ApplicationMapper.toFrontend(backendApp);
@@ -55,24 +55,24 @@ describe('ApplicationMapper', () => {
     it('should handle null values correctly', () => {
       const backendApp: BackendApplication = {
         id: 456,
-        userId: 'user-456',
-        positionUrl: 'https://example.com/job2',
-        positionTitle: null,
-        companyName: null,
-        jobLocation: null,
-        appliedAt: new Date('2024-01-20T10:00:00Z'),
+        user_id: 'user-456',
+        position_url: 'https://example.com/job2',
+        position_title: null,
+        company_name: null,
+        job_location: null,
+        applied_at: '2024-01-20T10:00:00Z',
         status: 'REJECTED',
-        cvPath: null,
-        coverLetterPath: null,
+        cv_path: null,
+        cover_letter_path: null,
         notes: null,
         description: null,
-        techStack: null,
-        softSkills: null,
-        jobType: null,
+        tech_stack: null,
+        soft_skills: null,
+        job_type: null,
         tags: null,
-        extractedJson: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        extracted_json: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
       const frontendApp = ApplicationMapper.toFrontend(backendApp);
@@ -106,17 +106,17 @@ describe('ApplicationMapper', () => {
 
       const backendData = ApplicationMapper.toBackend(frontendData);
 
-      assert.strictEqual(backendData.position_title, 'Backend Engineer');
-      assert.strictEqual(backendData.company_name, 'StartupCo');
-      assert.strictEqual(backendData.job_location, 'Remote');
-      assert.strictEqual(backendData.position_url, 'https://example.com/backend-job');
+      assert.strictEqual(backendData.positionTitle, 'Backend Engineer');
+      assert.strictEqual(backendData.companyName, 'StartupCo');
+      assert.strictEqual(backendData.jobLocation, 'Remote');
+      assert.strictEqual(backendData.positionUrl, 'https://example.com/backend-job');
       assert.strictEqual(backendData.status, 'INTERVIEWING');
-      assert.strictEqual(backendData.applied_at, '2024-02-01T10:00:00Z');
+      assert.strictEqual(backendData.appliedAt, '2024-02-01T10:00:00Z');
       assert.strictEqual(backendData.description, 'Backend development role');
       assert.strictEqual(backendData.notes, 'Interesting startup');
-      assert.deepStrictEqual(backendData.tech_stack, ['Python', 'Django']);
-      assert.deepStrictEqual(backendData.soft_skills, ['Problem Solving']);
-      assert.strictEqual(backendData.job_type, 'CONTRACT');
+      assert.deepStrictEqual(backendData.techStack, ['Python', 'Django']);
+      assert.deepStrictEqual(backendData.softSkills, ['Problem Solving']);
+      assert.strictEqual(backendData.jobType, 'CONTRACT');
       assert.deepStrictEqual(backendData.tags, ['python', 'backend']);
     });
 
@@ -128,10 +128,10 @@ describe('ApplicationMapper', () => {
 
       const backendData = ApplicationMapper.toBackend(partialData);
 
-      assert.strictEqual(backendData.position_title, 'Frontend Developer');
+      assert.strictEqual(backendData.positionTitle, 'Frontend Developer');
       assert.strictEqual(backendData.status, 'OFFERED');
-      assert.strictEqual(backendData.company_name, undefined);
-      assert.strictEqual(backendData.job_location, undefined);
+      assert.strictEqual(backendData.companyName, undefined);
+      assert.strictEqual(backendData.jobLocation, undefined);
     });
   });
 
@@ -162,24 +162,24 @@ describe('ApplicationMapper', () => {
       testCases.forEach(({ backend, frontend }) => {
         const backendApp: BackendApplication = {
           id: 1,
-          userId: 'test',
-          positionUrl: 'test',
-          positionTitle: 'test',
-          companyName: 'test',
-          jobLocation: 'test',
-          appliedAt: new Date(),
+          user_id: 'test',
+          position_url: 'test',
+          position_title: 'test',
+          company_name: 'test',
+          job_location: 'test',
+          applied_at: new Date().toISOString(),
           status: backend as any,
-          cvPath: null,
-          coverLetterPath: null,
+          cv_path: null,
+          cover_letter_path: null,
           notes: null,
           description: null,
-          techStack: null,
-          softSkills: null,
-          jobType: null,
+          tech_stack: null,
+          soft_skills: null,
+          job_type: null,
           tags: null,
-          extractedJson: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          extracted_json: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
         const result = ApplicationMapper.toFrontend(backendApp);
         assert.strictEqual(result.status, frontend, `${backend} should map to ${frontend}`);
@@ -200,29 +200,29 @@ describe('ApplicationMapper', () => {
       testCases.forEach(({ frontend, backend }) => {
         // Frontend to backend
         const backendResult = ApplicationMapper.toBackend({ jobType: frontend });
-        assert.strictEqual(backendResult.job_type, backend);
+        assert.strictEqual(backendResult.jobType, backend);
 
         // Backend to frontend
         const backendApp: BackendApplication = {
           id: 1,
-          userId: 'test',
-          positionUrl: 'test',
-          positionTitle: 'test',
-          companyName: 'test',
-          jobLocation: 'test',
-          appliedAt: new Date(),
+          user_id: 'test',
+          position_url: 'test',
+          position_title: 'test',
+          company_name: 'test',
+          job_location: 'test',
+          applied_at: new Date().toISOString(),
           status: 'APPLIED',
-          cvPath: null,
-          coverLetterPath: null,
+          cv_path: null,
+          cover_letter_path: null,
           notes: null,
           description: null,
-          techStack: null,
-          softSkills: null,
-          jobType: backend as any,
+          tech_stack: null,
+          soft_skills: null,
+          job_type: backend as any,
           tags: null,
-          extractedJson: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          extracted_json: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
         const frontendResult = ApplicationMapper.toFrontend(backendApp);
         assert.strictEqual(frontendResult.jobType, frontend);
@@ -235,45 +235,45 @@ describe('ApplicationMapper', () => {
       const backendApps: BackendApplication[] = [
         {
           id: 1,
-          userId: 'user-1',
-          positionUrl: 'https://example.com/job1',
-          positionTitle: 'Job 1',
-          companyName: 'Company 1',
-          jobLocation: 'Location 1',
-          appliedAt: new Date(),
+          user_id: 'user-1',
+          position_url: 'https://example.com/job1',
+          position_title: 'Job 1',
+          company_name: 'Company 1',
+          job_location: 'Location 1',
+          applied_at: new Date().toISOString(),
           status: 'APPLIED',
-          cvPath: null,
-          coverLetterPath: null,
+          cv_path: null,
+          cover_letter_path: null,
           notes: null,
           description: null,
-          techStack: null,
-          softSkills: null,
-          jobType: null,
+          tech_stack: null,
+          soft_skills: null,
+          job_type: null,
           tags: null,
-          extractedJson: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          extracted_json: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         },
         {
           id: 2,
-          userId: 'user-2',
-          positionUrl: 'https://example.com/job2',
-          positionTitle: 'Job 2',
-          companyName: 'Company 2',
-          jobLocation: 'Location 2',
-          appliedAt: new Date(),
+          user_id: 'user-2',
+          position_url: 'https://example.com/job2',
+          position_title: 'Job 2',
+          company_name: 'Company 2',
+          job_location: 'Location 2',
+          applied_at: new Date().toISOString(),
           status: 'INTERVIEWING',
-          cvPath: null,
-          coverLetterPath: null,
+          cv_path: null,
+          cover_letter_path: null,
           notes: null,
           description: null,
-          techStack: null,
-          softSkills: null,
-          jobType: null,
+          tech_stack: null,
+          soft_skills: null,
+          job_type: null,
           tags: null,
-          extractedJson: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          extracted_json: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         },
       ];
 
@@ -296,24 +296,24 @@ describe('ApplicationMapper', () => {
     it('should handle unknown backend status by defaulting to WITHDRAWN', () => {
       const backendApp: BackendApplication = {
         id: 999,
-        userId: 'user-999',
-        positionUrl: 'https://example.com/job',
-        positionTitle: 'Test Job',
-        companyName: 'Test Company',
-        jobLocation: 'Test Location',
-        appliedAt: new Date(),
+        user_id: 'user-999',
+        position_url: 'https://example.com/job',
+        position_title: 'Test Job',
+        company_name: 'Test Company',
+        job_location: 'Test Location',
+        applied_at: new Date().toISOString(),
         status: 'UNKNOWN_STATUS' as any,
-        cvPath: null,
-        coverLetterPath: null,
+        cv_path: null,
+        cover_letter_path: null,
         notes: null,
         description: null,
-        techStack: null,
-        softSkills: null,
-        jobType: null,
+        tech_stack: null,
+        soft_skills: null,
+        job_type: null,
         tags: null,
-        extractedJson: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        extracted_json: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
       const frontendApp = ApplicationMapper.toFrontend(backendApp);
@@ -323,24 +323,24 @@ describe('ApplicationMapper', () => {
     it('should handle unknown backend job type by defaulting to FULL_TIME', () => {
       const backendApp: BackendApplication = {
         id: 999,
-        userId: 'user-999',
-        positionUrl: 'https://example.com/job',
-        positionTitle: 'Test Job',
-        companyName: 'Test Company',
-        jobLocation: 'Test Location',
-        appliedAt: new Date(),
+        user_id: 'user-999',
+        position_url: 'https://example.com/job',
+        position_title: 'Test Job',
+        company_name: 'Test Company',
+        job_location: 'Test Location',
+        applied_at: new Date().toISOString(),
         status: 'APPLIED',
-        cvPath: null,
-        coverLetterPath: null,
+        cv_path: null,
+        cover_letter_path: null,
         notes: null,
         description: null,
-        techStack: null,
-        softSkills: null,
-        jobType: 'UNKNOWN_TYPE' as any,
+        tech_stack: null,
+        soft_skills: null,
+        job_type: 'UNKNOWN_TYPE' as any,
         tags: null,
-        extractedJson: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        extracted_json: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
       const frontendApp = ApplicationMapper.toFrontend(backendApp);
@@ -350,24 +350,24 @@ describe('ApplicationMapper', () => {
     it('should handle empty arrays correctly', () => {
       const backendApp: BackendApplication = {
         id: 789,
-        userId: 'user-789',
-        positionUrl: 'https://example.com/job',
-        positionTitle: 'Test Job',
-        companyName: 'Test Company',
-        jobLocation: 'Test Location',
-        appliedAt: new Date(),
+        user_id: 'user-789',
+        position_url: 'https://example.com/job',
+        position_title: 'Test Job',
+        company_name: 'Test Company',
+        job_location: 'Test Location',
+        applied_at: new Date().toISOString(),
         status: 'APPLIED',
-        cvPath: null,
-        coverLetterPath: null,
+        cv_path: null,
+        cover_letter_path: null,
         notes: null,
         description: null,
-        techStack: [],
-        softSkills: [],
-        jobType: null,
+        tech_stack: [],
+        soft_skills: [],
+        job_type: null,
         tags: [],
-        extractedJson: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        extracted_json: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
       const frontendApp = ApplicationMapper.toFrontend(backendApp);
@@ -379,27 +379,27 @@ describe('ApplicationMapper', () => {
     });
 
     it('should preserve ISO date format in toFrontend', () => {
-      const testDate = new Date('2024-03-15T14:30:00.000Z');
+      const testDate = '2024-03-15T14:30:00.000Z';
       const backendApp: BackendApplication = {
         id: 111,
-        userId: 'user-111',
-        positionUrl: 'https://example.com/job',
-        positionTitle: 'Test Job',
-        companyName: 'Test Company',
-        jobLocation: 'Test Location',
-        appliedAt: testDate,
+        user_id: 'user-111',
+        position_url: 'https://example.com/job',
+        position_title: 'Test Job',
+        company_name: 'Test Company',
+        job_location: 'Test Location',
+        applied_at: testDate,
         status: 'APPLIED',
-        cvPath: null,
-        coverLetterPath: null,
+        cv_path: null,
+        cover_letter_path: null,
         notes: null,
         description: null,
-        techStack: null,
-        softSkills: null,
-        jobType: null,
+        tech_stack: null,
+        soft_skills: null,
+        job_type: null,
         tags: null,
-        extractedJson: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        extracted_json: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
 
       const frontendApp = ApplicationMapper.toFrontend(backendApp);
@@ -417,12 +417,12 @@ describe('ApplicationMapper', () => {
 
       const backendData = ApplicationMapper.toBackend(frontendData);
 
-      assert.strictEqual(backendData.position_title, 'Test Position');
-      assert.strictEqual(backendData.position_url, 'https://example.com/job');
+      assert.strictEqual(backendData.positionTitle, 'Test Position');
+      assert.strictEqual(backendData.positionUrl, 'https://example.com/job');
       assert.strictEqual(backendData.status, 'APPLIED');
       // Undefined values should be included as undefined
-      assert.strictEqual(backendData.company_name, undefined);
-      assert.strictEqual(backendData.job_location, undefined);
+      assert.strictEqual(backendData.companyName, undefined);
+      assert.strictEqual(backendData.jobLocation, undefined);
     });
 
     it('should handle empty strings in toBackend', () => {
@@ -437,10 +437,10 @@ describe('ApplicationMapper', () => {
       const backendData = ApplicationMapper.toBackend(frontendData);
 
       // Empty strings should be preserved
-      assert.strictEqual(backendData.position_title, '');
-      assert.strictEqual(backendData.company_name, '');
-      assert.strictEqual(backendData.position_url, '');
-      assert.strictEqual(backendData.job_location, 'Remote');
+      assert.strictEqual(backendData.positionTitle, '');
+      assert.strictEqual(backendData.companyName, '');
+      assert.strictEqual(backendData.positionUrl, '');
+      assert.strictEqual(backendData.jobLocation, 'Remote');
     });
 
     it('should handle all fields being undefined in toBackend', () => {
@@ -448,8 +448,8 @@ describe('ApplicationMapper', () => {
 
       const backendData = ApplicationMapper.toBackend(frontendData);
 
-      // Should return an empty object when no fields are provided
-      assert.deepStrictEqual(backendData, {});
+      // positionUrl is always set to ensure API validation works
+      assert.deepStrictEqual(backendData, { positionUrl: '' });
     });
   });
 });
