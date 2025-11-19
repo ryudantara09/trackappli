@@ -75,6 +75,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     if (!localFile) return;
     
     // Get public URL and download
+    if (localFile.startsWith('http')) {
+      window.open(localFile, '_blank');
+      return;
+    }
+
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const publicUrl = `${supabaseUrl}/storage/v1/object/public/documents/${localFile}`;
     

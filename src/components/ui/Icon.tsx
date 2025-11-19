@@ -4,6 +4,7 @@ export {
   AlertTriangle as ExclamationTriangleIcon,
   ArrowUpDown as ArrowsUpDownIcon,
   Ban as NoSymbolIcon,
+  Banknote as BanknotesIcon,
   BarChart3 as ChartBarIcon,
   Bolt as BoltIcon,
   Briefcase as BriefcaseIcon,

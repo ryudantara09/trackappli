@@ -12,7 +12,9 @@ import {
   MapPinIcon, 
   CalendarIcon, 
   BuildingOfficeIcon, 
-  ArrowPathIcon 
+  ArrowPathIcon,
+  BanknotesIcon,
+  BriefcaseIcon
 } from '@/components/ui/Icon';
 
 interface ApplicationDetailsPageProps {
@@ -96,6 +98,12 @@ export default function ApplicationDetailsPage({ params }: ApplicationDetailsPag
       showError(error instanceof Error ? error.message : 'Failed to delete application');
       setIsDeleting(false);
     }
+  };
+
+  const getFileUrl = (path: string) => {
+    if (!path) return '#';
+    if (path.startsWith('http')) return path;
+    return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/documents/${path}`;
   };
 
   const handleStatusChange = async (newStatus: ApplicationStatus) => {
@@ -216,103 +224,93 @@ export default function ApplicationDetailsPage({ params }: ApplicationDetailsPag
             </div>
           </div>
 
-          {/* Job Type */}
-          {application.jobType && (
-            <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6 mb-6">
-              <h2 className="text-xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-4">
-                Job Type
-              </h2>
-              <span className="px-3 py-1.5 text-sm font-medium bg-primary-light text-primary-dark rounded-lg">
-                {application.jobType}
-              </span>
+          {/* Job Details Card */}
+          <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6 mb-6">
+            <h2 className="text-xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-4">
+              Job Details
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {application.jobType && (
+                <div className="flex items-start">
+                  <BriefcaseIcon className="w-5 h-5 mr-3 text-neutral-gray mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-neutral-gray mb-1">Job Type</p>
+                    <p className="text-neutral-text-primary-light dark:text-neutral-text-primary-dark">{application.jobType}</p>
+                  </div>
+                </div>
+              )}
+              {application.salary && (
+                <div className="flex items-start">
+                  <BanknotesIcon className="w-5 h-5 mr-3 text-neutral-gray mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-neutral-gray mb-1">Salary</p>
+                    <p className="text-neutral-text-primary-light dark:text-neutral-text-primary-dark">{application.salary}</p>
+                  </div>
+                </div>
+              )}
+              {application.url && (
+                <div className="flex items-start sm:col-span-2">
+                  <ArrowPathIcon className="w-5 h-5 mr-3 text-neutral-gray mt-0.5 rotate-45" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-neutral-gray mb-1">Job Posting URL</p>
+                    <a 
+                      href={application.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary-blue hover:underline break-all block"
+                    >
+                      {application.url}
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
+          </div>
 
-          {/* Job Description */}
-          {application.description && (
-            <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6 mb-6">
+          {/* Skills Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {/* Technical Skills */}
+            <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6">
               <h2 className="text-xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-4">
-                Job Description
+                Technical Skills
               </h2>
-              <p className="text-neutral-gray whitespace-pre-line leading-relaxed">
-                {application.description}
-              </p>
+              {application.skills && application.skills.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {application.skills.map((skill, index) => (
+                    <span 
+                      key={`tech-${skill}-${index}`}
+                      className="px-3 py-1.5 text-sm font-medium bg-primary-light text-primary-dark rounded-lg"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-neutral-gray italic">No technical skills listed</p>
+              )}
             </div>
-          )}
 
-          {/* Job URL */}
-          {application.url && (
-            <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6 mb-6">
-              <h2 className="text-xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-4">
-                Job Posting URL
-              </h2>
-              <a 
-                href={application.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary-blue hover:underline break-all"
-              >
-                {application.url}
-              </a>
-            </div>
-          )}
-
-          {/* Skills / Tech Stack */}
-          {application.skills && application.skills.length > 0 && (
-            <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6 mb-6">
-              <h2 className="text-xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-4">
-                Required Skills & Tech Stack
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {application.skills.map((skill, index) => (
-                  <span 
-                    key={`${skill}-${index}`}
-                    className="px-3 py-1.5 text-sm font-medium bg-primary-light text-primary-dark rounded-lg"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Soft Skills */}
-          {application.softSkills && application.softSkills.length > 0 && (
-            <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6 mb-6">
+            {/* Soft Skills */}
+            <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6">
               <h2 className="text-xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-4">
                 Soft Skills
               </h2>
-              <div className="flex flex-wrap gap-2">
-                {application.softSkills.map((skill, index) => (
-                  <span 
-                    key={`${skill}-${index}`}
-                    className="px-3 py-1.5 text-sm font-medium bg-green-100 text-green-800 rounded-lg"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
+              {application.softSkills && application.softSkills.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {application.softSkills.map((skill, index) => (
+                    <span 
+                      key={`soft-${skill}-${index}`}
+                      className="px-3 py-1.5 text-sm font-medium bg-green-100 text-green-800 rounded-lg"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-neutral-gray italic">No soft skills listed</p>
+              )}
             </div>
-          )}
-
-          {/* Tags */}
-          {application.tags && application.tags.length > 0 && (
-            <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6 mb-6">
-              <h2 className="text-xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-4">
-                Tags
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {application.tags.map((tag, index) => (
-                  <span 
-                    key={`${tag}-${index}`}
-                    className="px-3 py-1.5 text-sm font-medium bg-purple-100 text-purple-800 rounded-lg"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+          </div>
 
           {/* Documents */}
           {(application.cvPath || application.coverLetterPath) && (
@@ -325,7 +323,7 @@ export default function ApplicationDetailsPage({ params }: ApplicationDetailsPag
                   <div className="flex items-center justify-between p-3 bg-neutral-bg-light dark:bg-neutral-bg-dark rounded-lg">
                     <span className="text-neutral-gray">CV / Resume</span>
                     <a 
-                      href={application.cvPath}
+                      href={getFileUrl(application.cvPath)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary-blue hover:underline text-sm"
@@ -338,7 +336,7 @@ export default function ApplicationDetailsPage({ params }: ApplicationDetailsPag
                   <div className="flex items-center justify-between p-3 bg-neutral-bg-light dark:bg-neutral-bg-dark rounded-lg">
                     <span className="text-neutral-gray">Cover Letter</span>
                     <a 
-                      href={application.coverLetterPath}
+                      href={getFileUrl(application.coverLetterPath)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary-blue hover:underline text-sm"
@@ -348,6 +346,18 @@ export default function ApplicationDetailsPage({ params }: ApplicationDetailsPag
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {/* Job Description */}
+          {application.description && (
+            <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6 mb-6">
+              <h2 className="text-xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-4">
+                Job Description
+              </h2>
+              <p className="text-neutral-gray whitespace-pre-line leading-relaxed">
+                {application.description}
+              </p>
             </div>
           )}
 

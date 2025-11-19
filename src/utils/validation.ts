@@ -78,6 +78,10 @@ export const createApplicationSchema = z.object({
     JOB_TYPE.INTERNSHIP,
     JOB_TYPE.FREELANCE,
   ]).optional(),
+  techStack: z.array(z.string()).optional(),
+  softSkills: z.array(z.string()).optional(),
+  cvPath: z.string().optional(),
+  coverLetterPath: z.string().optional(),
 });
 
 /**
