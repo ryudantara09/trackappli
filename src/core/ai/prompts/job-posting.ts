@@ -32,7 +32,7 @@ EXTRACTION SCHEMA:
   "job_type": string | null,              // e.g., "Full-time", "Part-time", "Contract", "Internship"
   "tech_stack": string[],                 // Technical skills, programming languages, frameworks, tools
   "soft_skills": string[],                // Soft skills like "communication", "leadership", "teamwork"
-  "description": string | null,           // the job description full text (without the company name, title etc)
+  "description": string | null,           // the job description full text (without the company name, position title etc) MEANING DO NOT MAKE IT AS A SUMMARY, but also don't keep all sections that are not part of the  position description
   "salary_range": string | null           // Salary information if mentioned
 }
 
