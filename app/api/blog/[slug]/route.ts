@@ -23,10 +23,11 @@ async function getArticleOrThrow(slug: string) {
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: RouteParams }
+  { params }: { params: Promise<RouteParams> }
 ) {
   try {
-    const article = await getArticleOrThrow(params.slug);
+    const { slug } = await params;
+    const article = await getArticleOrThrow(slug);
     return NextResponse.json({ success: true, data: article });
   } catch (error) {
     return createErrorResponse(error);
@@ -35,17 +36,18 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: RouteParams }
+  { params }: { params: Promise<RouteParams> }
 ) {
   try {
     const auth = await requireAuth();
     assertAdminUser(auth.user);
 
+    const { slug } = await params;
     const payload = await validateRequestBody(request, updateArticleSchema);
     const supabase = createAdminClient();
     const blogService = new BlogService(supabase);
 
-    const article = await blogService.updateArticle(params.slug, {
+    const article = await blogService.updateArticle(slug, {
       title: payload.title,
       summary: payload.summary ?? null,
       content: payload.content,
@@ -64,15 +66,16 @@ export async function PUT(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: RouteParams }
+  { params }: { params: Promise<RouteParams> }
 ) {
   try {
     const auth = await requireAuth();
     assertAdminUser(auth.user);
 
+    const { slug } = await params;
     const supabase = createAdminClient();
     const blogService = new BlogService(supabase);
-    await blogService.deleteArticle(params.slug);
+    await blogService.deleteArticle(slug);
 
     return NextResponse.json({ success: true });
   } catch (error) {
