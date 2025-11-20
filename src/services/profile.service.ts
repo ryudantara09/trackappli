@@ -220,6 +220,9 @@ export class ProfileService {
     }
 
     if (cvData.work_experience && cvData.work_experience.length > 0) {
+      // Delete existing work experience
+      await this.experienceRepo.deleteAllForUser(userId);
+
       const experienceData: WorkExperienceInsert[] = cvData.work_experience.map(exp => {
         try {
           return {
@@ -247,6 +250,9 @@ export class ProfileService {
 
     // Process education
     if (cvData.education && cvData.education.length > 0) {
+      // Delete existing education
+      await this.educationRepo.deleteAllForUser(userId);
+
       const educationData: EducationInsert[] = cvData.education.map(edu => {
         try {
           return {
@@ -275,6 +281,9 @@ export class ProfileService {
 
     // Process technical skills
     if (cvData.technical_skills && cvData.technical_skills.length > 0) {
+      // Delete existing skills
+      await this.skillsRepo.deleteAllForUser(userId);
+
       const skillsData: TechnicalSkillInsert[] = cvData.technical_skills.map(skill => ({
         user_id: userId,
         category: this.normalizeCategory(skill.category),
