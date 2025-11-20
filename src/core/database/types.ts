@@ -170,13 +170,33 @@ export type Database = {
         }
         Relationships: []
       }
+      skills: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       technical_skills: {
         Row: {
-          category: string
           created_at: string
           description: string | null
           id: string
-          name: string
+          skill_id: string
           proficiency: string
           updated_at: string
           user_id: string
@@ -184,11 +204,10 @@ export type Database = {
           years_of_exp: number | null
         }
         Insert: {
-          category: string
           created_at?: string
           description?: string | null
           id?: string
-          name: string
+          skill_id: string
           proficiency: string
           updated_at?: string
           user_id: string
@@ -196,11 +215,10 @@ export type Database = {
           years_of_exp?: number | null
         }
         Update: {
-          category?: string
           created_at?: string
           description?: string | null
           id?: string
-          name?: string
+          skill_id?: string
           proficiency?: string
           updated_at?: string
           user_id?: string

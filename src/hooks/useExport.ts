@@ -1,123 +1,93 @@
-atch (error) } c;
-   ess(100) setProgr
-     l);
-URL(urokeObjectow.URL.rev
-      windnk);(liremoveChildcument.body.p
-      doanu      // Cle    
-ck();
-      link.cli);
-  ild(linkdy.appendChument.bo    doc  download
-er     // Trigg   
-    n}`;
- extensiomestamp}.${_${tinscatiolinload = `appowlink.d    'T')[0];
-  ing().split(Str.toISOw Date()mestamp = ne const ti   estamp
-  h timame witerate filenGen
-      // rl;
-      ink.href = u);
-      l'a'teElement(creaent.nk = documli    const }));
-  eType type: mimblob], { lob([RL(new BectUeateObj.cr.URLndow wil =onst ur  c link
-    load Create down   //
-   csv';
-xt/te : '   on' 
-    jsion/ 'applicat       ?
- == 'json' format =e = imeTypt mons ccsv';
-     on' : ''js? on' rmat === 'js= foion tens  const ex type
-     and MIMExtensionmine file e   // Deter
+import { useState, useCallback } from 'react';
 
-   (90);ogress  setPr    
-    ob();
-  se.blit responawalob = nst b     co the blob
- / Get      /0);
+export interface ExportOptions {
+  format?: 'csv' | 'json';
+  status?: string;
+  includeNotes?: boolean;
+  includeDescription?: boolean;
+}
 
-tProgress(7    se
-  }
-;
-      ort failed')or || 'ExperrorData.r(errw Erroow nehr;
-        t{}))) => (h((catc().onse.json await resprorData =t erns   co    e.ok) {
- f (!respons i
-     ss(50);
- setProgre 
-     
-     );g()}`.toStrin?${paramsexportapi/ fetch(`/= awaitst response t
-      coneques Make API r
-
-      //s(10);etProgres     s
- tter UXr be foate progress   // Simul}
-
-   
-      tion));ipDescrudeoptions.inclring(, Stn'Descriptio('includearams.append  p) {
-      finedion !== undecriptDesns?.includeif (optio  }
-      ));
-    deNotess.inclution String(optes',includeNo.append('   params) {
-     finedndeeNotes !== uud.incl (options?;
-      ifns.status)', optiotatuss.append('ss) paramatuions?.st if (opt
-     Params();w URLSearch = ne params   consters
-   etquery param  // Build 
-
-    rogress(0);tP
-      se;rting(true)Expo      setIs try {
-   
-   'csv';
- | ?.format | optionst format =   conss) => {
- onptins?: ExportOoptiosync (back(a= useCallpplications st exportA  */
-  conails
-  if export frows Error @thptions
-   * ourationonfig Export cions -aram opt* @p
-   * 
-   matfored cifins to speplicatio * Export ap*
-  ;
-
-  /*(0)tatess] = useS, setProgreogresspronst [lse);
-  cte(fa useSta =rting]etIsExpoxporting, sonst [isE  curn {
-ExportRetsexport(): Uion useE funct
-export
- * ```
- */}
- * };);
- *   rorailed:', errt f'Exponsole.error(*     co(error) {
-  catch *   }' });
- format: 'csvs({ icationpltApawait expor*      {
- 
- *   try {() =>async ort = xpeE const handl);
- * 
- * useExport( =sExporting }ions, iportApplicat const { ex``tsx
- *
- * `pleamex 
- * @thods
- *ate and me stortns Exp* @returions
- * 
- aticting applr exporfok tom hoo * Cus
+export interface UseExportReturn {
+  isExporting: boolean;
+  progress: number;
+  exportApplications: (options?: ExportOptions) => Promise<void>;
 }
 
 /**
-id>;e<voPromis=> ions) ptns?: ExportOtioions: (opApplicatrt expomber;
- ss: nu  progren;
-ooleating: bxporisE {
-  tReturneExporUsnterface export i
+ * Custom hook for exporting applications
+ * Handles the API call and file download
  */
-return type* Hook /**
- n;
+export function useExport(): UseExportReturn {
+  const [isExporting, setIsExporting] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const exportApplications = useCallback(async (options: ExportOptions = {}) => {
+    try {
+      setIsExporting(true);
+      setProgress(10); // Start progress
+
+      // Build query params
+      const params = new URLSearchParams();
+      if (options.status) {
+        params.append('status', options.status);
+      }
+      if (options.includeNotes !== undefined) {
+        params.append('includeNotes', String(options.includeNotes));
+      }
+      if (options.includeDescription !== undefined) {
+        params.append('includeDescription', String(options.includeDescription));
+      }
+
+      // Simulate progress for better UX
+      const progressInterval = setInterval(() => {
+        setProgress(prev => Math.min(prev + 10, 90));
+      }, 500);
+
+      // Make API request
+      const response = await fetch(`/api/export?${params.toString()}`);
+
+      clearInterval(progressInterval);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Export failed');
+      }
+
+      setProgress(100);
+
+      // Get the blob from response
+      const blob = await response.blob();
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Determine filename and extension
+      const format = options.format || 'csv';
+      const timestamp = new Date().toISOString().split('T')[0];
+      link.download = `applications_export_${timestamp}.${format}`;
+      
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+      
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+    } catch (error) {
+      console.error('Export failed:', error);
+      throw error;
+    } finally {
+      setIsExporting(false);
+      setProgress(0);
+    }
+  }, []);
+
+  return {
+    isExporting,
+    progress,
+    exportApplications,
+  };
 }
-
-: booleacription?eseDclud in
- s?: boolean;Note
-  includestring;  status?: ormat;
-rtFmat?: Expoor fOptions {
- Exportrface 
-export inte/ options
- *
- * Export
-
-/**| 'json';at = 'csv' ExportForme xport typs
- */
-e format type * Export
-/**
-t';
-eacm 'rfrock } CallbaeState, use { us
-
-import
- */ications.nd notifndling, ass, error ha progrees download
- * Handlmats. various fora incation datrting appliok for expom hoto
- * Cusk
- * t Hoo
- * useExpor/**

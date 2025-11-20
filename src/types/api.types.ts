@@ -100,6 +100,7 @@ export interface Education {
 export interface TechnicalSkill {
   id: string;
   userId: string;
+  skillId?: string; // Link to master skill
   category: SkillCategory;
   name: string;
   proficiency: SkillProficiency;
