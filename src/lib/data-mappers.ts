@@ -58,6 +58,7 @@ export class ApplicationMapper {
       tags: backend.tags || undefined,
       cvPath: backend.cv_path || undefined,
       coverLetterPath: backend.cover_letter_path || undefined,
+      salary: (backend.extracted_json as any)?.salary_range || undefined,
     };
   }
 

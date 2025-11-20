@@ -143,15 +143,8 @@ export const Header: React.FC<HeaderProps> = ({
   }
 
   return (
-    <header className="bg-neutral-bg-light dark:bg-neutral-bg-dark pt-8 pb-6">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <div className="min-w-0">
-          <h1 className="text-2xl sm:text-3xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark truncate">Applications</h1>
-          <p className="text-neutral-gray dark:text-neutral-text-secondary-dark mt-1 text-sm sm:text-base">
-            Track and manage your job applications here.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+    <header className="bg-neutral-surface-light dark:bg-neutral-surface-dark border-b border-neutral-border-light dark:border-neutral-border-dark mb-6 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+      <div className="flex h-16 items-center justify-end gap-2 sm:gap-3">
           <button
             onClick={toggleDarkMode}
             className="p-2 rounded-lg hover:bg-neutral-border-light dark:hover:bg-neutral-border-dark transition-colors"
@@ -164,23 +157,24 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
           {onExportClick && (
-            <Button onClick={onExportClick} size="medium" variant="secondary" className="hidden sm:flex">
-              <ArrowDownTrayIcon className="w-5 h-5 mr-2 -ml-1" />
+            <Button onClick={onExportClick} size="small" variant="secondary" className="hidden sm:flex">
+              <ArrowDownTrayIcon className="w-4 h-4 mr-1.5" />
               Export
             </Button>
           )}
           {onExportClick && (
-            <Button onClick={onExportClick} size="medium" variant="secondary" className="sm:hidden p-2">
-              <ArrowDownTrayIcon className="w-5 h-5" />
+            <Button onClick={onExportClick} size="small" variant="secondary" className="sm:hidden p-2">
+              <ArrowDownTrayIcon className="w-4 h-4" />
             </Button>
           )}
-          <Button onClick={onAddApplicationClick} size="medium" className="whitespace-nowrap">
-            <PlusIcon className="w-5 h-5 sm:mr-2 -ml-1" />
-            <span className="hidden sm:inline">Add Application</span>
-            <span className="sm:hidden">Add</span>
-          </Button>
+          {onAddApplicationClick && (
+            <Button onClick={onAddApplicationClick} size="small" className="whitespace-nowrap">
+              <PlusIcon className="w-4 h-4 sm:mr-1.5 -ml-1" />
+              <span className="hidden sm:inline">Add Application</span>
+              <span className="sm:hidden">Add</span>
+            </Button>
+          )}
         </div>
-      </div>
     </header>
   );
 };

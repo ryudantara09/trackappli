@@ -6,6 +6,7 @@ import 'react-quill-new/dist/quill.snow.css';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToastContext } from '@/contexts/ToastContext';
 import { Button } from '@/components/ui/Button';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { slugify } from '@/utils/slugify';
 import type { BlogArticle } from '@/types/frontend.types';
 
@@ -178,18 +179,15 @@ export default function BlogAdminPage() {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-          <p className="text-sm uppercase tracking-[0.4em] text-primary-blue">Blog Studio</p>
-          <h1 className="text-3xl font-extrabold mt-2">Publish homepage-worthy insights</h1>
-          <p className="text-neutral-gray dark:text-neutral-text-secondary-dark mt-2 max-w-3xl">
-            Articles added here sync directly to the homepage spotlight. Write rich content, schedule publish times, and keep your community updated.
-          </p>
-        </div>
+      <PageHeader 
+        badge="Blog Studio"
+        title="Publish homepage-worthy insights"
+        description="Articles added here sync directly to the homepage spotlight. Write rich content, schedule publish times, and keep your community updated."
+      >
         <Button variant="secondary" onClick={resetForm}>
           New Draft
         </Button>
-      </div>
+      </PageHeader>
 
       <div className="grid lg:grid-cols-3 gap-8">
         <form

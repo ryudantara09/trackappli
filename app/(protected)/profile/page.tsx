@@ -6,6 +6,8 @@ import { useCVExtraction } from '../../../src/hooks/useCVExtraction';
 import { useToastContext } from '../../../src/contexts/ToastContext';
 import { Button } from '../../../src/components/ui/Button';
 import { PlusIcon } from '../../../src/components/ui/Icon';
+import { PageHeader } from '../../../src/components/ui/PageHeader';
+import { Header } from '../../../src/components/layout/Header';
 import { SKILL_PROFICIENCY, SkillProficiency, SkillCategory } from '../../../src/config/constants';
 import { WorkExperience, Education, TechnicalSkill } from '../../../src/types/api.types';
 
@@ -56,12 +58,11 @@ export default function ProfilePage() {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark">
-          Profile
-        </h1>
-        <p className="text-neutral-gray mt-1">Manage your professional information</p>
-      </div>
+      <Header />
+      <PageHeader 
+        title="Profile" 
+        description="Manage your professional information"
+      />
 
       {/* Tabs */}
       <div className="border-b border-neutral-border-light dark:border-neutral-border-dark mb-8 overflow-x-auto">

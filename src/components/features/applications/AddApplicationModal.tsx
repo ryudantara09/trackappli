@@ -83,6 +83,7 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
         description: data.description || prev.description,
         skills: data.techStack || prev.skills,
         softSkills: data.softSkills || prev.softSkills,
+        jobType: (data.jobType as any) || prev.jobType,
         url: extractJobUrl || prev.url,
       }));
       
@@ -253,6 +254,21 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
                 ...prev, 
                 softSkills: e.target.value.split(',').map(s => s.trim())
               }))} 
+            />
+            <InputField 
+              label="Tags (comma separated)" 
+              name="tags" 
+              value={formState.tags?.join(', ') || ''} 
+              onChange={(e) => setFormState(prev => ({
+                ...prev, 
+                tags: e.target.value.split(',').map(s => s.trim())
+              }))} 
+            />
+            <InputField 
+              label="Job Type" 
+              name="jobType" 
+              value={formState.jobType || ''} 
+              onChange={handleFormChange} 
             />
 
             <div>

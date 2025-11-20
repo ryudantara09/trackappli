@@ -49,6 +49,7 @@ export interface FrontendApplication {
   tags?: string[];
   cvPath?: string;
   coverLetterPath?: string;
+  salary?: string;
 }
 
 /**
@@ -69,6 +70,7 @@ export interface ApplicationFormData {
   tags?: string[];
   cvPath?: string;
   coverLetterPath?: string;
+  salary?: string;
 }
 
 /**

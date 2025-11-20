@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { Header } from '@/components/layout/Header';
+import { PageHeader } from '@/components/ui/PageHeader';
 import { KanbanColumn } from '@/components/features/applications/KanbanColumn';
 import { ListView } from '@/components/features/applications/ListView';
 import { AddApplicationModal } from '@/components/features/applications/AddApplicationModal';
@@ -261,33 +262,33 @@ const ApplicationsPage: React.FC = () => {
   if (loading) {
     return (
       <div className="px-4 sm:px-6 lg:px-8 py-8">
-        <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
-
-        {/* Page Title Skeleton */}
-        <div className="mb-6">
-          <div className="h-8 w-64 bg-gray-200 rounded animate-pulse mb-2"></div>
-          <div className="h-4 w-96 bg-gray-200 rounded animate-pulse"></div>
-        </div>
-
-        {/* Search Bar Skeleton */}
-        <div className="mb-6">
-          <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
-        </div>
-
-        {/* List Skeleton */}
-        <div className="bg-white border border-neutral-border-light rounded-lg overflow-hidden">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="px-6 py-4 border-b border-neutral-border-light">
-              <div className="flex items-center gap-4">
-                <div className="flex-1">
-                  <div className="h-5 w-48 bg-gray-200 rounded animate-pulse mb-2"></div>
-                  <div className="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
-                </div>
-                <div className="h-6 w-24 bg-gray-200 rounded-full animate-pulse"></div>
-                <div className="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
-              </div>
+            <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
+            
+            {/* Page Title Skeleton */}
+            <div className="mb-6">
+              <div className="h-8 w-64 bg-gray-200 rounded animate-pulse mb-2"></div>
+              <div className="h-4 w-96 bg-gray-200 rounded animate-pulse"></div>
             </div>
-          ))}
+
+            {/* Search Bar Skeleton */}
+            <div className="mb-6">
+              <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+            </div>
+
+            {/* List Skeleton */}
+            <div className="bg-white border border-neutral-border-light rounded-lg overflow-hidden">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="px-6 py-4 border-b border-neutral-border-light">
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1">
+                      <div className="h-5 w-48 bg-gray-200 rounded animate-pulse mb-2"></div>
+                      <div className="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+                    </div>
+                    <div className="h-6 w-24 bg-gray-200 rounded-full animate-pulse"></div>
+                    <div className="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                </div>
+              ))}
         </div>
       </div>
     );
@@ -297,19 +298,19 @@ const ApplicationsPage: React.FC = () => {
   if (error) {
     return (
       <div className="px-4 sm:px-6 lg:px-8 py-8">
-        <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="text-red-500 text-5xl mb-4">⚠️</div>
+            <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
+            <div className="flex items-center justify-center h-64">
+              <div className="text-center">
+                <div className="text-red-500 text-5xl mb-4">⚠️</div>
             <h3 className="text-xl font-semibold text-neutral-text-primary-light mb-2">Failed to Load Applications</h3>
-            <p className="text-neutral-gray mb-4">{error}</p>
-            <button
-              onClick={() => refresh()}
-              className="px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-dark transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
+                <p className="text-neutral-gray mb-4">{error}</p>
+                <button
+                  onClick={() => refresh()}
+                  className="px-4 py-2 bg-primary-blue text-white rounded-lg hover:bg-primary-dark transition-colors"
+                >
+                  Try Again
+                </button>
+              </div>
         </div>
       </div>
     );
@@ -317,125 +318,124 @@ const ApplicationsPage: React.FC = () => {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8 text-neutral-text-primary-light dark:text-neutral-text-primary-dark bg-neutral-bg-light dark:bg-neutral-bg-dark">
-      <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
+          <Header onAddApplicationClick={() => setIsModalOpen(true)} onExportClick={handleExport} />
+          
+      <PageHeader 
+        title="All Applications" 
+        description="Manage and track all your job applications"
+      />
 
-      {/* Page Title */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-neutral-text-primary-light">All Applications</h1>
-        <p className="text-neutral-gray mt-1">Manage and track all your job applications</p>
-      </div>
-
-      {/* Application Counter */}
-      {hasApplications && (
-        <div className="mb-4 text-sm text-neutral-gray">
-          {hasActiveFilters ? (
-            <>
+          {/* Application Counter */}
+          {hasApplications && (
+            <div className="mb-4 text-sm text-neutral-gray">
+              {hasActiveFilters ? (
+                <>
               Showing <span className="font-semibold text-neutral-text-primary-light">{filteredApplications.length}</span> of{' '}
               <span className="font-semibold text-neutral-text-primary-light">{applications.length}</span> applications
-            </>
-          ) : (
-            <>
-              Total: <span className="font-semibold text-neutral-text-primary-light">{applications.length}</span> applications
-            </>
-          )}
-        </div>
-      )}
-
-      {/* Search and Filters */}
-      {hasApplications && (
-        <SearchFilterBar
-          searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
-          selectedStatus={selectedStatus}
-          onStatusChange={handleStatusChange_Filter}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
-          dateRange={dateRange}
-          onDateRangeChange={handleDateRangeChange}
-          sortBy={sortBy}
-          onSortChange={setSortBy}
-        />
-      )}
-
-      {/* Content Area */}
-      {!hasApplications ? (
-        <EmptyState type="no-applications" onAction={() => setIsModalOpen(true)} />
-      ) : !hasFilteredResults ? (
-        <EmptyState type="no-results" searchQuery={searchQuery} />
-      ) : viewMode === 'kanban' ? (
-        <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-4">
-          {kanbanColumns.map(({ status, apps }) => (
-            <KanbanColumn
-              key={status}
-              status={status}
-              applications={apps}
-              onDelete={handleDeleteApplication}
-              onEdit={handleEditApplication}
-              onStatusChange={handleStatusChange}
-            />
-          ))}
-        </div>
-      ) : (
-        <>
-          <div className="pb-4">
-            <ListView
-              applications={paginatedApplications}
-              onDelete={handleDeleteApplication}
-              onEdit={handleEditApplication}
-            />
-          </div>
-
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between border-t border-neutral-border-light pt-4 pb-8">
-              <div className="text-sm text-neutral-gray">Page {currentPage} of {totalPages}</div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 border border-neutral-border-light rounded-lg text-sm font-medium text-neutral-gray hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  Previous
-                </button>
-
-                <div className="hidden sm:flex gap-1">
-                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                    let pageNum;
-                    if (totalPages <= 5) {
-                      pageNum = i + 1;
-                    } else if (currentPage <= 3) {
-                      pageNum = i + 1;
-                    } else if (currentPage >= totalPages - 2) {
-                      pageNum = totalPages - 4 + i;
-                    } else {
-                      pageNum = currentPage - 2 + i;
-                    }
-
-                    return (
-                      <button
-                        key={pageNum}
-                        onClick={() => setCurrentPage(pageNum)}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                          currentPage === pageNum ? 'bg-primary-blue text-white' : 'text-neutral-gray hover:bg-gray-50'
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <button
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 border border-neutral-border-light rounded-lg text-sm font-medium text-neutral-gray hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  Next
-                </button>
-              </div>
+                </>
+              ) : (
+                <>
+                  Total: <span className="font-semibold text-neutral-text-primary-light">{applications.length}</span> applications
+                </>
+              )}
             </div>
           )}
-        </>
-      )}
+
+          {/* Search and Filters */}
+          {hasApplications && (
+            <SearchFilterBar
+              searchQuery={searchQuery}
+              onSearchChange={handleSearchChange}
+              selectedStatus={selectedStatus}
+              onStatusChange={handleStatusChange_Filter}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              dateRange={dateRange}
+              onDateRangeChange={handleDateRangeChange}
+              sortBy={sortBy}
+              onSortChange={setSortBy}
+            />
+          )}
+
+          {/* Content Area */}
+          {!hasApplications ? (
+            <EmptyState type="no-applications" onAction={() => setIsModalOpen(true)} />
+          ) : !hasFilteredResults ? (
+            <EmptyState type="no-results" searchQuery={searchQuery} />
+          ) : viewMode === 'kanban' ? (
+            <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-4">
+              {kanbanColumns.map(({ status, apps }) => (
+                <KanbanColumn 
+                  key={status} 
+                  status={status} 
+                  applications={apps}
+                  onDelete={handleDeleteApplication}
+                  onEdit={handleEditApplication}
+                  onStatusChange={handleStatusChange}
+                />
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="pb-4">
+                <ListView 
+                  applications={paginatedApplications}
+                  onDelete={handleDeleteApplication}
+                  onEdit={handleEditApplication}
+                />
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between border-t border-neutral-border-light pt-4 pb-8">
+              <div className="text-sm text-neutral-gray">Page {currentPage} of {totalPages}</div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 border border-neutral-border-light rounded-lg text-sm font-medium text-neutral-gray hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Previous
+                    </button>
+                    
+                    <div className="hidden sm:flex gap-1">
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+                        
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => setCurrentPage(pageNum)}
+                            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          currentPage === pageNum ? 'bg-primary-blue text-white' : 'text-neutral-gray hover:bg-gray-50'
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 border border-neutral-border-light rounded-lg text-sm font-medium text-neutral-gray hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
 
       <AddApplicationModal
         isOpen={isModalOpen}

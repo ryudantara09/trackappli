@@ -34,6 +34,11 @@ export interface CreateApplicationInput {
   tags?: string[];
   description?: string;
   isFromExtension?: boolean;
+  techStack?: string[];
+  softSkills?: string[];
+  jobType?: string;
+  cvPath?: string;
+  coverLetterPath?: string;
 }
 
 export interface UpdateApplicationInput {
@@ -138,9 +143,9 @@ export class ApplicationsService {
       companyName: input.companyName,
       jobLocation: input.jobLocation,
       description: input.description,
-      techStack: null as any,
-      softSkills: null as any,
-      jobType: null as string | null,
+      techStack: input.techStack || (null as any),
+      softSkills: input.softSkills || (null as any),
+      jobType: input.jobType || (null as string | null),
     };
 
     // Attempt AI extraction if raw text provided
@@ -213,6 +218,8 @@ export class ApplicationsService {
       job_type: finalData.jobType,
       tags: tags.length > 0 ? tags : null,
       extracted_json: extractedData ? JSON.parse(JSON.stringify(extractedData)) : null,
+      cv_path: input.cvPath || null,
+      cover_letter_path: input.coverLetterPath || null,
     };
 
     // Create application in database
