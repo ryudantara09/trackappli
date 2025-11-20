@@ -14,7 +14,8 @@ import {
   BuildingOfficeIcon, 
   ArrowPathIcon,
   BanknotesIcon,
-  BriefcaseIcon
+  BriefcaseIcon,
+  TagIcon
 } from '@/components/ui/Icon';
 
 interface ApplicationDetailsPageProps {
@@ -190,6 +191,21 @@ export default function ApplicationDetailsPage({ params }: ApplicationDetailsPag
                   </div>
                 </div>
                 <StatusBadge status={application.status} />
+                
+                {/* Tags Section */}
+                {application.tags && application.tags.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2 mt-4">
+                    <TagIcon className="w-4 h-4 text-neutral-400 mr-1" />
+                    {application.tags.map((tag, index) => (
+                      <span 
+                        key={`tag-${index}`}
+                        className="px-2.5 py-0.5 text-xs font-medium bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300 rounded-full border border-neutral-200 dark:border-neutral-600"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
               
               <div className="flex gap-3 flex-shrink-0">
@@ -224,51 +240,51 @@ export default function ApplicationDetailsPage({ params }: ApplicationDetailsPag
             </div>
           </div>
 
-          {/* Job Details Card */}
-          <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6 mb-6">
-            <h2 className="text-xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-4">
-              Job Details
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {application.jobType && (
-                <div className="flex items-start">
-                  <BriefcaseIcon className="w-5 h-5 mr-3 text-neutral-gray mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium text-neutral-gray mb-1">Job Type</p>
-                    <p className="text-neutral-text-primary-light dark:text-neutral-text-primary-dark">{application.jobType}</p>
+          {/* Info Grid: Job Details & Skills */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            {/* Job Details Card */}
+            <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6">
+              <h2 className="text-xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-4">
+                Job Details
+              </h2>
+              <div className="space-y-4">
+                {application.jobType && (
+                  <div className="flex items-start">
+                    <BriefcaseIcon className="w-5 h-5 mr-3 text-neutral-gray mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-neutral-gray mb-1">Job Type</p>
+                      <p className="text-neutral-text-primary-light dark:text-neutral-text-primary-dark">{application.jobType}</p>
+                    </div>
                   </div>
-                </div>
-              )}
-              {application.salary && (
-                <div className="flex items-start">
-                  <BanknotesIcon className="w-5 h-5 mr-3 text-neutral-gray mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium text-neutral-gray mb-1">Salary</p>
-                    <p className="text-neutral-text-primary-light dark:text-neutral-text-primary-dark">{application.salary}</p>
+                )}
+                {application.salary && (
+                  <div className="flex items-start">
+                    <BanknotesIcon className="w-5 h-5 mr-3 text-neutral-gray mt-0.5" />
+                    <div>
+                      <p className="text-sm font-medium text-neutral-gray mb-1">Salary</p>
+                      <p className="text-neutral-text-primary-light dark:text-neutral-text-primary-dark">{application.salary}</p>
+                    </div>
                   </div>
-                </div>
-              )}
-              {application.url && (
-                <div className="flex items-start sm:col-span-2">
-                  <ArrowPathIcon className="w-5 h-5 mr-3 text-neutral-gray mt-0.5 rotate-45" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-neutral-gray mb-1">Job Posting URL</p>
-                    <a 
-                      href={application.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary-blue hover:underline break-all block"
-                    >
-                      {application.url}
-                    </a>
+                )}
+                {application.url && (
+                  <div className="flex items-start">
+                    <ArrowPathIcon className="w-5 h-5 mr-3 text-neutral-gray mt-0.5 rotate-45" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-neutral-gray mb-1">Job Posting URL</p>
+                      <a 
+                        href={application.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary-blue hover:underline break-all block"
+                      >
+                        {application.url}
+                      </a>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Skills Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             {/* Technical Skills */}
             <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-6">
               <h2 className="text-xl font-bold text-neutral-text-primary-light dark:text-neutral-text-primary-dark mb-4">

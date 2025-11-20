@@ -41,6 +41,7 @@ export {
   Settings as Cog6ToothIcon,
   Sparkles as SparklesIcon,
   Sun as SunIcon,
+  Tag as TagIcon,
   Target as TargetIcon,
   Trash2 as TrashIcon,
   TrendingDown as ArrowTrendingDownIcon,
