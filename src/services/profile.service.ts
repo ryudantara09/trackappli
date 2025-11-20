@@ -25,11 +25,13 @@ import {
   TechnicalSkill,
   TechnicalSkillInsert,
 } from '../repositories/skills.repository';
+import { ProfileRepository, Profile } from '../repositories/profile.repository';
 import { CVExtraction } from '../types/ai.types';
 import { ValidationError } from '../utils/errors';
 import { SKILL_PROFICIENCY } from '../config/constants';
 
 export interface CompleteProfile {
+  profile: Profile | null;
   workExperience: WorkExperience[];
   education: Education[];
   technicalSkills: TechnicalSkill[];
@@ -53,11 +55,13 @@ export class ProfileService {
   private experienceRepo: ExperienceRepository;
   private educationRepo: EducationRepository;
   private skillsRepo: SkillsRepository;
+  private profileRepo: ProfileRepository;
 
   constructor(supabase: SupabaseClient<Database>) {
     this.experienceRepo = new ExperienceRepository(supabase);
     this.educationRepo = new EducationRepository(supabase);
     this.skillsRepo = new SkillsRepository(supabase);
+    this.profileRepo = new ProfileRepository(supabase);
   }
 
   /**
@@ -66,13 +70,15 @@ export class ProfileService {
    */
   async getCompleteProfile(userId: string): Promise<CompleteProfile> {
     // Fetch all profile data in parallel
-    const [workExperience, education, technicalSkills] = await Promise.all([
+    const [profile, workExperience, education, technicalSkills] = await Promise.all([
+      this.profileRepo.findById(userId),
       this.experienceRepo.findByUserId(userId),
       this.educationRepo.findByUserId(userId),
       this.skillsRepo.findByUserId(userId),
     ]);
 
     return {
+      profile,
       workExperience,
       education,
       technicalSkills,
@@ -184,6 +190,35 @@ export class ProfileService {
     };
 
     // Process work experience
+    if (cvData.personal_info) {
+      const { name, email, phone, location } = cvData.personal_info;
+      let first_name = '';
+      let last_name = '';
+      
+      if (name) {
+        const nameParts = name.split(' ');
+        first_name = nameParts[0];
+        last_name = nameParts.slice(1).join(' ');
+      }
+
+      // Fetch existing profile to preserve data that isn't being updated
+      const existingProfile = await this.profileRepo.findById(userId);
+
+      await this.profileRepo.upsert({
+        id: userId,
+        first_name: first_name || existingProfile?.first_name || null,
+        last_name: last_name || existingProfile?.last_name || null,
+        email: email || existingProfile?.email || null,
+        phone: phone || existingProfile?.phone || null,
+        location: location || existingProfile?.location || null,
+        summary: existingProfile?.summary || null,
+        website: existingProfile?.website || null,
+        linkedin_url: existingProfile?.linkedin_url || null,
+        github_url: existingProfile?.github_url || null,
+        avatar_url: existingProfile?.avatar_url || null
+      });
+    }
+
     if (cvData.work_experience && cvData.work_experience.length > 0) {
       const experienceData: WorkExperienceInsert[] = cvData.work_experience.map(exp => {
         try {

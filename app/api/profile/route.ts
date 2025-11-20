@@ -44,18 +44,23 @@ export async function PUT(request: NextRequest) {
     // Initialize repository
     const profileRepo = new ProfileRepository(supabase);
 
+    // Fetch existing profile to handle partial updates correctly
+    const existingProfile = await profileRepo.findById(userId);
+
     // Upsert profile (create if doesn't exist, update if it does)
+    // We merge body with existing profile to prevent overwriting missing fields with null
     const profile = await profileRepo.upsert({
       id: userId,
-      first_name: body.first_name ?? null,
-      last_name: body.last_name ?? null,
-      email: body.email ?? null,
-      phone: body.phone ?? null,
-      location: body.location ?? null,
-      summary: body.summary ?? null,
-      website: body.website ?? null,
-      linkedin_url: body.linkedin_url ?? null,
-      github_url: body.github_url ?? null,
+      first_name: body.first_name ?? existingProfile?.first_name ?? null,
+      last_name: body.last_name ?? existingProfile?.last_name ?? null,
+      email: body.email ?? existingProfile?.email ?? null,
+      phone: body.phone ?? existingProfile?.phone ?? null,
+      location: body.location ?? existingProfile?.location ?? null,
+      summary: body.summary ?? existingProfile?.summary ?? null,
+      website: body.website ?? existingProfile?.website ?? null,
+      linkedin_url: body.linkedin_url ?? existingProfile?.linkedin_url ?? null,
+      github_url: body.github_url ?? existingProfile?.github_url ?? null,
+      avatar_url: body.avatar_url ?? existingProfile?.avatar_url ?? null,
     });
 
     return NextResponse.json({
@@ -83,18 +88,22 @@ export async function POST(request: NextRequest) {
     // Initialize repository
     const profileRepo = new ProfileRepository(supabase);
 
+    // Fetch existing profile to handle partial updates correctly
+    const existingProfile = await profileRepo.findById(userId);
+
     // Upsert profile (create if doesn't exist, update if it does)
     const profile = await profileRepo.upsert({
       id: userId,
-      first_name: body.first_name ?? null,
-      last_name: body.last_name ?? null,
-      email: body.email ?? null,
-      phone: body.phone ?? null,
-      location: body.location ?? null,
-      summary: body.summary ?? null,
-      website: body.website ?? null,
-      linkedin_url: body.linkedin_url ?? null,
-      github_url: body.github_url ?? null,
+      first_name: body.first_name ?? existingProfile?.first_name ?? null,
+      last_name: body.last_name ?? existingProfile?.last_name ?? null,
+      email: body.email ?? existingProfile?.email ?? null,
+      phone: body.phone ?? existingProfile?.phone ?? null,
+      location: body.location ?? existingProfile?.location ?? null,
+      summary: body.summary ?? existingProfile?.summary ?? null,
+      website: body.website ?? existingProfile?.website ?? null,
+      linkedin_url: body.linkedin_url ?? existingProfile?.linkedin_url ?? null,
+      github_url: body.github_url ?? existingProfile?.github_url ?? null,
+      avatar_url: body.avatar_url ?? existingProfile?.avatar_url ?? null,
     });
 
     return NextResponse.json({

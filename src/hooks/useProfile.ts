@@ -13,8 +13,11 @@ import {
   UpdateTechnicalSkillRequest,
   CVExtractionResponse,
 } from '../types/api.types';
+import { CVExtraction } from '../types/ai.types';
+import { Profile } from '../repositories/profile.repository';
 
 interface ProfileData {
+  profile: Profile | null;
   workExperience: WorkExperience[];
   education: Education[];
   technicalSkills: TechnicalSkill[];
@@ -225,11 +228,61 @@ export function useProfile() {
     } : null);
   };
 
+  const saveExtractedCV = async (data: CVExtraction) => {
+    const response = await fetch('/api/profile/cv/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to save extracted CV');
+    }
+
+    await loadProfile();
+    return await response.json();
+  };
+
+  const uploadAvatar = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', 'avatar');
+
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to upload avatar');
+    }
+
+    const result = await response.json();
+    
+    // Update profile with new avatar URL
+    const updateResponse = await fetch('/api/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ avatar_url: result.url }),
+    });
+
+    if (!updateResponse.ok) {
+      throw new Error('Failed to update profile with avatar');
+    }
+
+    await loadProfile();
+    return result.url;
+  };
+
   return {
     profile,
     loading,
     error,
     refresh: loadProfile,
+    saveExtractedCV,
+    uploadAvatar,
     // Work Experience
     addExperience,
     updateExperience,
