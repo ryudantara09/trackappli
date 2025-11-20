@@ -158,4 +158,19 @@ export class EducationRepository {
 
     return data || [];
   }
+
+  /**
+   * Delete all education entries for a specific user
+   * @param userId - User ID to delete entries for
+   */
+  async deleteAllForUser(userId: string): Promise<void> {
+    const { error } = await this.supabase
+      .from('education')
+      .delete()
+      .eq('user_id', userId);
+
+    if (error) {
+      throw new Error(`Failed to delete education: ${error.message}`);
+    }
+  }
 }

@@ -201,4 +201,19 @@ export class SkillsRepository {
 
     return data || [];
   }
+
+  /**
+   * Delete all technical skills for a specific user
+   * @param userId - User ID to delete skills for
+   */
+  async deleteAllForUser(userId: string): Promise<void> {
+    const { error } = await this.supabase
+      .from('technical_skills')
+      .delete()
+      .eq('user_id', userId);
+
+    if (error) {
+      throw new Error(`Failed to delete technical skills: ${error.message}`);
+    }
+  }
 }

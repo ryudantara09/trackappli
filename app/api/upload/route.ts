@@ -24,14 +24,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate upload type
-    if (!type || !['cv', 'cover_letter'].includes(type)) {
-      throw new ValidationError('Invalid upload type. Must be "cv" or "cover_letter".');
+    if (!type || !['cv', 'cover_letter', 'avatar'].includes(type)) {
+      throw new ValidationError('Invalid upload type. Must be "cv", "cover_letter", or "avatar".');
     }
 
     // Validate file type
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
       throw new ValidationError(
-        `Invalid file type: ${file.type}. Only PDF files are allowed.`
+        `Invalid file type: ${file.type}. Allowed types: ${ALLOWED_FILE_TYPES.join(', ')}`
       );
     }
 
@@ -51,9 +51,12 @@ export async function POST(request: NextRequest) {
     const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
     const fileName = `${user.id}/${type}/${timestamp}_${sanitizedFileName}`;
 
+    // Determine bucket based on type
+    const bucket = type === 'avatar' ? 'avatars' : 'documents';
+
     // Upload to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('documents')
+      .from(bucket)
       .upload(fileName, buffer, {
         contentType: file.type,
         upsert: false,
@@ -66,7 +69,7 @@ export async function POST(request: NextRequest) {
 
     // Get public URL
     const { data: urlData } = supabase.storage
-      .from('documents')
+      .from(bucket)
       .getPublicUrl(fileName);
 
     return NextResponse.json({

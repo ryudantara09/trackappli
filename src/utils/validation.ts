@@ -270,6 +270,7 @@ export const updateProfileSchema = z.object({
   website: z.string().url().optional(),
   linkedin_url: z.string().url().optional(),
   github_url: z.string().url().optional(),
+  avatar_url: z.string().url().optional(),
 });
 
 /**

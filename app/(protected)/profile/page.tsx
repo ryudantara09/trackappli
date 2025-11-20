@@ -5,19 +5,23 @@ import { useProfile } from '../../../src/hooks/useProfile';
 import { useCVExtraction } from '../../../src/hooks/useCVExtraction';
 import { useToastContext } from '../../../src/contexts/ToastContext';
 import { Button } from '../../../src/components/ui/Button';
-import { PlusIcon } from '../../../src/components/ui/Icon';
+import { PlusIcon, UserIcon } from '../../../src/components/ui/Icon';
 import { PageHeader } from '../../../src/components/ui/PageHeader';
 import { Header } from '../../../src/components/layout/Header';
 import { SKILL_PROFICIENCY, SkillProficiency, SkillCategory } from '../../../src/config/constants';
 import { WorkExperience, Education, TechnicalSkill } from '../../../src/types/api.types';
+import ReviewCVModal from '../../../src/components/profile/ReviewCVModal';
+import { CVExtraction } from '../../../src/types/ai.types';
 
 type Tab = 'personal' | 'experience' | 'education' | 'skills';
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<Tab>('personal');
-  const { profile, loading, error } = useProfile();
+  const { profile, loading, error, saveExtractedCV } = useProfile();
   const { extractCV, extracting } = useCVExtraction();
   const { showSuccess, showError } = useToastContext();
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [extractedData, setExtractedData] = useState<CVExtraction | null>(null);
 
   const tabs: { id: Tab; label: string }[] = [
     { id: 'personal', label: 'Personal Info' },
@@ -32,7 +36,18 @@ export default function ProfilePage() {
 
     const result = await extractCV(file);
     if (result) {
-      showSuccess('CV extracted successfully! Review and save the information.');
+      setExtractedData(result);
+      setReviewModalOpen(true);
+    }
+  };
+
+  const handleSaveCV = async (data: CVExtraction) => {
+    try {
+      await saveExtractedCV(data);
+      showSuccess('Profile updated successfully from CV');
+      setReviewModalOpen(false);
+    } catch (error) {
+      showError(error instanceof Error ? error.message : 'Failed to save profile');
     }
   };
 
@@ -85,7 +100,11 @@ export default function ProfilePage() {
 
       {/* Personal Info Tab */}
       {activeTab === 'personal' && (
-        <PersonalInfoTab onCVUpload={handleCVUpload} extracting={extracting} />
+        <PersonalInfoTab 
+          onCVUpload={handleCVUpload} 
+          extracting={extracting} 
+          profile={profile?.profile || null}
+        />
       )}
 
       {/* Work Experience Tab */}
@@ -102,13 +121,52 @@ export default function ProfilePage() {
       {activeTab === 'skills' && profile && (
         <SkillsTab skills={profile.technicalSkills} />
       )}
+
+      {/* Review CV Modal */}
+      {extractedData && (
+        <ReviewCVModal
+          isOpen={reviewModalOpen}
+          onClose={() => setReviewModalOpen(false)}
+          initialData={extractedData}
+          onSave={handleSaveCV}
+        />
+      )}
     </div>
   );
 }
 
 
+import { Profile } from '../../../src/repositories/profile.repository';
+
 // Personal Info Tab Component
-function PersonalInfoTab({ onCVUpload, extracting }: { onCVUpload: (e: React.ChangeEvent<HTMLInputElement>) => void; extracting: boolean }) {
+function PersonalInfoTab({ 
+  onCVUpload, 
+  extracting,
+  profile 
+}: { 
+  onCVUpload: (e: React.ChangeEvent<HTMLInputElement>) => void; 
+  extracting: boolean;
+  profile: Profile | null;
+}) {
+  const { uploadAvatar } = useProfile();
+  const { showSuccess, showError } = useToastContext();
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploadingAvatar(true);
+    try {
+      await uploadAvatar(file);
+      showSuccess('Avatar updated successfully');
+    } catch (error) {
+      showError(error instanceof Error ? error.message : 'Failed to upload avatar');
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
   return (
     <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-xl border border-neutral-border-light dark:border-neutral-border-dark p-4 sm:p-6 lg:p-8">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
@@ -130,9 +188,73 @@ function PersonalInfoTab({ onCVUpload, extracting }: { onCVUpload: (e: React.Cha
         </div>
       </div>
 
-      <div className="text-center py-12 text-neutral-gray">
-        <p>Upload your CV to automatically extract your profile information</p>
-        <p className="text-sm mt-2">or manually add your experience, education, and skills using the tabs above</p>
+      <div className="flex flex-col md:flex-row gap-8 mb-8">
+        {/* Avatar Section */}
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative w-32 h-32 rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200">
+            {profile?.avatar_url ? (
+              <img 
+                src={profile.avatar_url} 
+                alt="Profile" 
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <UserIcon className="w-16 h-16" />
+              </div>
+            )}
+            {uploadingAvatar && (
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+              </div>
+            )}
+          </div>
+          <label htmlFor="avatar-upload" className="cursor-pointer text-sm text-primary-blue hover:text-primary-dark font-medium">
+            Change Photo
+            <input
+              id="avatar-upload"
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarUpload}
+              className="hidden"
+              disabled={uploadingAvatar}
+            />
+          </label>
+        </div>
+
+        {/* Info Section */}
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+            <div className="p-2 bg-gray-50 rounded border border-gray-200 text-gray-900">
+              {profile?.first_name || '-'}
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+            <div className="p-2 bg-gray-50 rounded border border-gray-200 text-gray-900">
+              {profile?.last_name || '-'}
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <div className="p-2 bg-gray-50 rounded border border-gray-200 text-gray-900">
+              {profile?.email || '-'}
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <div className="p-2 bg-gray-50 rounded border border-gray-200 text-gray-900">
+              {profile?.phone || '-'}
+            </div>
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+            <div className="p-2 bg-gray-50 rounded border border-gray-200 text-gray-900">
+              {profile?.location || '-'}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

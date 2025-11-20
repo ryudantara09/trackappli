@@ -12,6 +12,7 @@ import {
   NotebookPenIcon,
 } from '../ui/Icon';
 import { useAuth } from '../../contexts/AuthContext';
+import { useProfile } from '../../hooks/useProfile';
 import { Button } from '../ui/Button';
 import { BrandLogo } from '../ui/BrandLogo';
 
@@ -38,6 +39,7 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, href, active }) => (
 
 export const Sidebar: React.FC = () => {
   const { logout, user, isAdmin } = useAuth();
+  const { profile } = useProfile();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -48,8 +50,16 @@ export const Sidebar: React.FC = () => {
 
   // Extract user display name from email or use placeholder
   const userEmail = user?.email || 'user@example.com';
-  const userName = userEmail.split('@')[0] || 'User';
-  const displayName = userName.charAt(0).toUpperCase() + userName.slice(1);
+  
+  const fullName = [profile?.profile?.first_name, profile?.profile?.last_name]
+    .filter(Boolean)
+    .join(' ');
+
+  const emailName = userEmail.split('@')[0] || 'User';
+  const formattedEmailName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+  
+  const displayName = fullName || formattedEmailName;
+  const avatarUrl = profile?.profile?.avatar_url || `https://avatar.vercel.sh/${userEmail}`;
 
   return (
     <aside className="w-64 bg-neutral-surface-light dark:bg-neutral-surface-dark border-r border-neutral-border-light dark:border-neutral-border-dark flex-shrink-0 flex flex-col">
@@ -101,8 +111,8 @@ export const Sidebar: React.FC = () => {
       <div className="p-4 border-t border-neutral-border-light dark:border-neutral-border-dark">
         <div className="flex items-center gap-3 mb-4">
           <img
-            className="h-10 w-10 rounded-full"
-            src={`https://avatar.vercel.sh/${userEmail}`}
+            className="h-10 w-10 rounded-full object-cover"
+            src={avatarUrl}
             alt="User avatar"
           />
           <div>

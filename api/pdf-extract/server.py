@@ -79,9 +79,7 @@ def extract_text_with_fitz(pdf_bytes):
         full_html = re.sub(r"<p\s*>&#x[0-9a-fA-F]+;</p>", "", full_html, flags=re.IGNORECASE | re.DOTALL)
         full_html = re.sub(r"^\s*[\r\n]+", "", full_html, flags=re.IGNORECASE | re.DOTALL)
         full_html = remove_empty_lines(full_html)
-
-        print("\n\n\nPYTHON MICROSERVICE CALLED!!!\n\n\n", file=sys.stderr)
-
+        print("Full HTML:\n", full_html, "\n\n")
         return full_html
 
     except Exception as e:

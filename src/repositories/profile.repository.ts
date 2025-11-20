@@ -13,6 +13,7 @@ export interface Profile {
   website: string | null;
   linkedin_url: string | null;
   github_url: string | null;
+  avatar_url: string | null;
 }
 
 export type ProfileInsert = Omit<Profile, 'created_at' | 'updated_at'>;
