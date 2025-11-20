@@ -12,6 +12,7 @@ import { SKILL_PROFICIENCY, SkillProficiency, SkillCategory } from '../../../src
 import { WorkExperience, Education, TechnicalSkill } from '../../../src/types/api.types';
 import ReviewCVModal from '../../../src/components/profile/ReviewCVModal';
 import { CVExtraction } from '../../../src/types/ai.types';
+import { SkillAutocomplete } from '../../../src/components/ui/SkillAutocomplete';
 
 type Tab = 'personal' | 'experience' | 'education' | 'skills';
 
@@ -1191,11 +1192,10 @@ function AddSkillModal({ onClose }: { onClose: () => void }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">Skill Name *</label>
-              <input
-                type="text"
+              <SkillAutocomplete
                 required
                 value={formData.name}
-                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                onChange={value => setFormData({ ...formData, name: value })}
                 placeholder="React, Python, etc."
                 className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
               />
@@ -1313,11 +1313,11 @@ function EditSkillModal({ skill, onClose }: { skill: TechnicalSkill; onClose: ()
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">Skill Name *</label>
-              <input
-                type="text"
+              <SkillAutocomplete
                 required
                 value={formData.name}
-                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                onChange={value => setFormData({ ...formData, name: value })}
+                placeholder="React, Python, etc."
                 className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
               />
             </div>

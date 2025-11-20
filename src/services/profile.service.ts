@@ -284,7 +284,7 @@ export class ProfileService {
       // Delete existing skills
       await this.skillsRepo.deleteAllForUser(userId);
 
-      const skillsData: TechnicalSkillInsert[] = cvData.technical_skills.map(skill => ({
+      const skillsData = cvData.technical_skills.map(skill => ({
         user_id: userId,
         category: this.normalizeCategory(skill.category),
         name: skill.name,
@@ -374,7 +374,7 @@ export class ProfileService {
   /**
    * Validate technical skill data
    */
-  validateTechnicalSkill(data: Partial<TechnicalSkillInsert>): void {
+  validateTechnicalSkill(data: any): void {
     if (!data.category || data.category.trim().length === 0) {
       throw new ValidationError('Skill category is required');
     }
