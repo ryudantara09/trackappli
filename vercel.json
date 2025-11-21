@@ -4,12 +4,7 @@
   "framework": "nextjs",
   "regions": ["fra1"],
   "functions": {
-    "api/**/*.ts": {
-      "maxDuration": 30,
-      "memory": 1024
-    },
     "api/pdf-extract/index.py": {
-      "runtime": "python3.11",
       "maxDuration": 30,
       "memory": 512
     }
