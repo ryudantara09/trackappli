@@ -2,7 +2,7 @@
   "buildCommand": "next build",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "regions": ["iad1"],
+  "regions": ["fra1"],
   "functions": {
     "api/**/*.ts": {
       "maxDuration": 30,

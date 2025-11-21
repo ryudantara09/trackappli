@@ -1,0 +1,9 @@
+# Tasks list 
+
+- [ ] connection OAuth google w linkedin
+- [ ] ATS give score based on the job description and the CV
+- [ ] Cover letter writing
+- [ ] extension chrome / safari / mozilla
+- [ ] playwright for scrapping job posting (linkedin, indeed, weblinks...)
+- [ ] fix dashboard when clicking on status cards the others become zeros
+- [ ] make application URL not required 
