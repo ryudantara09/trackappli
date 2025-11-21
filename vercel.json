@@ -2,7 +2,7 @@
   "buildCommand": "next build",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "regions": ["fra1"],
+  "regions": ["iad1"],
   "functions": {
     "api/pdf-extract/index.py": {
       "maxDuration": 30,
