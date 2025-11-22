@@ -124,7 +124,7 @@ const solutionTiles = [
 const testimonials = [
   {
     quote:
-      "Trakaply simplified our digital classroom. Coaches see the same metrics that students do, so feedback is data-backed and engagement is real-time.",
+      "trakappli simplified our digital classroom. Coaches see the same metrics that students do, so feedback is data-backed and engagement is real-time.",
     name: "Sarah Johnson",
     role: "Director of Career Services • TechRoots Bootcamp",
     badge: "TechRoots",
@@ -140,7 +140,7 @@ const testimonials = [
   },
   {
     quote:
-      "As a student, I know how Trakaply translates to results. The AI resume reviews and reminders meant every recruiter touchpoint stayed on track.",
+      "As a student, I know how trakappli translates to results. The AI resume reviews and reminders meant every recruiter touchpoint stayed on track.",
     name: "Alexa Rivera",
     role: "Product Design Fellow • Blend Academy",
     badge: "Blend Academy",
@@ -156,7 +156,7 @@ const fallbackArticles: BlogArticle[] = [
     slug: "q1-2025-job-market-signal-report",
     content: "",
     publishedAt: "2025-03-12T00:00:00.000Z",
-    authorName: "Trakaply Editorial",
+    authorName: "trakappli Editorial",
   },
   {
     id: "collaborative-job-tracking",
@@ -165,7 +165,7 @@ const fallbackArticles: BlogArticle[] = [
     slug: "collaborative-job-tracking",
     content: "",
     publishedAt: "2025-02-28T00:00:00.000Z",
-    authorName: "Trakaply Editorial",
+    authorName: "trakappli Editorial",
   },
   {
     id: "geo-playbook-hr-tech",
@@ -174,15 +174,15 @@ const fallbackArticles: BlogArticle[] = [
     slug: "geo-playbook-hr-tech",
     content: "",
     publishedAt: "2025-02-05T00:00:00.000Z",
-    authorName: "Trakaply Editorial",
+    authorName: "trakappli Editorial",
   },
 ];
 
 const comparisonRows = [
-  { label: "Live Kanban & Map view", spreadsheet: "Manual formatting", generic: "List-based UI", trakaply: "Interactive boards, cohort view" },
-  { label: "AI resume diagnostics", spreadsheet: "Not available", generic: "Basic keyword check", trakaply: "Keyword density & ATS score" },
-  { label: "Coach visibility", spreadsheet: "Manual sharing", generic: "None", trakaply: "Real-time dashboards & FERPA-friendly permissions" },
-  { label: "Automated reminders", spreadsheet: "Personal calendar", generic: "Email-only nudges", trakaply: "Built-in email/SMS sequences" },
+  { label: "Live Kanban & Map view", spreadsheet: "Manual formatting", generic: "List-based UI", trakappli: "Interactive boards, cohort view" },
+  { label: "AI resume diagnostics", spreadsheet: "Not available", generic: "Basic keyword check", trakappli: "Keyword density & ATS score" },
+  { label: "Coach visibility", spreadsheet: "Manual sharing", generic: "None", trakappli: "Real-time dashboards & FERPA-friendly permissions" },
+  { label: "Automated reminders", spreadsheet: "Personal calendar", generic: "Email-only nudges", trakappli: "Built-in email/SMS sequences" },
 ];
 
 const workflowSteps = [
@@ -194,17 +194,17 @@ const workflowSteps = [
 
 const faqData = [
   {
-    question: "Is Trakaply free for students and individuals?",
+    question: "Is trakappli free for students and individuals?",
     answer:
-      "Yes, Trakaply offers a Free Forever plan for individuals with unlimited job tracking, the Chrome Extension, and AI resume suggestions. Paid plans unlock coach dashboards, FERPA-ready permissions, and cohort reporting for career teams.",
+      "Yes, trakappli offers a Free Forever plan for individuals with unlimited job tracking, the Chrome Extension, and AI resume suggestions. Paid plans unlock coach dashboards, FERPA-ready permissions, and cohort reporting for career teams.",
   },
   {
-    question: "Does Trakaply work with LinkedIn Easy Apply and other boards?",
+    question: "Does trakappli work with LinkedIn Easy Apply and other boards?",
     answer:
       "Chrome and email capture links pull details from LinkedIn, Indeed, Wellfound, or referral threads so every application lands in one Kanban board automatically.",
   },
   {
-    question: "How secure is the data I store in Trakaply?",
+    question: "How secure is the data I store in trakappli?",
     answer:
       "We use SOC2-ready infrastructure, encryption at rest and in transit, role-based access, and regional data centers so universities and enterprises can meet security reviews with confidence.",
   },
@@ -214,7 +214,7 @@ const faqData = [
       "Absolutely. Coaches can invite learners, leave inline comments, templatize workflows, and export analytics for weekly check-ins without chasing screenshots.",
   },
   {
-    question: "What metrics does Trakaply track?",
+    question: "What metrics does trakappli track?",
     answer:
       "Pipeline velocity, interview-to-offer ratio, top sources, follow-up discipline, and time-in-stage are calculated automatically to spotlight coaching opportunities.",
   },
@@ -281,21 +281,21 @@ export default function HomePage() {
       "@graph": [
         {
           "@type": "Organization",
-          "@id": "https://trakaply.com/#organization",
-          name: "Trakaply",
-          url: "https://trakaply.com",
+          "@id": "https://trakappli.com/#organization",
+          name: "trakappli",
+          url: "https://trakappli.com",
           sameAs: [
-            "https://www.linkedin.com/company/trakaply",
-            "https://twitter.com/trakaply",
-            "https://github.com/trakaply",
+            "https://www.linkedin.com/company/trakappli",
+            "https://twitter.com/trakappli",
+            "https://github.com/trakappli",
           ],
-          contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: "hello@trakaply.com" },
-          logo: "https://trakaply.com/Logos/trakaply-blue.svg",
+          contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: "hello@trakappli.com" },
+          logo: "https://trakappli.com/Logos/trakappli-blue.svg",
         },
         {
           "@type": "SoftwareApplication",
-          "@id": "https://trakaply.com/#app",
-          name: "Trakaply Job Tracker",
+          "@id": "https://trakappli.com/#app",
+          name: "trakappli Job Tracker",
           applicationCategory: "BusinessApplication",
           operatingSystem: "Web, iOS, Android",
           audience: {
@@ -309,12 +309,12 @@ export default function HomePage() {
             description: "Free for individuals. Paid plans available for teams, schools, and advisors.",
           },
           aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", ratingCount: "487" },
-          publisher: { "@id": "https://trakaply.com/#organization" },
+          publisher: { "@id": "https://trakappli.com/#organization" },
           applicationSuite: "Job search CRM, AI resume intelligence, coach collaboration",
         },
         {
           "@type": "FAQPage",
-          "@id": "https://trakaply.com/#faq",
+          "@id": "https://trakappli.com/#faq",
           mainEntity: faqData.map((faq) => ({
             "@type": "Question",
             name: faq.question,
@@ -346,7 +346,7 @@ export default function HomePage() {
                   The collaborative job tracker & AI resume builder for career teams
                 </h1>
                 <p className="text-lg text-neutral-gray dark:text-neutral-text-secondary-dark">
-                  Trakaply is a collaborative job search platform that combines a Kanban application tracker, AI resume optimization, and coach dashboards to help bootcamps, universities, and ambitious candidates reduce time-to-hire.
+                  trakappli is a collaborative job search platform that combines a Kanban application tracker, AI resume optimization, and coach dashboards to help bootcamps, universities, and ambitious candidates reduce time-to-hire.
                 </p>
                 <ul className="space-y-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">
                   <li className="flex items-start gap-3">
@@ -455,7 +455,7 @@ export default function HomePage() {
         <Section>
           <SectionTitle
             badge="Workflow"
-            title="How Trakaply runs every job search"
+            title="How trakappli runs every job search"
             subtitle="Define the process once and keep every student, alum, and advisor focused on the same GTM-style playbook."
           />
           <ol className="grid md:grid-cols-2 gap-6">
@@ -493,7 +493,7 @@ export default function HomePage() {
 
         <Section id="features" className="bg-neutral-bg-dark text-white rounded-t-[48px]">
           <SectionTitle
-            badge="Why Trakaply"
+            badge="Why trakappli"
             title="Powering better learning experiences"
             subtitle="All-in-one system built for seamless, adaptive, and connected education journeys."
             isDark
@@ -536,7 +536,7 @@ export default function HomePage() {
                   <th className="py-3 pr-8">Capability</th>
                   <th className="py-3 pr-8">Spreadsheets</th>
                   <th className="py-3 pr-8">Generic trackers</th>
-                  <th className="py-3">Trakaply</th>
+                  <th className="py-3">trakappli</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-border-light dark:divide-neutral-border-dark">
@@ -545,7 +545,7 @@ export default function HomePage() {
                     <td className="py-4 pr-8 font-medium">{row.label}</td>
                     <td className="py-4 pr-8 text-neutral-gray dark:text-neutral-text-secondary-dark">{row.spreadsheet}</td>
                     <td className="py-4 pr-8 text-neutral-gray dark:text-neutral-text-secondary-dark">{row.generic}</td>
-                    <td className="py-4 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">{row.trakaply}</td>
+                    <td className="py-4 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">{row.trakappli}</td>
                   </tr>
                 ))}
               </tbody>
@@ -558,7 +558,7 @@ export default function HomePage() {
         <Section id="testimonials">
           <SectionTitle
             badge="Testimonials"
-            title="What our educators say about Trakaply"
+            title="What our educators say about trakappli"
             subtitle="A single platform for schools, cohorts, and ambitious candidates to operate with confidence."
           />
           <div className="text-center max-w-4xl mx-auto space-y-8">
@@ -620,7 +620,7 @@ export default function HomePage() {
                   </Link>
                 </h3>
                 <p className="text-neutral-gray dark:text-neutral-text-secondary-dark">
-                  {insight.summary || "Explore the latest insight from the Trakaply team."}
+                  {insight.summary || "Explore the latest insight from the trakappli team."}
                 </p>
                 <Button as="a" href={`/blog/${insight.slug}`} variant="secondary" size="small" className="w-fit">
                   Read
@@ -657,7 +657,7 @@ export default function HomePage() {
             <p className="text-sm uppercase tracking-[0.4em] text-primary-light/80">Ready to coordinate every offer?</p>
             <h2 className="text-5xl sm:text-6xl font-extrabold tracking-tight">It starts with smarter tracking.</h2>
             <p className="max-w-2xl text-lg text-primary-light">
-              Every interaction helps improve interviews, personalize learning, and enhance classroom collaboration. With every click, Trakaply learns how students grow and adapts content in a unique learning path for every mind.
+              Every interaction helps improve interviews, personalize learning, and enhance classroom collaboration. With every click, trakappli learns how students grow and adapts content in a unique learning path for every mind.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button size="large" className="!bg-white !text-primary-blue hover:!bg-primary-light" onClick={handleGetStarted}>

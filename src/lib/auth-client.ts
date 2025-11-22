@@ -75,6 +75,51 @@ export async function signUp(email: string, password: string) {
 }
 
 /**
+ * Sign in with Google OAuth
+ * @returns Authentication data
+ * @throws Error if sign in fails
+ */
+export async function signInWithGoogle() {
+  const supabase = getSupabase();
+  
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${window.location.origin}/auth/callback`,
+    },
+  });
+  
+  if (error) {
+    throw new Error(error.message);
+  }
+  
+  return data;
+}
+
+/**
+ * Sign in with LinkedIn OAuth
+ * @returns Authentication data
+ * @throws Error if sign in fails
+ */
+export async function signInWithLinkedIn() {
+  const supabase = getSupabase();
+  
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'linkedin_oidc',
+    options: {
+      redirectTo: `${window.location.origin}/auth/callback`,
+      scopes: 'openid profile email',
+    },
+  });
+  
+  if (error) {
+    throw new Error(error.message);
+  }
+  
+  return data;
+}
+
+/**
  * Sign out the current user
  * Clears the session and removes auth cookies
  * @throws Error if sign out fails

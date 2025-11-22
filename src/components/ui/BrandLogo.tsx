@@ -23,12 +23,12 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 }) => {
   const { darkMode } = useTheme();
   const isDark = variant === "auto" ? darkMode : variant === "dark";
-  const src = isDark ? "/Logos/trakaply-white.svg" : "/Logos/trakaply-blue.svg";
+  const src = isDark ? "/Logos/trakappli-white.svg" : "/Logos/trakappli-blue.svg";
 
   return (
     <Image
       src={src}
-      alt="Trakaply Logo"
+      alt="trakappli Logo"
       width={width}
       height={height}
       className={className}

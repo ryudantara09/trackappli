@@ -32,7 +32,7 @@ const TermsOfServicePage: React.FC = () => {
                     <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-lg border border-neutral-border-light dark:border-neutral-border-dark p-8 md:p-12">
                         <Section title="1. Acceptance of Terms">
                             <p>
-                                Welcome to trakaply! These Terms of Service (&quot;Terms&quot;) govern your access to and use of trakaply&apos;s website, services, and applications (collectively, the &quot;Service&quot;). By accessing or using the Service, you agree to be bound by these Terms.
+                                Welcome to trakappli! These Terms of Service (&quot;Terms&quot;) govern your access to and use of trakappli&apos;s website, services, and applications (collectively, the &quot;Service&quot;). By accessing or using the Service, you agree to be bound by these Terms.
                             </p>
                             <p>
                                 If you do not agree to these Terms, you may not access or use the Service. We reserve the right to modify these Terms at any time, and your continued use constitutes acceptance of any changes.
@@ -41,7 +41,7 @@ const TermsOfServicePage: React.FC = () => {
 
                         <Section title="2. Description of Service">
                             <p>
-                                trakaply is a job application tracking and management platform that helps users organize their job search. Our Service includes:
+                                trakappli is a job application tracking and management platform that helps users organize their job search. Our Service includes:
                             </p>
                             <ul className="list-disc list-inside space-y-2 ml-4">
                                 <li>Application tracking and status management</li>
@@ -91,7 +91,7 @@ const TermsOfServicePage: React.FC = () => {
 
                         <Section title="5. Intellectual Property">
                             <p>
-                                The Service, including its original content, features, and functionality, is owned by trakaply and is protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.
+                                The Service, including its original content, features, and functionality, is owned by trakappli and is protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.
                             </p>
                             <p>
                                 Our trademarks, logos, and service marks may not be used without our prior written permission. All other trademarks are the property of their respective owners.
@@ -113,7 +113,7 @@ const TermsOfServicePage: React.FC = () => {
                         <Section title="7. Free and Paid Services">
                             <p><strong>Free Plan:</strong></p>
                             <p>
-                                trakaply offers a free plan with core features at no cost. We reserve the right to modify or discontinue the free plan at any time with reasonable notice.
+                                trakappli offers a free plan with core features at no cost. We reserve the right to modify or discontinue the free plan at any time with reasonable notice.
                             </p>
                             
                             <p className="mt-4"><strong>Premium Plans (Future):</strong></p>
@@ -148,18 +148,18 @@ const TermsOfServicePage: React.FC = () => {
                             
                             <p className="mt-4"><strong>Limitation of Liability:</strong></p>
                             <p>
-                                TO THE MAXIMUM EXTENT PERMITTED BY LAW, TRAKAPLY SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES.
+                                TO THE MAXIMUM EXTENT PERMITTED BY LAW, trakappli SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES.
                             </p>
                             
                             <p className="mt-4"><strong>No Employment Guarantee:</strong></p>
                             <p>
-                                trakaply is a tracking tool only. We do not guarantee job placement, interview invitations, or employment outcomes. Your success depends on your own efforts, qualifications, and market conditions.
+                                trakappli is a tracking tool only. We do not guarantee job placement, interview invitations, or employment outcomes. Your success depends on your own efforts, qualifications, and market conditions.
                             </p>
                         </Section>
 
                         <Section title="11. Indemnification">
                             <p>
-                                You agree to indemnify, defend, and hold harmless trakaply, its officers, directors, employees, and agents from any claims, liabilities, damages, losses, and expenses arising out of or related to your use of the Service or violation of these Terms.
+                                You agree to indemnify, defend, and hold harmless trakappli, its officers, directors, employees, and agents from any claims, liabilities, damages, losses, and expenses arising out of or related to your use of the Service or violation of these Terms.
                             </p>
                         </Section>
 
@@ -178,7 +178,7 @@ const TermsOfServicePage: React.FC = () => {
                         <Section title="13. General Provisions">
                             <p><strong>Entire Agreement:</strong></p>
                             <p>
-                                These Terms, together with our Privacy Policy, constitute the entire agreement between you and trakaply.
+                                These Terms, together with our Privacy Policy, constitute the entire agreement between you and trakappli.
                             </p>
                             
                             <p className="mt-4"><strong>Severability:</strong></p>
@@ -197,14 +197,14 @@ const TermsOfServicePage: React.FC = () => {
                                 If you have any questions about these Terms, please contact us:
                             </p>
                             <ul className="list-none space-y-2 mt-4">
-                                <li><strong>Email:</strong> legal@trakaply.com</li>
-                                <li><strong>Address:</strong> trakaply Inc., 123 Tech Street, San Francisco, CA 94105</li>
+                                <li><strong>Email:</strong> legal@trakappli.com</li>
+                                <li><strong>Address:</strong> trakappli Inc., 123 Tech Street, San Francisco, CA 94105</li>
                             </ul>
                         </Section>
 
                         <div className="mt-12 p-6 bg-primary-light rounded-lg border border-primary-blue/20">
                             <p className="text-sm text-neutral-text-primary-light">
-                                <strong>By using trakaply, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</strong>
+                                <strong>By using trakappli, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</strong>
                             </p>
                         </div>
                     </div>

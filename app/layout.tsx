@@ -13,9 +13,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Trakaply | Job Tracker & AI Resume Builder for Organized Career Teams",
+  title: "trakappli | Job Tracker & AI Resume Builder for Organized Career Teams",
   description:
-    "Trakaply is the all-in-one job tracker, AI resume builder, and collaborative workspace trusted by schools, career coaches, and ambitious candidates to land offers faster.",
+    "trakappli is the all-in-one job tracker, AI resume builder, and collaborative workspace trusted by schools, career coaches, and ambitious candidates to land offers faster.",
   keywords: [
     "job tracker",
     "AI resume builder",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
     "collaborative job search",
     "job search CRM",
   ],
-  authors: [{ name: "Trakaply Team" }],
-  creator: "Trakaply",
-  publisher: "Trakaply",
+  authors: [{ name: "trakappli Team" }],
+  creator: "trakappli",
+  publisher: "trakappli",
   robots: "index, follow",
   icons: {
     icon: [
@@ -46,15 +46,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://trakaply.com",
-    title: "Trakaply | Job Tracker & AI Resume Builder",
+    url: "https://trakappli.com",
+    title: "trakappli | Job Tracker & AI Resume Builder",
     description:
       "Organize every opportunity, tailor resumes with AI, and collaborate with coaches in one secure job search operating system.",
-    siteName: "Trakaply",
+    siteName: "trakappli",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Trakaply | Job Tracker & AI Resume Builder",
+    title: "trakappli | Job Tracker & AI Resume Builder",
     description:
       "The modern job search OS for schools, cohorts, and ambitious individuals. Track applications, automate follow-ups, and win offers faster.",
   },

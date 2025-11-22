@@ -12,7 +12,7 @@ import Link from 'next/link';
 import {
   BriefcaseIcon,
   GoogleIcon,
-  GithubIcon,
+  LinkedinIcon,
   EnvelopeIcon,
   LockClosedIcon,
   UserIcon,
@@ -21,14 +21,15 @@ import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToastContext } from '@/contexts/ToastContext';
 
-const SocialButton: React.FC<{ icon: React.ReactNode; label: string }> = ({
+const SocialButton: React.FC<{ icon: React.ReactNode; label: string; onClick: () => void }> = ({
   icon,
   label,
+  onClick,
 }) => (
   <button
     type="button"
+    onClick={onClick}
     className="w-full inline-flex items-center justify-center px-4 py-2 border border-neutral-border-light rounded-md shadow-sm bg-neutral-surface-light text-sm font-medium text-neutral-gray hover:bg-neutral-bg-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue"
-    disabled
   >
     {icon}
     <span className="ml-2 sm:ml-3 truncate">{label}</span>
@@ -79,7 +80,7 @@ const AuthPageContent: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   
-  const { login, signup } = useAuth();
+  const { login, signup, loginWithGoogle, loginWithLinkedIn } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { showSuccess, showError } = useToastContext();
@@ -150,7 +151,7 @@ const AuthPageContent: React.FC = () => {
             <Link href="/" className="flex items-center mb-6">
               <BriefcaseIcon className="h-8 w-8 text-primary-blue flex-shrink-0" />
               <span className="ml-3 text-xl sm:text-2xl font-bold text-neutral-text-primary-light">
-                trakaply
+                trakappli
               </span>
             </Link>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-text-primary-light">
@@ -172,11 +173,13 @@ const AuthPageContent: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <SocialButton
                 icon={<GoogleIcon className="w-5 h-5" />}
-                label="Sign up with Google"
+                label="Google"
+                onClick={loginWithGoogle}
               />
               <SocialButton
-                icon={<GithubIcon className="w-5 h-5 text-[#333]" />}
-                label="Sign up with GitHub"
+                icon={<LinkedinIcon className="w-5 h-5 text-[#0077b5]" />}
+                label="LinkedIn"
+                onClick={loginWithLinkedIn}
               />
             </div>
 
@@ -302,7 +305,7 @@ const AuthPageContent: React.FC = () => {
         <div className="relative text-center text-white max-w-md">
           <BriefcaseIcon className="h-12 w-12 mx-auto text-white/50" />
           <blockquote className="mt-8 text-2xl font-semibold leading-relaxed">
-            "trakaply transformed my chaotic job search into an organized,
+            "trakappli transformed my chaotic job search into an organized,
             stress-free process. The AI assistant is a game-changer!"
           </blockquote>
           <div className="mt-8 flex items-center justify-center">

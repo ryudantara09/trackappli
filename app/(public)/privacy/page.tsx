@@ -32,10 +32,10 @@ const PrivacyPolicyPage: React.FC = () => {
                     <div className="bg-neutral-surface-light dark:bg-neutral-surface-dark rounded-lg border border-neutral-border-light dark:border-neutral-border-dark p-8 md:p-12">
                         <Section title="1. Introduction">
                             <p>
-                                Welcome to trakaply (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, disclose, and safeguard your information when you use our job application tracking service.
+                                Welcome to trakappli (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we collect, use, disclose, and safeguard your information when you use our job application tracking service.
                             </p>
                             <p>
-                                By using trakaply, you agree to the collection and use of information in accordance with this policy. If you do not agree with our policies and practices, please do not use our service.
+                                By using trakappli, you agree to the collection and use of information in accordance with this policy. If you do not agree with our policies and practices, please do not use our service.
                             </p>
                         </Section>
 
@@ -108,7 +108,7 @@ const PrivacyPolicyPage: React.FC = () => {
                                 <li><strong>Withdraw Consent:</strong> Revoke consent for data processing where applicable</li>
                             </ul>
                             <p className="mt-4">
-                                To exercise these rights, contact us at privacy@trakaply.com or through your account settings.
+                                To exercise these rights, contact us at privacy@trakappli.com or through your account settings.
                             </p>
                         </Section>
 
@@ -139,7 +139,7 @@ const PrivacyPolicyPage: React.FC = () => {
 
                         <Section title="10. Children's Privacy">
                             <p>
-                                trakaply is not intended for users under 18 years of age. We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us immediately.
+                                trakappli is not intended for users under 18 years of age. We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us immediately.
                             </p>
                         </Section>
 
@@ -160,8 +160,8 @@ const PrivacyPolicyPage: React.FC = () => {
                                 If you have questions or concerns about this privacy policy, please contact us:
                             </p>
                             <ul className="list-none space-y-2 mt-4">
-                                <li><strong>Email:</strong> privacy@trakaply.com</li>
-                                <li><strong>Address:</strong> trakaply Inc., 123 Tech Street, San Francisco, CA 94105</li>
+                                <li><strong>Email:</strong> privacy@trakappli.com</li>
+                                <li><strong>Address:</strong> trakappli Inc., 123 Tech Street, San Francisco, CA 94105</li>
                             </ul>
                         </Section>
                     </div>

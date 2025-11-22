@@ -7,7 +7,7 @@ import { BlogService } from '@/services/blog.service';
 import { Button } from '@/components/ui/Button';
 
 export const metadata: Metadata = {
-  title: 'Blog | Trakaply',
+  title: 'Blog | trakappli',
   description: 'Latest insights on the job market, career coaching, and education technology.',
 };
 

@@ -16,12 +16,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const article = await fetchArticle(slug);
   if (!article) {
     return {
-      title: 'Article not found | Trakaply',
+      title: 'Article not found | trakappli',
     };
   }
   return {
-    title: `${article.title} | Trakaply`,
-    description: article.summary ?? 'Learn from Trakaply’s latest insights on the job market.',
+    title: `${article.title} | trakappli`,
+    description: article.summary ?? 'Learn from trakappli’s latest insights on the job market.',
   };
 }
 
@@ -36,10 +36,10 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     <div className="bg-neutral-bg-light dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark min-h-screen">
       <Header variant="landing" />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-0 py-16 space-y-6">
-        <p className="text-sm uppercase tracking-[0.4em] text-primary-blue">Trakaply Blog</p>
+        <p className="text-sm uppercase tracking-[0.4em] text-primary-blue">trakappli Blog</p>
         <h1 className="text-4xl font-extrabold leading-tight">{article.title}</h1>
         <div className="text-sm text-neutral-gray dark:text-neutral-text-secondary-dark">
-          <span>{article.authorName ?? 'Trakaply Editorial Team'}</span>
+          <span>{article.authorName ?? 'trakappli Editorial Team'}</span>
           <span className="mx-2">•</span>
           <span>{new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
         </div>

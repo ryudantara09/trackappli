@@ -45,7 +45,7 @@ const AboutPage: React.FC = () => {
                         We&apos;re on a mission to make job hunting <span className="text-primary-blue">effortless</span>
                     </h1>
                     <p className="text-lg sm:text-xl text-neutral-gray max-w-3xl mx-auto">
-                        trakaply was born from our own frustration with scattered job applications across emails, spreadsheets, and sticky notes. We built the tool we wish we had—simple, powerful, and free.
+                        trakappli was born from our own frustration with scattered job applications across emails, spreadsheets, and sticky notes. We built the tool we wish we had—simple, powerful, and free.
                     </p>
                 </Section>
 
@@ -63,7 +63,7 @@ const AboutPage: React.FC = () => {
                                 After trying various spreadsheets and tools that were either too complex or too basic, we decided to build something better. Something that understands the modern job seeker&apos;s needs.
                             </p>
                             <p className="text-neutral-gray">
-                                Today, trakaply helps thousands of job seekers stay organized, reduce stress, and land their dream jobs faster. And we&apos;re just getting started.
+                                Today, trakappli helps thousands of job seekers stay organized, reduce stress, and land their dream jobs faster. And we&apos;re just getting started.
                             </p>
                         </div>
                         <div className="relative">

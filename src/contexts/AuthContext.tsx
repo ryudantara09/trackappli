@@ -8,7 +8,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 import { User } from '@supabase/supabase-js';
-import { getSupabase, signIn, signUp, signOut, getUser } from '../lib/auth-client';
+import { getSupabase, signIn, signUp, signOut, getUser, signInWithGoogle, signInWithLinkedIn } from '../lib/auth-client';
 import { isAdminEmail } from '../utils/admin';
 
 interface AuthContextType {
@@ -17,6 +17,8 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
+  loginWithLinkedIn: () => Promise<void>;
   logout: () => Promise<void>;
   isAdmin: boolean;
 }
@@ -78,6 +80,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const loginWithGoogle = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      console.error('Google login error:', error);
+      throw error;
+    }
+  };
+
+  const loginWithLinkedIn = async () => {
+    try {
+      await signInWithLinkedIn();
+    } catch (error) {
+      console.error('LinkedIn login error:', error);
+      throw error;
+    }
+  };
+
   const logout = async () => {
     try {
       await signOut();
@@ -98,6 +118,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isLoading,
         login,
         signup,
+        loginWithGoogle,
+        loginWithLinkedIn,
         logout,
         isAdmin,
       }}

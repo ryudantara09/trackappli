@@ -38,7 +38,7 @@ const HelpCenterPage: React.FC = () => {
             category: "Getting Started",
             questions: [
                 { q: "How do I create an account?", a: "Click 'Get Started Free' on the homepage or 'Sign Up' in the header. You can sign up with email or use social login with Google or GitHub." },
-                { q: "Is trakaply really free?", a: "Yes! trakaply offers a generous free forever plan with unlimited applications, AI extraction, and all core features. Premium plans with advanced analytics are coming soon." },
+                { q: "Is trakappli really free?", a: "Yes! trakappli offers a generous free forever plan with unlimited applications, AI extraction, and all core features. Premium plans with advanced analytics are coming soon." },
                 { q: "How do I add my first job application?", a: "After logging in, click the 'Add Application' button on your dashboard. Fill in the job details manually, or use our AI feature to extract data from job posting URLs." },
             ]
         },
