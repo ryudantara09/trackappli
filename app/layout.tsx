@@ -51,12 +51,21 @@ export const metadata: Metadata = {
     description:
       "Organize every opportunity, tailor resumes with AI, and collaborate with coaches in one secure job search operating system.",
     siteName: "trakappli",
+    images: [
+      {
+        url: "/banner.png",
+        width: 1200,
+        height: 630,
+        alt: "trakappli Platform Preview",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "trakappli | Job Tracker & AI Resume Builder",
     description:
       "The modern job search OS for schools, cohorts, and ambitious individuals. Track applications, automate follow-ups, and win offers faster.",
+    images: ["/banner.png"],
   },
 };
 
