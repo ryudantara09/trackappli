@@ -1,0 +1,17 @@
+meta {
+  name: Scrape Job
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5002/scrape
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "url": "https://www.linkedin.com/jobs/view/3753567368"
+  }
+}
