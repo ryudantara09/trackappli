@@ -20,7 +20,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Call Python microservice
-    const pythonServiceUrl = process.env.PYTHON_SERVICE_URL || 'http://localhost:5001';
+    // On Vercel: call /api/python-extract directly
+    // On localhost: call Flask server at http://localhost:5001/extract
+    const pythonServiceUrl = process.env.PYTHON_SERVICE_URL || 'http://localhost:5001/extract';
     const result = await callPythonService(pythonServiceUrl, body);
 
     return NextResponse.json(result);
@@ -41,7 +43,7 @@ export async function POST(request: NextRequest) {
  */
 async function callPythonService(serviceUrl: string, data: any): Promise<any> {
   try {
-    const response = await fetch(`${serviceUrl}/extract`, {
+    const response = await fetch(serviceUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
