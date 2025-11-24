@@ -158,52 +158,44 @@ if __name__ == "__main__":
 
 
 # For Vercel serverless function
-def handler(event, context):
-    """Vercel serverless function handler"""
-    
-    # Handle CORS preflight
-    if event.get("httpMethod") == "OPTIONS" or event.get("method") == "OPTIONS":
-        return {
-            "statusCode": 200,
-            "headers": {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "POST, OPTIONS",
-                "Access-Control-Allow-Headers": "Content-Type",
-            },
-            "body": "",
-        }
-    
-    try:
-        # Parse request body
-        body = event.get("body", "")
-        if event.get("isBase64Encoded"):
-            body = base64.b64decode(body).decode("utf-8")
-        
-        request_body = json.loads(body) if isinstance(body, str) else body
-        
-        # Process the request
-        result = process_pdf_extraction(request_body)
-        
-        # Return response
-        return {
-            "statusCode": 200 if result.get("success") else 400,
-            "headers": {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-            },
-            "body": json.dumps(result),
-        }
-        
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        
-        return {
-            "statusCode": 500,
-            "headers": {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-            },
-            "body": json.dumps({"success": False, "error": f"Request handling failed: {str(e)}"}),
-        }
+from http.server import BaseHTTPRequestHandler
+
+
+class handler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        try:
+            # Read request body
+            content_length = int(self.headers.get("Content-Length", 0))
+            post_data = self.rfile.read(content_length)
+            request_body = json.loads(post_data.decode("utf-8"))
+
+            # Process the PDF extraction
+            result = process_pdf_extraction(request_body)
+
+            # Send response
+            status_code = 200 if result.get("success") else 400
+            self.send_response(status_code)
+            self.send_header("Content-type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(json.dumps(result).encode("utf-8"))
+
+        except Exception as e:
+            import traceback
+
+            error_trace = traceback.format_exc()
+            print(f"ERROR: {error_trace}")
+
+            self.send_response(500)
+            self.send_header("Content-type", "application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            error_response = {"success": False, "error": f"{type(e).__name__}: {str(e)}", "traceback": error_trace}
+            self.wfile.write(json.dumps(error_response).encode("utf-8"))
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()

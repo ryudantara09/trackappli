@@ -126,9 +126,9 @@ function bufferToBase64(buffer: Buffer | Uint8Array): string {
  * @returns Base URL for the application
  */
 function getBaseUrl(): string {
-  // In production (Vercel), use the deployment URL
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
+  // In production (Vercel), use the actual production URL
+  if (process.env.VERCEL) {
+    return 'https://www.trakapp.li';
   }
 
   // In development, use localhost

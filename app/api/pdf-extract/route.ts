@@ -6,24 +6,50 @@ import { NextRequest, NextResponse } from 'next/server';
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { pdf } = body;
+    // Check content type to handle both JSON and multipart
+    const contentType = request.headers.get('content-type') || '';
+    let pdfBase64: string;
 
-    if (!pdf || typeof pdf !== 'string') {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Invalid request: pdf field must be a base64 encoded string',
-        },
-        { status: 400 }
-      );
+    if (contentType.includes('multipart/form-data')) {
+      // Handle file upload
+      const formData = await request.formData();
+      const file = formData.get('file') as File;
+      
+      if (!file) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'No file provided in multipart form data',
+          },
+          { status: 400 }
+        );
+      }
+
+      // Convert file to base64
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      pdfBase64 = buffer.toString('base64');
+    } else {
+      // Handle JSON with base64
+      const body = await request.json();
+      pdfBase64 = body.pdf;
+
+      if (!pdfBase64 || typeof pdfBase64 !== 'string') {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Invalid request: pdf field must be a base64 encoded string',
+          },
+          { status: 400 }
+        );
+      }
     }
 
     // Call Python microservice
     // On Vercel: call /api/python-extract directly
     // On localhost: call Flask server at http://localhost:5001/extract
     const pythonServiceUrl = process.env.PYTHON_SERVICE_URL || 'http://localhost:5001/extract';
-    const result = await callPythonService(pythonServiceUrl, body);
+    const result = await callPythonService(pythonServiceUrl, { pdf: pdfBase64 });
 
     return NextResponse.json(result);
   } catch (error) {
