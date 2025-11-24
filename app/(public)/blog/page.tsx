@@ -12,9 +12,14 @@ export const metadata: Metadata = {
 };
 
 async function fetchArticles() {
-  const supabase = createAnonClient();
-  const blogService = new BlogService(supabase);
-  return blogService.listArticles({ limit: 50 });
+  try {
+    const supabase = createAnonClient();
+    const blogService = new BlogService(supabase);
+    return await blogService.listArticles({ limit: 50 });
+  } catch (error) {
+    console.error('Failed to fetch articles:', error);
+    return [];
+  }
 }
 
 export default async function BlogPage() {

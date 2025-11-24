@@ -6,9 +6,14 @@ import { BlogService } from '@/services/blog.service';
 import type { BlogArticle } from '@/types/frontend.types';
 
 async function fetchArticle(slug: string): Promise<BlogArticle | null> {
-  const supabase = createAnonClient();
-  const blogService = new BlogService(supabase);
-  return blogService.getArticleBySlug(slug);
+  try {
+    const supabase = createAnonClient();
+    const blogService = new BlogService(supabase);
+    return await blogService.getArticleBySlug(slug);
+  } catch (error) {
+    console.error(`Failed to fetch article with slug ${slug}:`, error);
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
