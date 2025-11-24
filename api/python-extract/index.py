@@ -1,10 +1,6 @@
-from http.server import BaseHTTPRequestHandler
 import json
 import base64
-import tempfile
-import os
 import sys
-from pathlib import Path
 import re
 
 # Try different import methods for PyMuPDF
@@ -102,28 +98,43 @@ def extract_text_with_fitz(pdf_bytes):
 
 def process_pdf_extraction(request_body):
     """Process PDF extraction from request body"""
+    print("DEBUG: Starting process_pdf_extraction")
     try:
         # Extract the base64-encoded PDF content
         pdf_base64 = request_body.get("pdf")
 
         if not pdf_base64:
+            print("DEBUG: Missing pdf field")
             return {"success": False, "error": "Missing pdf field in request body"}
 
         # Decode the base64 PDF content
-        pdf_bytes = base64.b64decode(pdf_base64)
+        try:
+            pdf_bytes = base64.b64decode(pdf_base64)
+            print(f"DEBUG: Decoded PDF bytes: {len(pdf_bytes)}")
+        except Exception as e:
+            print(f"DEBUG: Base64 decode error: {e}")
+            return {"success": False, "error": f"Invalid base64 PDF data: {str(e)}"}
 
         # Extract text from PDF
+        print("DEBUG: Calling extract_text_with_fitz")
         extracted_text = extract_text_with_fitz(pdf_bytes)
+        print(f"DEBUG: Extracted text length: {len(extracted_text) if extracted_text else 0}")
 
         if not extracted_text or len(extracted_text.strip()) < 50:
+            print("DEBUG: Insufficient text")
             return {"success": False, "error": "Unable to extract sufficient text from PDF"}
 
         # Clean the final text
         final_text = clean_text(extracted_text)
+        print("DEBUG: Text cleaned")
 
         return {"success": True, "text": final_text, "library": "PyMuPDF"}
 
     except Exception as e:
+        print(f"DEBUG: Exception in process_pdf_extraction: {e}")
+        import traceback
+
+        traceback.print_exc()
         return {"success": False, "error": f"PDF extraction failed: {str(e)}"}
 
 
@@ -147,14 +158,18 @@ if __name__ == "__main__":
 
 
 # For Vercel serverless function
+from http.server import BaseHTTPRequestHandler
+
+
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         try:
-            content_length = int(self.headers["Content-Length"])
+            # Read request body
+            content_length = int(self.headers.get("Content-Length", 0))
             post_data = self.rfile.read(content_length)
-            request_body = json.loads(post_data)
+            request_body = json.loads(post_data.decode("utf-8"))
 
-            # Process the request
+            # Process the PDF extraction
             result = process_pdf_extraction(request_body)
 
             # Send response
@@ -166,12 +181,17 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(result).encode("utf-8"))
 
         except Exception as e:
+            import traceback
+
+            error_trace = traceback.format_exc()
+            print(f"ERROR: {error_trace}")
+
             self.send_response(500)
             self.send_header("Content-type", "application/json")
             self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
-            response = {"success": False, "error": f"Request handling failed: {str(e)}"}
-            self.wfile.write(json.dumps(response).encode("utf-8"))
+            error_response = {"success": False, "error": f"{type(e).__name__}: {str(e)}", "traceback": error_trace}
+            self.wfile.write(json.dumps(error_response).encode("utf-8"))
 
     def do_OPTIONS(self):
         self.send_response(200)
