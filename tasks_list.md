@@ -7,3 +7,4 @@
 - [ ] playwright for scrapping job posting (linkedin, indeed, weblinks...)
 - [ ] fix dashboard when clicking on status cards the others become zeros
 - [ ] make application URL not required
+- [ ] fix application/[id] routing on vercel
