@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '../../../../src/core/auth/middleware';
-import { createRouteHandlerClient } from '../../../../src/core/auth/supabase';
-import { ApplicationsService } from '../../../../src/services/applications.service';
-import { createErrorResponse, ValidationError } from '../../../../src/utils/errors';
-import { updateApplicationSchema, validateRequestBody } from '../../../../src/utils/validation';
-
+import { requireAuth } from '@/core/auth/middleware';
+import { createRouteHandlerClient } from '@/core/auth/supabase';
+import { ApplicationsService } from '@/services/applications.service';
+import { createErrorResponse, ValidationError } from '@/utils/errors';
+import { updateApplicationSchema, validateRequestBody } from '@/utils/validation';
 /**
  * GET /api/applications/[id]
  * Get a single application by ID
