@@ -74,13 +74,22 @@ The function is automatically deployed to Vercel as a Python serverless function
 ```json
 {
   "functions": {
-    "api/pdf-extract/index.py": {
+    "api/py-pdf-extract/index.py": {
       "runtime": "python3.11",
       "maxDuration": 30,
       "memory": 512
     }
   }
 }
+
+## Environment Variables
+
+The application automatically detects the correct URL for the Python service.
+
+- **Local Development**: Defaults to `http://localhost:5001/extract`
+- **Vercel Deployment**: Automatically uses `https://<your-app-domain>/api/py-pdf-extract`
+
+You can override this by setting the `PYTHON_SERVICE_URL` environment variable if needed.
 ```
 
 ## Usage from TypeScript

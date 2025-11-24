@@ -20,7 +20,24 @@ export async function POST(request: NextRequest) {
     }
 
     // Call Python microservice
-    const pythonServiceUrl = process.env.PYTHON_SERVICE_URL || 'http://localhost:5001';
+    // Automatically detect environment:
+    // 1. Use explicit env var if set
+    // 2. In development, use local Python server
+    // 3. In production, use the current origin to call the Vercel function
+    let pythonServiceUrl = process.env.PYTHON_SERVICE_URL;
+    
+    if (!pythonServiceUrl) {
+      if (process.env.NODE_ENV === 'development') {
+        pythonServiceUrl = 'http://localhost:5001/extract';
+      } else {
+        // Production / Preview
+        // Use the origin of the request to construct the URL
+        // This ensures we are calling the function on the same deployment
+        pythonServiceUrl = `${request.nextUrl.origin}/api/py-pdf-extract`;
+      }
+    }
+
+    console.log(`Attempting to call Python service at: ${pythonServiceUrl}`);
     const result = await callPythonService(pythonServiceUrl, body);
 
     return NextResponse.json(result);
@@ -41,7 +58,7 @@ export async function POST(request: NextRequest) {
  */
 async function callPythonService(serviceUrl: string, data: any): Promise<any> {
   try {
-    const response = await fetch(`${serviceUrl}/extract`, {
+    const response = await fetch(serviceUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -50,15 +67,25 @@ async function callPythonService(serviceUrl: string, data: any): Promise<any> {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || `Python service returned status ${response.status}`);
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Python service returned status ${response.status}`);
+      } else {
+        const text = await response.text();
+        // Truncate text to avoid huge error messages
+        const preview = text.slice(0, 200);
+        throw new Error(
+          `Python service at ${serviceUrl} failed with status ${response.status}. Response: ${preview}...`
+        );
+      }
     }
 
     return await response.json();
   } catch (error) {
     if (error instanceof Error && error.message.includes('fetch failed')) {
       throw new Error(
-        'Python microservice is not running. Start it with: cd api/pdf-extract && python server.py'
+        'Python microservice is not running. Start it with: cd api/py-pdf-extract && python server.py'
       );
     }
     throw error;

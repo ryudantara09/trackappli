@@ -27,6 +27,7 @@ const nextConfig: NextConfig = {
   },
 
   // Production optimizations
+  output: 'standalone',
   poweredByHeader: false,
   compress: true,
 
