@@ -23,7 +23,7 @@ import { APPLICATION_STATUS, EXTENSION_HEADER } from '../config/constants';
 
 export interface CreateApplicationInput {
   userId: string;
-  positionUrl: string;
+  positionUrl?: string;
   positionTitle?: string;
   companyName?: string;
   jobLocation?: string;
@@ -82,18 +82,6 @@ export class ApplicationsService {
    * Validate application creation input
    */
   private validateCreateInput(input: CreateApplicationInput): void {
-    // Validate required fields
-    if (!input.positionUrl || input.positionUrl.trim().length === 0) {
-      throw new ValidationError('Position URL is required');
-    }
-
-    // Validate URL format
-    try {
-      new URL(input.positionUrl);
-    } catch {
-      throw new ValidationError('Position URL must be a valid URL');
-    }
-
     // Validate status if provided
     if (input.status && !Object.values(APPLICATION_STATUS).includes(input.status as any)) {
       throw new ValidationError(
@@ -106,6 +94,15 @@ export class ApplicationsService {
       const date = new Date(input.appliedAt);
       if (isNaN(date.getTime())) {
         throw new ValidationError('Applied date must be a valid ISO date string');
+      }
+    }
+
+    // Validate URL format if provided
+    if (input.positionUrl && input.positionUrl.trim().length > 0) {
+      try {
+        new URL(input.positionUrl);
+      } catch {
+        throw new ValidationError('Position URL must be a valid URL');
       }
     }
   }
@@ -205,7 +202,7 @@ export class ApplicationsService {
     // Prepare application data for insertion
     const applicationData: ApplicationInsert = {
       user_id: input.userId,
-      position_url: input.positionUrl,
+      position_url: input.positionUrl ?? '',
       position_title: finalData.positionTitle || null,
       company_name: finalData.companyName || null,
       job_location: finalData.jobLocation || null,

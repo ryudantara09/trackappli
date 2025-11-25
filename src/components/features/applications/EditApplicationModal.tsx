@@ -100,7 +100,6 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 required 
               />
             </div>
-            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InputField 
                 label="Location" 
@@ -108,26 +107,31 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 value={formState.location || ''} 
                 onChange={handleFormChange} 
               />
-              <div>
-                <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-                  Status
-                </label>
-                <select
-                  id="status"
-                  name="status"
-                  value={formState.status}
-                  onChange={handleFormChange}
-                  className="mt-1 block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
-                >
-                  <option value={ApplicationStatus.APPLIED}>Applied</option>
-                  <option value={ApplicationStatus.INTERVIEW}>Interview</option>
-                  <option value={ApplicationStatus.OFFER}>Offer</option>
-                  <option value={ApplicationStatus.REJECTED}>Rejected</option>
-                  <option value={ApplicationStatus.WITHDRAWN}>Withdrawn</option>
-                </select>
-              </div>
+              <InputField 
+                label="Job URL" 
+                name="url" 
+                value={formState.url || ''} 
+                onChange={handleFormChange} 
+              />
             </div>
-
+            <div>
+              <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+                Status
+              </label>
+              <select
+                id="status"
+                name="status"
+                value={formState.status}
+                onChange={handleFormChange}
+                className="mt-1 block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
+              >
+                <option value={ApplicationStatus.APPLIED}>Applied</option>
+                <option value={ApplicationStatus.INTERVIEW}>Interview</option>
+                <option value={ApplicationStatus.OFFER}>Offer</option>
+                <option value={ApplicationStatus.REJECTED}>Rejected</option>
+                <option value={ApplicationStatus.WITHDRAWN}>Withdrawn</option>
+              </select>
+            </div>
             <div>
               <label htmlFor="jobType" className="block text-sm font-medium text-gray-700">
                 Job Type
@@ -147,35 +151,24 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 <option value={JobType.FREELANCE}>Freelance</option>
               </select>
             </div>
-            
-            <InputField 
-              label="Job URL" 
-              name="url" 
-              value={formState.url || ''} 
-              onChange={handleFormChange} 
-            />
-            
             <InputField 
               label="Skills (comma separated)" 
               name="skills" 
               value={formState.skills?.join(', ') || ''} 
               onChange={handleSkillsChange} 
             />
-
             <InputField 
               label="Soft Skills (comma separated)" 
               name="softSkills" 
               value={formState.softSkills?.join(', ') || ''} 
               onChange={handleSoftSkillsChange} 
             />
-
             <InputField 
               label="Tags (comma separated)" 
               name="tags" 
               value={formState.tags?.join(', ') || ''} 
               onChange={handleTagsChange} 
             />
-
             <div>
               <label htmlFor="description" className="block text-sm font-medium text-gray-700">
                 Description
@@ -189,7 +182,6 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 className="mt-1 block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
               />
             </div>
-            
             <div>
               <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
                 Notes

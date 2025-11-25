@@ -21,8 +21,9 @@ const dateRangeRefinement = (data: { start_date?: string; end_date?: string; cur
 };
 
 // Validate URL format more strictly
-const urlSchema = z.string().min(1, 'URL is required').refine(
+const urlSchema = z.string().optional().refine(
   (url) => {
+    if (!url) return true;
     try {
       new URL(url);
       return true;
