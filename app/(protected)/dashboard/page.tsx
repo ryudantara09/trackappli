@@ -164,8 +164,8 @@ const DashboardPage: React.FC = () => {
     }
   };
 
-  // Filtering Logic
-  const filteredApplications = useMemo(() => {
+  // Base filtered applications (without status filter) for stats
+  const baseFilteredApplications = useMemo(() => {
     // Filter out deleted application during undo window
     let filtered = deletedApplication 
       ? applications.filter(app => app.id !== deletedApplication.id)
@@ -182,11 +182,6 @@ const DashboardPage: React.FC = () => {
       );
     }
 
-    // Status filter
-    if (selectedStatus !== 'all') {
-      filtered = filtered.filter(app => app.status === selectedStatus);
-    }
-
     // Date range filter
     if (dateRange !== 'all') {
       const now = new Date();
@@ -197,6 +192,18 @@ const DashboardPage: React.FC = () => {
         const appDate = new Date(app.dateApplied);
         return appDate >= cutoffDate;
       });
+    }
+
+    return filtered;
+  }, [applications, deletedApplication, searchQuery, dateRange]);
+
+  // Final filtered applications (with status filter and sorting)
+  const filteredApplications = useMemo(() => {
+    let filtered = baseFilteredApplications;
+
+    // Status filter
+    if (selectedStatus !== 'all') {
+      filtered = filtered.filter(app => app.status === selectedStatus);
     }
 
     // Sorting
@@ -217,14 +224,14 @@ const DashboardPage: React.FC = () => {
     }
 
     return sorted;
-  }, [applications, deletedApplication, searchQuery, selectedStatus, dateRange, sortBy]);
+  }, [baseFilteredApplications, selectedStatus, sortBy]);
 
   const summaryStats = useMemo(() => {
     return Object.values(ApplicationStatus).map(status => ({
         status,
-        count: filteredApplications.filter(app => app.status === status).length
+        count: baseFilteredApplications.filter(app => app.status === status).length
     }));
-  }, [filteredApplications]);
+  }, [baseFilteredApplications]);
 
   const kanbanColumns = useMemo(() => {
       return Object.values(ApplicationStatus).map(status => ({
@@ -291,7 +298,7 @@ const DashboardPage: React.FC = () => {
             
             {/* Summary Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 mb-6">
-        <SummaryCard title="Total Applications" value={filteredApplications.length} />
+        <SummaryCard title="Total Applications" value={baseFilteredApplications.length} />
                 {summaryStats.map(stat => (
                     <SummaryCard 
                       key={stat.status} 
