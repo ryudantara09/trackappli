@@ -117,7 +117,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </Link>
               ) : (
                 <>
-                  <Link href="/auth">
+                  <Link href="/auth?mode=signin">
                     <Button 
                       size="medium" 
                       variant="secondary" 
@@ -130,7 +130,7 @@ export const Header: React.FC<HeaderProps> = ({
                       Sign In
                     </Button>
                   </Link>
-                  <Link href="/auth">
+                  <Link href="/auth?mode=signup">
                     <Button size="medium">Get Started Free</Button>
                   </Link>
                 </>

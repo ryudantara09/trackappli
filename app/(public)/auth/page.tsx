@@ -73,7 +73,13 @@ const InputField: React.FC<{
 );
 
 const AuthPageContent: React.FC = () => {
-  const [isSignUp, setIsSignUp] = useState(true);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { showSuccess, showError } = useToastContext();
+  
+  // Get mode from URL parameter (signup or signin)
+  const mode = searchParams.get('mode') || 'signup';
+  const [isSignUp, setIsSignUp] = useState(mode === 'signup');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -81,12 +87,14 @@ const AuthPageContent: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   
   const { login, signup, loginWithGoogle, loginWithLinkedIn } = useAuth();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { showSuccess, showError } = useToastContext();
   
   // Get the redirect parameter from URL (set by middleware)
   const redirectTo = searchParams.get('redirect') || '/dashboard';
+  
+  // Update isSignUp when mode changes
+  React.useEffect(() => {
+    setIsSignUp(mode === 'signup');
+  }, [mode]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,13 +167,12 @@ const AuthPageContent: React.FC = () => {
             </h2>
             <p className="mt-2 text-sm text-neutral-gray">
               {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-              <button
-                onClick={() => setIsSignUp(!isSignUp)}
+              <Link
+                href={isSignUp ? '/auth?mode=signin' : '/auth?mode=signup'}
                 className="font-medium text-primary-blue hover:text-primary-dark"
-                type="button"
               >
                 {isSignUp ? 'Sign in' : 'Sign up for free'}
-              </button>
+              </Link>
             </p>
           </div>
 
@@ -252,7 +259,7 @@ const AuthPageContent: React.FC = () => {
 
                     <div className="text-sm">
                       <Link
-                        href="/help"
+                        href="/auth/forgot-password"
                         className="font-medium text-primary-blue hover:text-primary-dark"
                       >
                         Forgot password?
