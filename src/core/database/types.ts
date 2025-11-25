@@ -70,7 +70,7 @@ export type Database = {
           job_type: string | null
           notes: string | null
           position_title: string | null
-          position_url: string
+          position_url?: string
           soft_skills: Json | null
           status: string
           tags: Json | null
