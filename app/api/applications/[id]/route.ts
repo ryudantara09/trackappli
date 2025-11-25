@@ -13,7 +13,7 @@ export const runtime = 'nodejs';
  */
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -23,7 +23,7 @@ export async function GET(
     const applicationsService = new ApplicationsService(supabase);
 
     // Parse application ID
-    const { id } = await context.params;
+    const { id } = await params;
     const applicationId = parseInt(id, 10);
     
     if (isNaN(applicationId)) {
@@ -48,7 +48,7 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -58,7 +58,7 @@ export async function PUT(
     const applicationsService = new ApplicationsService(supabase);
 
     // Parse application ID
-    const { id } = await context.params;
+    const { id } = await params;
     const applicationId = parseInt(id, 10);
     
     if (isNaN(applicationId)) {
@@ -90,7 +90,7 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Authenticate user and get authenticated Supabase client
@@ -100,7 +100,7 @@ export async function DELETE(
     const applicationsService = new ApplicationsService(supabase);
 
     // Parse application ID
-    const { id } = await context.params;
+    const { id } = await params;
     const applicationId = parseInt(id, 10);
     
     if (isNaN(applicationId)) {
