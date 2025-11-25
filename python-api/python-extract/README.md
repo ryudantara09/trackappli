@@ -4,7 +4,7 @@ This Python serverless function extracts text from PDF files using pdfplumber (p
 
 ## Endpoint
 
-`POST /api/pdf-extract`
+`POST /api/python-extract`
 
 ## Request Format
 

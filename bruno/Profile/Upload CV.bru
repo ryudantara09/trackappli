@@ -1,0 +1,37 @@
+meta {
+  name: Upload CV to Profile
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/profile/cv
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsImtpZCI6InhRTytBOXhhdDNVRForeEgiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL21teGJqdHptYXJxdmV6a2Fiam56LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI4OWM2YzI1ZS0xZjY2LTQ5YjMtYWVlMi0zODQ5OTFlODY4MTMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzYzOTk3ODA0LCJpYXQiOjE3NjM5OTQyMDQsImVtYWlsIjoidGVzdEB0ZXN0LnR0IiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdLCJyb2xlIjoiYWRtaW4ifSwidXNlcl9tZXRhZGF0YSI6eyJlbWFpbF92ZXJpZmllZCI6dHJ1ZX0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3NjM5OTQyMDN9XSwic2Vzc2lvbl9pZCI6IjU5M2RmMDRkLTQ3N2QtNGU2MC1iNjk2LTYyNTZkOWU2YWM0OSIsImlzX2Fub255bW91cyI6ZmFsc2V9.KWkVnegg96A1kya4p-yg_RMAp3k7YsHLSEakAxboEkk
+}
+
+body:multipart-form {
+  cv: @file(C:\Users\medba\Downloads\DC - PREXTA - M.MA - ML Engineer.pdf)
+}
+
+docs {
+  # Upload CV to Profile
+  
+  This is the ACTUAL endpoint that's failing - the full CV upload flow.
+  
+  ## Usage
+  1. Make sure you're logged in (auth token is set)
+  2. Click on the "cv" field in the body
+  3. Select your CV PDF file
+  4. Send the request
+  
+  This will:
+  - Upload the CV
+  - Extract text from PDF
+  - Use AI to extract structured data
+  - Return the extracted CV information
+}

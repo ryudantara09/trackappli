@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '../../../../src/core/auth/middleware';
-import { createRouteHandlerClient } from '../../../../src/core/auth/supabase';
-import { ApplicationsService } from '../../../../src/services/applications.service';
-import { createErrorResponse, ValidationError } from '../../../../src/utils/errors';
-import { updateApplicationSchema, validateRequestBody } from '../../../../src/utils/validation';
+import { requireAuth } from '@/core/auth/middleware';
+import { createRouteHandlerClient } from '@/core/auth/supabase';
+import { ApplicationsService } from '@/services/applications.service';
+import { createErrorResponse, ValidationError } from '@/utils/errors';
+import { updateApplicationSchema, validateRequestBody } from '@/utils/validation';
 
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 /**
  * GET /api/applications/[id]
  * Get a single application by ID
@@ -14,6 +16,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // DEBUG: Log the ID value BEFORE auth
+    const { id } = await params;
+    console.log('=== DEBUG: Received ID parameter:', id, 'Type:', typeof id, 'URL:', request.url);
+    
     // Authenticate user and get authenticated Supabase client
     const { userId, supabase } = await requireAuth();
 
@@ -21,10 +27,10 @@ export async function GET(
     const applicationsService = new ApplicationsService(supabase);
 
     // Parse application ID
-    const { id } = await params;
     const applicationId = parseInt(id, 10);
     
     if (isNaN(applicationId)) {
+      console.error('Failed to parse ID:', id, 'Result:', applicationId);
       throw new ValidationError('Invalid application ID');
     }
 

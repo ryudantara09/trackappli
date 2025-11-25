@@ -48,7 +48,12 @@ export async function POST(request: NextRequest) {
     // Call Python microservice
     // On Vercel: call /api/python-extract directly
     // On localhost: call Flask server at http://localhost:5001/extract
-    const pythonServiceUrl = process.env.PYTHON_SERVICE_URL || 'http://localhost:5001/extract';
+    let defaultUrl = 'http://localhost:5001/extract';
+    if (process.env.NODE_ENV === 'production') {
+      const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://www.trakapp.li';
+      defaultUrl = `${baseUrl}/api/python-extract`;
+    }
+    const pythonServiceUrl = process.env.PYTHON_SERVICE_URL || defaultUrl;
     const result = await callPythonService(pythonServiceUrl, { pdf: pdfBase64 });
 
     return NextResponse.json(result);
@@ -86,7 +91,7 @@ async function callPythonService(serviceUrl: string, data: any): Promise<any> {
   } catch (error) {
     if (error instanceof Error && error.message.includes('fetch failed')) {
       throw new Error(
-        'Python microservice is not running. Start it with: cd api/pdf-extract && python server.py'
+        'Python microservice is not running. Start it with: cd python-api/python-extract && python server.py'
       );
     }
     throw error;
