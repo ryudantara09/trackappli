@@ -290,7 +290,7 @@ export default function HomePage() {
             "https://github.com/trakappli",
           ],
           contactPoint: { "@type": "ContactPoint", contactType: "customer support", email: "hello@trakappli.com" },
-          logo: "https://trakappli.com/Logos/trakappli-blue.svg",
+          logo: "https://trakappli.com/Logos/trakappli-logo-blue.svg",
         },
         {
           "@type": "SoftwareApplication",
