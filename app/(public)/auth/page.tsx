@@ -66,7 +66,7 @@ const InputField: React.FC<{
         placeholder={label}
         value={value}
         onChange={onChange}
-        className="block w-full rounded-md border-neutral-border-light pl-10 shadow-sm focus:border-primary-blue focus:ring-primary-blue sm:text-sm py-3"
+        className="block w-full rounded-md border-neutral-border-light dark:border-neutral-border-dark pl-10 shadow-sm focus:border-primary-blue focus:ring-primary-blue sm:text-sm py-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
       />
     </div>
   </div>

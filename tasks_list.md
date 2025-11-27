@@ -13,4 +13,8 @@
 - [x] fix password recovery considering that we use supabase
 - [x] fix the problem of the user who connects using providers (google, linkedin) and connects with email issue if it is still existing
 - [x] signin button should take you to sign in, get starte for free button should take you to signup
-- [ ] fix the text boxes for the dark mode where the text appears white on white background (which makes it not readable and seen)
+- [x] fix the text boxes for the dark mode where the text appears white on white background (which makes it not readable and seen)
+- [ ] add openrouter for different AI models to manage the usage
+- [ ] Manage the usage of the AI models based on the token numbers
+- [ ] Add pricing plans and bundles: check costs of models, add models usage, add prices for different costs and models
+- [ ] Add vecor database for storing CVs and cover letters for future usage (enhance generation, lookup, etc...)

@@ -142,17 +142,17 @@ export default function ReviewCVModal({ isOpen, onClose, initialData, onSave }: 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="bg-white dark:bg-neutral-surface-dark rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
-          <h2 className="text-xl font-bold text-gray-900">Review CV Data</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
+        <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-neutral-border-dark">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-neutral-text-primary-dark">Review CV Data</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
             <XMarkIcon className="w-6 h-6" />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-100 bg-gray-50/50">
+        <div className="flex border-b border-gray-100 dark:border-neutral-border-dark bg-gray-50/50 dark:bg-neutral-bg-dark">
           <TabButton 
             active={activeTab === 'personal'} 
             onClick={() => setActiveTab('personal')} 
@@ -180,7 +180,7 @@ export default function ReviewCVModal({ isOpen, onClose, initialData, onSave }: 
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 bg-gray-50/30">
+        <div className="flex-1 overflow-y-auto p-6 bg-gray-50/30 dark:bg-neutral-bg-dark">
           {activeTab === 'personal' && (
             <div className="space-y-4 max-w-2xl mx-auto">
               <InputField 
@@ -209,7 +209,7 @@ export default function ReviewCVModal({ isOpen, onClose, initialData, onSave }: 
           {activeTab === 'experience' && (
             <div className="space-y-6">
               {formData.work_experience?.map((exp, index) => (
-                <div key={index} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm relative group">
+                <div key={index} className="bg-white dark:bg-neutral-surface-dark p-6 rounded-lg border border-gray-200 dark:border-neutral-border-dark shadow-sm relative group">
                   <button 
                     onClick={() => removeExperience(index)}
                     className="absolute top-4 right-4 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
@@ -254,11 +254,11 @@ export default function ReviewCVModal({ isOpen, onClose, initialData, onSave }: 
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
                       <textarea 
                         value={exp.description || ''}
                         onChange={(e) => updateExperience(index, 'description', e.target.value)}
-                        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-blue focus:ring-primary-blue min-h-[100px]"
+                        className="w-full rounded-lg border-gray-300 dark:border-neutral-border-dark shadow-sm focus:border-primary-blue focus:ring-primary-blue min-h-[100px] bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
                       />
                     </div>
                     <InputField 
@@ -278,7 +278,7 @@ export default function ReviewCVModal({ isOpen, onClose, initialData, onSave }: 
           {activeTab === 'education' && (
             <div className="space-y-6">
               {formData.education?.map((edu, index) => (
-                <div key={index} className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm relative group">
+                <div key={index} className="bg-white dark:bg-neutral-surface-dark p-6 rounded-lg border border-gray-200 dark:border-neutral-border-dark shadow-sm relative group">
                   <button 
                     onClick={() => removeEducation(index)}
                     className="absolute top-4 right-4 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
@@ -328,7 +328,7 @@ export default function ReviewCVModal({ isOpen, onClose, initialData, onSave }: 
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {formData.technical_skills?.map((skill, index) => (
-                  <div key={index} className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm relative group flex gap-3 items-start">
+                  <div key={index} className="bg-white dark:bg-neutral-surface-dark p-4 rounded-lg border border-gray-200 dark:border-neutral-border-dark shadow-sm relative group flex gap-3 items-start">
                     <div className="flex-1 space-y-3">
                       <InputField 
                         label="Category" 
@@ -366,7 +366,7 @@ export default function ReviewCVModal({ isOpen, onClose, initialData, onSave }: 
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gray-100 bg-white flex justify-end gap-3">
+        <div className="p-6 border-t border-gray-100 dark:border-neutral-border-dark bg-white dark:bg-neutral-surface-dark flex justify-end gap-3">
           <Button variant="secondary" onClick={onClose}>Cancel</Button>
           <Button onClick={handleSave} disabled={isSaving}>
             {isSaving ? 'Saving...' : 'Save Profile'}
@@ -383,8 +383,8 @@ function TabButton({ active, onClick, icon, label }: { active: boolean; onClick:
       onClick={onClick}
       className={`flex items-center gap-2 px-6 py-4 text-sm font-medium transition-colors border-b-2 ${
         active 
-          ? 'border-primary-blue text-primary-blue bg-blue-50/50' 
-          : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+          ? 'border-primary-blue text-primary-blue bg-blue-50/50 dark:bg-blue-900/20' 
+          : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-neutral-bg-dark'
       }`}
     >
       {icon}
@@ -402,12 +402,12 @@ interface InputFieldProps extends Omit<React.InputHTMLAttributes<HTMLInputElemen
 function InputField({ label, onChange, value, className = '', ...props }: InputFieldProps) {
   return (
     <div className={className}>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{label}</label>
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-blue focus:ring-primary-blue h-10 px-3"
+        className="w-full rounded-lg border-gray-300 dark:border-neutral-border-dark shadow-sm focus:border-primary-blue focus:ring-primary-blue h-10 px-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
         {...props}
       />
     </div>
