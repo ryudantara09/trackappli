@@ -71,13 +71,13 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div 
-        className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col transition-all duration-300 transform scale-95 opacity-0 animate-fade-in-scale"
+        className="bg-white dark:bg-neutral-surface-dark rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col transition-all duration-300 transform scale-95 opacity-0 animate-fade-in-scale"
         style={{ animationFillMode: 'forwards' }}
         onClick={e => e.stopPropagation()}
       >
-        <div className="p-6 border-b flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Edit Application</h2>
-          <button onClick={onClose} className="text-neutral-gray hover:text-black">
+        <div className="p-6 border-b border-neutral-border-light dark:border-neutral-border-dark flex justify-between items-center">
+          <h2 className="text-xl font-semibold text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Edit Application</h2>
+          <button onClick={onClose} className="text-neutral-gray hover:text-black dark:hover:text-white">
             <XMarkIcon className="w-6 h-6" />
           </button>
         </div>
@@ -115,7 +115,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               />
             </div>
             <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="status" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Status
               </label>
               <select
@@ -123,7 +123,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 name="status"
                 value={formState.status}
                 onChange={handleFormChange}
-                className="mt-1 block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
+                className="mt-1 block w-full border-neutral-border-light dark:border-neutral-border-dark rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               >
                 <option value={ApplicationStatus.APPLIED}>Applied</option>
                 <option value={ApplicationStatus.INTERVIEW}>Interview</option>
@@ -133,7 +133,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               </select>
             </div>
             <div>
-              <label htmlFor="jobType" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="jobType" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Job Type
               </label>
               <select
@@ -141,7 +141,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 name="jobType"
                 value={formState.jobType || ''}
                 onChange={handleFormChange}
-                className="mt-1 block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
+                className="mt-1 block w-full border-neutral-border-light dark:border-neutral-border-dark rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               >
                 <option value="">Select job type...</option>
                 <option value={JobType.FULL_TIME}>Full-time</option>
@@ -170,7 +170,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
               onChange={handleTagsChange} 
             />
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Description
               </label>
               <textarea
@@ -179,11 +179,11 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 rows={5}
                 value={formState.description || ''}
                 onChange={handleFormChange}
-                className="mt-1 block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
+                className="mt-1 block w-full border-neutral-border-light dark:border-neutral-border-dark rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="notes" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Notes
               </label>
               <textarea
@@ -192,7 +192,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
                 rows={3}
                 value={formState.notes || ''}
                 onChange={handleFormChange}
-                className="mt-1 block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
+                className="mt-1 block w-full border-neutral-border-light dark:border-neutral-border-dark rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
 
@@ -221,7 +221,7 @@ export const EditApplicationModal: React.FC<EditApplicationModalProps> = ({
           </form>
         </div>
         
-        <div className="p-6 border-t bg-gray-50 flex justify-end items-center">
+        <div className="p-6 border-t border-neutral-border-light dark:border-neutral-border-dark bg-gray-50 dark:bg-neutral-bg-dark flex justify-end items-center">
           <Button onClick={onClose} variant="secondary" className="mr-4">
             Cancel
           </Button>
@@ -250,7 +250,7 @@ const InputField: React.FC<{
   required?: boolean;
 }> = ({ label, name, value, onChange, required }) => (
   <div>
-    <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+    <label htmlFor={name} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
       {label}
     </label>
     <input
@@ -260,7 +260,8 @@ const InputField: React.FC<{
       value={value || ''}
       onChange={onChange}
       required={required}
-      className="mt-1 block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
+      className="mt-1 block w-full border-neutral-border-light dark:border-neutral-border-dark rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
     />
   </div>
 );
+

@@ -91,14 +91,14 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
   return (
     <div className={`space-y-2 ${className}`}>
-      <label className="block text-sm font-medium text-gray-700">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
         {displayLabel}
       </label>
 
       {localFile ? (
-        <div className="flex items-center gap-2 p-3 bg-gray-50 border border-neutral-border-light rounded-md">
+        <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-neutral-bg-dark border border-neutral-border-light dark:border-neutral-border-dark rounded-md">
           <DocumentIcon className="w-5 h-5 text-primary-blue flex-shrink-0" />
-          <span className="text-sm text-gray-700 flex-1 truncate" title={fileName || ''}>
+          <span className="text-sm text-gray-700 dark:text-gray-300 flex-1 truncate" title={fileName || ''}>
             {fileName}
           </span>
           <button
@@ -143,23 +143,23 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
       {uploading && progress && (
         <div className="space-y-1">
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
             <div
               className="bg-primary-blue h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress.percentage}%` }}
             />
           </div>
-          <p className="text-xs text-gray-500 text-center">
+          <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
             {progress.percentage}% uploaded
           </p>
         </div>
       )}
 
       {error && (
-        <p className="text-sm text-red-500">{error}</p>
+        <p className="text-sm text-red-500 dark:text-red-400">{error}</p>
       )}
 
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-gray-500 dark:text-gray-400">
         PDF files only, max 5MB
       </p>
     </div>
