@@ -18,7 +18,27 @@ export default function ExtensionCallbackPage() {
   const [status, setStatus] = useState<'checking' | 'sending' | 'success' | 'redirect'>('checking');
 
   useEffect(() => {
+    let extensionReady = false;
+    let authMessageSent = false;
+
+    // Listen for extension ready signal
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'TRAKAPP_EXTENSION_READY') {
+        console.log('[TrakApp.li] Extension is ready');
+        extensionReady = true;
+        // Try to send auth immediately when extension signals ready
+        if (!authMessageSent) {
+          handleExtensionAuth();
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
     const handleExtensionAuth = async () => {
+      // Prevent multiple sends
+      if (authMessageSent) return;
+
       // Wait for auth to load
       if (isLoading) return;
 
@@ -38,19 +58,43 @@ export default function ExtensionCallbackPage() {
         const { data: { session } } = await supabase.auth.getSession();
 
         if (session) {
+          authMessageSent = true;
+
           // Send auth data to extension via postMessage
-          window.postMessage({
-            type: 'TRAKAPP_AUTH_CALLBACK',
-            payload: {
-              accessToken: session.access_token,
-              refreshToken: session.refresh_token,
-              expiresAt: session.expires_at ? session.expires_at * 1000 : Date.now() + 3600000,
-              user: {
-                id: user.id,
-                email: user.email,
+          const sendAuthMessage = () => {
+            console.log('[TrakApp.li] Sending auth callback to extension');
+            window.postMessage({
+              type: 'TRAKAPP_AUTH_CALLBACK',
+              payload: {
+                accessToken: session.access_token,
+                refreshToken: session.refresh_token,
+                expiresAt: session.expires_at ? session.expires_at * 1000 : Date.now() + 3600000,
+                user: {
+                  id: user.id,
+                  email: user.email,
+                },
               },
-            },
-          }, '*');
+            }, '*');
+          };
+
+          // Send immediately
+          sendAuthMessage();
+          
+          // Retry every 100ms for 2 seconds to ensure content script receives it
+          let attempts = 0;
+          const maxAttempts = 20;
+          const retryInterval = setInterval(() => {
+            attempts++;
+            sendAuthMessage();
+            if (attempts >= maxAttempts) {
+              clearInterval(retryInterval);
+            }
+          }, 100);
+
+          // Clean up interval after 2 seconds
+          setTimeout(() => {
+            clearInterval(retryInterval);
+          }, 2000);
 
           setStatus('success');
         } else {
@@ -65,7 +109,21 @@ export default function ExtensionCallbackPage() {
       }
     };
 
+    // Try immediately (in case extension is already ready)
     handleExtensionAuth();
+
+    // Also try after a short delay as fallback
+    const fallbackTimeout = setTimeout(() => {
+      if (!authMessageSent) {
+        console.log('[TrakApp.li] Fallback: sending auth without extension ready signal');
+        handleExtensionAuth();
+      }
+    }, 500);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      clearTimeout(fallbackTimeout);
+    };
   }, [isAuthenticated, isLoading, user, router]);
 
   return (

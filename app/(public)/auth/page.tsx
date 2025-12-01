@@ -101,7 +101,11 @@ const AuthPageContent: React.FC = () => {
 
   // Handle extension login callback - send tokens back to extension
   React.useEffect(() => {
+    let authMessageSent = false;
+
     const sendAuthToExtension = async () => {
+      if (authMessageSent) return;
+      
       if (isExtensionLogin && isAuthenticated && user) {
         // Get the current session from Supabase
         const { getSupabase } = await import('@/lib/auth-client');
@@ -109,20 +113,44 @@ const AuthPageContent: React.FC = () => {
         const { data: { session } } = await supabase.auth.getSession();
         
         if (session) {
+          authMessageSent = true;
+
           // Send auth data to extension via postMessage
-          // The extension content script will listen for this
-          window.postMessage({
-            type: 'TRAKAPP_AUTH_CALLBACK',
-            payload: {
-              accessToken: session.access_token,
-              refreshToken: session.refresh_token,
-              expiresAt: session.expires_at ? session.expires_at * 1000 : Date.now() + 3600000,
-              user: {
-                id: user.id,
-                email: user.email,
+          // Retry multiple times to ensure content script receives it
+          const sendAuthMessage = () => {
+            console.log('[TrakApp.li] Sending auth callback to extension from auth page');
+            window.postMessage({
+              type: 'TRAKAPP_AUTH_CALLBACK',
+              payload: {
+                accessToken: session.access_token,
+                refreshToken: session.refresh_token,
+                expiresAt: session.expires_at ? session.expires_at * 1000 : Date.now() + 3600000,
+                user: {
+                  id: user.id,
+                  email: user.email,
+                },
               },
-            },
-          }, '*');
+            }, '*');
+          };
+
+          // Send immediately
+          sendAuthMessage();
+          
+          // Retry every 100ms for 2 seconds to ensure content script receives it
+          let attempts = 0;
+          const maxAttempts = 20;
+          const retryInterval = setInterval(() => {
+            attempts++;
+            sendAuthMessage();
+            if (attempts >= maxAttempts) {
+              clearInterval(retryInterval);
+            }
+          }, 100);
+
+          // Clean up interval after 2 seconds
+          setTimeout(() => {
+            clearInterval(retryInterval);
+          }, 2000);
           
           // Show success message
           showSuccess('Connected to extension! You can close this tab.');
