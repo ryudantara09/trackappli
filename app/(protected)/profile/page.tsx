@@ -226,32 +226,32 @@ function PersonalInfoTab({
         {/* Info Section */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-            <div className="p-2 bg-gray-50 rounded border border-gray-200 text-gray-900">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name</label>
+            <div className="p-2 bg-gray-50 dark:bg-neutral-bg-dark rounded border border-gray-200 dark:border-neutral-border-dark text-gray-900 dark:text-neutral-text-primary-dark">
               {profile?.first_name || '-'}
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-            <div className="p-2 bg-gray-50 rounded border border-gray-200 text-gray-900">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name</label>
+            <div className="p-2 bg-gray-50 dark:bg-neutral-bg-dark rounded border border-gray-200 dark:border-neutral-border-dark text-gray-900 dark:text-neutral-text-primary-dark">
               {profile?.last_name || '-'}
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <div className="p-2 bg-gray-50 rounded border border-gray-200 text-gray-900">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+            <div className="p-2 bg-gray-50 dark:bg-neutral-bg-dark rounded border border-gray-200 dark:border-neutral-border-dark text-gray-900 dark:text-neutral-text-primary-dark">
               {profile?.email || '-'}
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-            <div className="p-2 bg-gray-50 rounded border border-gray-200 text-gray-900">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone</label>
+            <div className="p-2 bg-gray-50 dark:bg-neutral-bg-dark rounded border border-gray-200 dark:border-neutral-border-dark text-gray-900 dark:text-neutral-text-primary-dark">
               {profile?.phone || '-'}
             </div>
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-            <div className="p-2 bg-gray-50 rounded border border-gray-200 text-gray-900">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Location</label>
+            <div className="p-2 bg-gray-50 dark:bg-neutral-bg-dark rounded border border-gray-200 dark:border-neutral-border-dark text-gray-900 dark:text-neutral-text-primary-dark">
               {profile?.location || '-'}
             </div>
           </div>
@@ -588,50 +588,50 @@ function AddExperienceModal({ onClose }: { onClose: () => void }) {
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Position *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Position *</label>
               <input
                 type="text"
                 required
                 value={formData.position}
                 onChange={e => setFormData({ ...formData, position: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Company *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Company *</label>
               <input
                 type="text"
                 required
                 value={formData.company}
                 onChange={e => setFormData({ ...formData, company: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Location</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Location</label>
             <input
               type="text"
               value={formData.location}
               onChange={e => setFormData({ ...formData, location: e.target.value })}
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Start Date *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Start Date *</label>
               <input
                 type="date"
                 required
                 value={formData.start_date}
                 onChange={e => setFormData({ ...formData, start_date: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">End Date</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">End Date</label>
               <input
                 type="date"
                 value={formData.end_date}
@@ -654,23 +654,23 @@ function AddExperienceModal({ onClose }: { onClose: () => void }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Description</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Description</label>
             <textarea
               value={formData.description}
               onChange={e => setFormData({ ...formData, description: e.target.value })}
               rows={4}
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Technologies (comma separated)</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Technologies (comma separated)</label>
             <input
               type="text"
               value={formData.technologies}
               onChange={e => setFormData({ ...formData, technologies: e.target.value })}
               placeholder="React, TypeScript, Node.js"
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
@@ -735,50 +735,50 @@ function EditExperienceModal({ experience, onClose }: { experience: WorkExperien
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Position *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Position *</label>
               <input
                 type="text"
                 required
                 value={formData.position}
                 onChange={e => setFormData({ ...formData, position: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Company *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Company *</label>
               <input
                 type="text"
                 required
                 value={formData.company}
                 onChange={e => setFormData({ ...formData, company: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Location</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Location</label>
             <input
               type="text"
               value={formData.location}
               onChange={e => setFormData({ ...formData, location: e.target.value })}
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Start Date *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Start Date *</label>
               <input
                 type="date"
                 required
                 value={formData.start_date}
                 onChange={e => setFormData({ ...formData, start_date: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">End Date</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">End Date</label>
               <input
                 type="date"
                 value={formData.end_date}
@@ -801,23 +801,23 @@ function EditExperienceModal({ experience, onClose }: { experience: WorkExperien
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Description</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Description</label>
             <textarea
               value={formData.description}
               onChange={e => setFormData({ ...formData, description: e.target.value })}
               rows={4}
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Technologies (comma separated)</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Technologies (comma separated)</label>
             <input
               type="text"
               value={formData.technologies}
               onChange={e => setFormData({ ...formData, technologies: e.target.value })}
               placeholder="React, TypeScript, Node.js"
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
@@ -880,61 +880,61 @@ function AddEducationModal({ onClose }: { onClose: () => void }) {
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Institution *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Institution *</label>
               <input
                 type="text"
                 required
                 value={formData.institution}
                 onChange={e => setFormData({ ...formData, institution: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Degree *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Degree *</label>
               <input
                 type="text"
                 required
                 value={formData.degree}
                 onChange={e => setFormData({ ...formData, degree: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Field of Study</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Field of Study</label>
               <input
                 type="text"
                 value={formData.field_of_study}
                 onChange={e => setFormData({ ...formData, field_of_study: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Location</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Location</label>
               <input
                 type="text"
                 value={formData.location}
                 onChange={e => setFormData({ ...formData, location: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Start Date *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Start Date *</label>
               <input
                 type="date"
                 required
                 value={formData.start_date}
                 onChange={e => setFormData({ ...formData, start_date: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">End Date</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">End Date</label>
               <input
                 type="date"
                 value={formData.end_date}
@@ -957,23 +957,23 @@ function AddEducationModal({ onClose }: { onClose: () => void }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">GPA</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">GPA</label>
             <input
               type="text"
               value={formData.gpa}
               onChange={e => setFormData({ ...formData, gpa: e.target.value })}
               placeholder="3.8/4.0"
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Description</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Description</label>
             <textarea
               value={formData.description}
               onChange={e => setFormData({ ...formData, description: e.target.value })}
               rows={4}
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
@@ -1036,61 +1036,61 @@ function EditEducationModal({ education, onClose }: { education: Education; onCl
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Institution *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Institution *</label>
               <input
                 type="text"
                 required
                 value={formData.institution}
                 onChange={e => setFormData({ ...formData, institution: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Degree *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Degree *</label>
               <input
                 type="text"
                 required
                 value={formData.degree}
                 onChange={e => setFormData({ ...formData, degree: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Field of Study</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Field of Study</label>
               <input
                 type="text"
                 value={formData.field_of_study}
                 onChange={e => setFormData({ ...formData, field_of_study: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Location</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Location</label>
               <input
                 type="text"
                 value={formData.location}
                 onChange={e => setFormData({ ...formData, location: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Start Date *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Start Date *</label>
               <input
                 type="date"
                 required
                 value={formData.start_date}
                 onChange={e => setFormData({ ...formData, start_date: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">End Date</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">End Date</label>
               <input
                 type="date"
                 value={formData.end_date}
@@ -1113,23 +1113,23 @@ function EditEducationModal({ education, onClose }: { education: Education; onCl
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">GPA</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">GPA</label>
             <input
               type="text"
               value={formData.gpa}
               onChange={e => setFormData({ ...formData, gpa: e.target.value })}
               placeholder="3.8/4.0"
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Description</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Description</label>
             <textarea
               value={formData.description}
               onChange={e => setFormData({ ...formData, description: e.target.value })}
               rows={4}
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
@@ -1191,22 +1191,22 @@ function AddSkillModal({ onClose }: { onClose: () => void }) {
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Skill Name *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Skill Name *</label>
               <SkillAutocomplete
                 required
                 value={formData.name}
                 onChange={value => setFormData({ ...formData, name: value })}
                 placeholder="React, Python, etc."
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Category *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Category *</label>
               <select
                 required
                 value={formData.category}
                 onChange={e => setFormData({ ...formData, category: e.target.value as SkillCategory })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               >
                 <option value="PROGRAMMING_LANGUAGE">Programming Language</option>
                 <option value="FRAMEWORK">Framework</option>
@@ -1220,12 +1220,12 @@ function AddSkillModal({ onClose }: { onClose: () => void }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Proficiency *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Proficiency *</label>
               <select
                 required
                 value={formData.proficiency}
                 onChange={e => setFormData({ ...formData, proficiency: e.target.value as SkillProficiency })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               >
                 <option value={SKILL_PROFICIENCY.BEGINNER}>Beginner</option>
                 <option value={SKILL_PROFICIENCY.INTERMEDIATE}>Intermediate</option>
@@ -1234,24 +1234,24 @@ function AddSkillModal({ onClose }: { onClose: () => void }) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Years of Experience</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Years of Experience</label>
               <input
                 type="number"
                 min="0"
                 value={formData.years_of_exp}
                 onChange={e => setFormData({ ...formData, years_of_exp: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Description</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Description</label>
             <textarea
               value={formData.description}
               onChange={e => setFormData({ ...formData, description: e.target.value })}
               rows={3}
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
@@ -1312,22 +1312,22 @@ function EditSkillModal({ skill, onClose }: { skill: TechnicalSkill; onClose: ()
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Skill Name *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Skill Name *</label>
               <SkillAutocomplete
                 required
                 value={formData.name}
                 onChange={value => setFormData({ ...formData, name: value })}
                 placeholder="React, Python, etc."
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Category *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Category *</label>
               <select
                 required
                 value={formData.category}
                 onChange={e => setFormData({ ...formData, category: e.target.value as SkillCategory })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               >
                 <option value="PROGRAMMING_LANGUAGE">Programming Language</option>
                 <option value="FRAMEWORK">Framework</option>
@@ -1341,12 +1341,12 @@ function EditSkillModal({ skill, onClose }: { skill: TechnicalSkill; onClose: ()
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Proficiency *</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Proficiency *</label>
               <select
                 required
                 value={formData.proficiency}
                 onChange={e => setFormData({ ...formData, proficiency: e.target.value as SkillProficiency })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               >
                 <option value={SKILL_PROFICIENCY.BEGINNER}>Beginner</option>
                 <option value={SKILL_PROFICIENCY.INTERMEDIATE}>Intermediate</option>
@@ -1355,24 +1355,24 @@ function EditSkillModal({ skill, onClose }: { skill: TechnicalSkill; onClose: ()
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Years of Experience</label>
+              <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Years of Experience</label>
               <input
                 type="number"
                 min="0"
                 value={formData.years_of_exp}
                 onChange={e => setFormData({ ...formData, years_of_exp: e.target.value })}
-                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+                className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Description</label>
+            <label className="block text-sm font-medium mb-2 text-neutral-text-primary-light dark:text-neutral-text-primary-dark">Description</label>
             <textarea
               value={formData.description}
               onChange={e => setFormData({ ...formData, description: e.target.value })}
               rows={3}
-              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark"
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
             />
           </div>
 
@@ -1389,3 +1389,6 @@ function EditSkillModal({ skill, onClose }: { skill: TechnicalSkill; onClose: ()
     </div>
   );
 }
+
+
+

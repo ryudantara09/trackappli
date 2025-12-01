@@ -272,7 +272,7 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
             />
 
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Description
               </label>
               <textarea
@@ -281,12 +281,12 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
                 rows={5}
                 value={formState.description}
                 onChange={handleFormChange}
-                className="mt-1 block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
+                className="mt-1 block w-full border-neutral-border-light dark:border-neutral-border-dark rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
             
             <div>
-              <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="notes" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Notes
               </label>
               <textarea
@@ -295,7 +295,7 @@ export const AddApplicationModal: React.FC<AddApplicationModalProps> = ({
                 rows={3}
                 value={formState.notes}
                 onChange={handleFormChange}
-                className="mt-1 block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
+                className="mt-1 block w-full border-neutral-border-light dark:border-neutral-border-dark rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
               />
             </div>
 
@@ -358,7 +358,7 @@ const InputField: React.FC<{
   required?: boolean;
 }> = ({ label, name, value, onChange, required }) => (
   <div>
-    <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+    <label htmlFor={name} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
       {label}
     </label>
     <input
@@ -368,7 +368,8 @@ const InputField: React.FC<{
       value={value || ''}
       onChange={onChange}
       required={required}
-      className="mt-1 block w-full border-neutral-border-light rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3"
+      className="mt-1 block w-full border-neutral-border-light dark:border-neutral-border-dark rounded-md shadow-sm focus:ring-primary-blue focus:border-primary-blue sm:text-sm p-3 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
     />
   </div>
 );
+
