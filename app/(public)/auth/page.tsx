@@ -86,15 +86,80 @@ const AuthPageContent: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   
-  const { login, signup, loginWithGoogle, loginWithLinkedIn } = useAuth();
+  const { login, signup, loginWithGoogle, loginWithLinkedIn, user, isAuthenticated } = useAuth();
   
   // Get the redirect parameter from URL (set by middleware)
   const redirectTo = searchParams.get('redirect') || '/dashboard';
+  
+  // Check if login is from browser extension
+  const isExtensionLogin = searchParams.get('source') === 'extension';
   
   // Update isSignUp when mode changes
   React.useEffect(() => {
     setIsSignUp(mode === 'signup');
   }, [mode]);
+
+  // Handle extension login callback - send tokens back to extension
+  React.useEffect(() => {
+    let authMessageSent = false;
+
+    const sendAuthToExtension = async () => {
+      if (authMessageSent) return;
+      
+      if (isExtensionLogin && isAuthenticated && user) {
+        // Get the current session from Supabase
+        const { getSupabase } = await import('@/lib/auth-client');
+        const supabase = getSupabase();
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session) {
+          authMessageSent = true;
+
+          // Send auth data to extension via postMessage
+          // Retry multiple times to ensure content script receives it
+          const sendAuthMessage = () => {
+            console.log('[TrakApp.li] Sending auth callback to extension from auth page');
+            window.postMessage({
+              type: 'TRAKAPP_AUTH_CALLBACK',
+              payload: {
+                accessToken: session.access_token,
+                refreshToken: session.refresh_token,
+                expiresAt: session.expires_at ? session.expires_at * 1000 : Date.now() + 3600000,
+                user: {
+                  id: user.id,
+                  email: user.email,
+                },
+              },
+            }, '*');
+          };
+
+          // Send immediately
+          sendAuthMessage();
+          
+          // Retry every 100ms for 2 seconds to ensure content script receives it
+          let attempts = 0;
+          const maxAttempts = 20;
+          const retryInterval = setInterval(() => {
+            attempts++;
+            sendAuthMessage();
+            if (attempts >= maxAttempts) {
+              clearInterval(retryInterval);
+            }
+          }, 100);
+
+          // Clean up interval after 2 seconds
+          setTimeout(() => {
+            clearInterval(retryInterval);
+          }, 2000);
+          
+          // Show success message
+          showSuccess('Connected to extension! You can close this tab.');
+        }
+      }
+    };
+    
+    sendAuthToExtension();
+  }, [isExtensionLogin, isAuthenticated, user, showSuccess]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

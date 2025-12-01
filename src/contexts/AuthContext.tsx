@@ -60,6 +60,46 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   }, []);
 
+  // Sync auth state with browser extension
+  useEffect(() => {
+    if (!isLoading && user) {
+      const syncWithExtension = async () => {
+        try {
+          const supabase = getSupabase();
+          const { data: { session } } = await supabase.auth.getSession();
+          
+          if (session) {
+            window.postMessage({
+              type: 'TRAKAPP_AUTH_CALLBACK',
+              payload: {
+                accessToken: session.access_token,
+                refreshToken: session.refresh_token,
+                expiresAt: session.expires_at ? session.expires_at * 1000 : Date.now() + 3600000,
+                user: {
+                  id: user.id,
+                  email: user.email,
+                },
+              },
+            }, '*');
+          }
+        } catch (err) {
+          console.error('Error syncing with extension:', err);
+        }
+      };
+      
+      syncWithExtension();
+      
+      const handleExtensionReady = (event: MessageEvent) => {
+        if (event.data?.type === 'TRAKAPP_EXTENSION_READY') {
+          syncWithExtension();
+        }
+      };
+      
+      window.addEventListener('message', handleExtensionReady);
+      return () => window.removeEventListener('message', handleExtensionReady);
+    }
+  }, [user, isLoading]);
+
   const login = async (email: string, password: string) => {
     try {
       const { user: authenticatedUser } = await signIn(email, password);
