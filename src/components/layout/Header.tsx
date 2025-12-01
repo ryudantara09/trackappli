@@ -25,6 +25,13 @@ export const Header: React.FC<HeaderProps> = ({
   const { darkMode, toggleDarkMode } = useTheme();
   const pathname = usePathname();
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      router.push(`/applications?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
 
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, anchor: string) => {
     if (pathname === '/') {
@@ -153,6 +160,9 @@ export const Header: React.FC<HeaderProps> = ({
               type="text"
               className="block w-full pl-11 pr-4 py-2.5 border-none rounded-full leading-5 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-blue/20 shadow-sm transition-all duration-200"
               placeholder="Search your applications..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearch}
             />
           </div>
         </div>

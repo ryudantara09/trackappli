@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { KanbanColumn } from '@/components/features/applications/KanbanColumn';
@@ -10,15 +11,20 @@ import { EditApplicationModal } from '@/components/features/applications/EditApp
 import { SearchFilterBar, SortOption } from '@/components/features/applications/SearchFilterBar';
 import { EmptyState } from '@/components/features/applications/EmptyState';
 import { useApplications } from '@/hooks/useApplications';
+import { useDebounce } from '@/hooks/useDebounce';
 import { useToastContext } from '@/contexts/ToastContext';
 import { FrontendApplication, ApplicationStatus, ApplicationFormData } from '@/types/frontend.types';
 
 // Pagination constants
 const ITEMS_PER_PAGE = 20;
 
-const ApplicationsPage: React.FC = () => {
+const ApplicationsContent: React.FC = () => {
+  const searchParams = useSearchParams();
+  
   // Search and filter state for API
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  
   const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus | 'all'>('all');
 
   // Fetch applications from API with filters
@@ -31,9 +37,17 @@ const ApplicationsPage: React.FC = () => {
     deleteApplication,
     refresh
   } = useApplications({
-    q: searchQuery,
+    q: debouncedSearchQuery,
     status: selectedStatus !== 'all' ? selectedStatus : undefined,
   });
+
+  // Update search query if URL param changes (e.g. from Header search)
+  useEffect(() => {
+    const q = searchParams.get('q');
+    if (q !== null && q !== searchQuery) {
+      setSearchQuery(q);
+    }
+  }, [searchParams]);
 
   // Toast notifications
   const { showSuccess, showError } = useToastContext();
@@ -452,6 +466,19 @@ const ApplicationsPage: React.FC = () => {
         onUpdateApplication={handleUpdateApplication}
       />
     </div>
+  );
+};
+
+const ApplicationsPage: React.FC = () => {
+  return (
+    <Suspense fallback={
+      <div className="px-4 sm:px-6 lg:px-8 py-8">
+        <div className="h-8 w-64 bg-gray-200 rounded animate-pulse mb-2"></div>
+        <div className="h-4 w-96 bg-gray-200 rounded animate-pulse"></div>
+      </div>
+    }>
+      <ApplicationsContent />
+    </Suspense>
   );
 };
 
