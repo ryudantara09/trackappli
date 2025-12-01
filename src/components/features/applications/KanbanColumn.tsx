@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FrontendApplication, ApplicationStatus } from '@/types/frontend.types';
 import { ApplicationCard } from '@/components/features/applications/ApplicationCard';
 import { EmptyState } from '@/components/features/applications/EmptyState';
@@ -14,12 +15,12 @@ interface KanbanColumnProps {
   onStatusChange?: (applicationId: string, newStatus: ApplicationStatus) => void;
 }
 
-export const KanbanColumn: React.FC<KanbanColumnProps> = ({ 
-  status, 
-  applications, 
-  onDelete, 
-  onEdit, 
-  onStatusChange 
+export const KanbanColumn: React.FC<KanbanColumnProps> = ({
+  status,
+  applications,
+  onDelete,
+  onEdit,
+  onStatusChange
 }) => {
   const details = STATUS_DETAILS[status] || STATUS_DETAILS[ApplicationStatus.WITHDRAWN];
   const [isDragOver, setIsDragOver] = React.useState(false);
@@ -38,7 +39,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     try {
       const applicationData = e.dataTransfer.getData('application/json');
       if (applicationData && onStatusChange) {
@@ -52,38 +53,51 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
       console.error('Error handling drop:', error);
     }
   };
-  
+
   return (
-    <div className="w-80 min-w-[320px] flex-shrink-0">
-      <div className={`flex items-center justify-between p-3 rounded-t-lg border-b-4 ${details.border} bg-neutral-surface-light dark:bg-neutral-surface-dark`}>
-        <div className="flex items-center gap-2">
-          <h2 className={`font-semibold ${details.color}`}>{status}</h2>
-          <span className="text-sm font-medium bg-neutral-border-light text-neutral-gray px-2 py-0.5 rounded-full dark:bg-neutral-border-dark dark:text-neutral-text-secondary-dark">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="w-80 min-w-[320px] flex-shrink-0"
+    >
+      <div className={`flex items-center justify-between p-4 rounded-t-3xl bg-transparent ${details.border.replace('border-b-4', 'border-b-2')}`}>
+        <div className="flex items-center gap-3">
+          <div className={`w-3 h-3 rounded-full ${details.color.replace('text-', 'bg-')}`} />
+          <h2 className="font-bold text-neutral-800 dark:text-white tracking-tight text-lg">{status}</h2>
+          <span className="text-xs font-bold bg-white dark:bg-neutral-800 text-neutral-500 px-2.5 py-1 rounded-full shadow-sm">
             {applications.length}
           </span>
         </div>
       </div>
-      <div 
-        className={`p-1 bg-neutral-bg-light dark:bg-neutral-bg-dark min-h-[400px] rounded-b-lg transition-colors ${
-          isDragOver ? 'bg-primary-light/20 ring-2 ring-primary-blue ring-inset' : ''
-        }`}
+      <div
+        className={`p-3 min-h-[400px] rounded-b-3xl transition-colors duration-300 ${isDragOver ? 'bg-primary-blue/5 rounded-3xl' : 'bg-transparent'
+          }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {applications.length > 0 ? (
-          applications.map(app => (
-            <ApplicationCard 
-              key={app.id} 
-              application={app} 
-              onDelete={onDelete} 
-              onEdit={onEdit} 
-            />
-          ))
-        ) : (
-          <EmptyState type="column-empty" />
-        )}
+        <AnimatePresence mode='popLayout'>
+          {applications.length > 0 ? (
+            applications.map(app => (
+              <ApplicationCard
+                key={app.id}
+                application={app}
+                onDelete={onDelete}
+                onEdit={onEdit}
+              />
+            ))
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <EmptyState type="column-empty" />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   );
 };
