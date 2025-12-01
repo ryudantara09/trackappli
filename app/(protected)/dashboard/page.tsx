@@ -40,6 +40,40 @@ const DashboardPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<'kanban' | 'list'>('kanban');
   const [sortBy, setSortBy] = useState<SortOption>('date-desc');
 
+  // Calculate weekly activity
+  const weeklyActivityData = useMemo(() => {
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const today = new Date();
+    const last7Days = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(today);
+      d.setDate(d.getDate() - (6 - i));
+      return d;
+    });
+
+    return last7Days.map(date => {
+      const dayName = days[date.getDay()];
+      const count = applications.filter(app => {
+        if (!app.dateApplied) return false;
+        const appDate = new Date(app.dateApplied);
+        return appDate.getDate() === date.getDate() &&
+               appDate.getMonth() === date.getMonth() &&
+               appDate.getFullYear() === date.getFullYear();
+      }).length;
+      return { name: dayName, apps: count };
+    });
+  }, [applications]);
+
+  // Get recent activity
+  const recentActivity = useMemo(() => {
+    return [...applications]
+      .sort((a, b) => {
+        const dateA = a.dateApplied ? new Date(a.dateApplied).getTime() : 0;
+        const dateB = b.dateApplied ? new Date(b.dateApplied).getTime() : 0;
+        return dateB - dateA;
+      })
+      .slice(0, 3);
+  }, [applications]);
+
   const handleAddApplication = useCallback(async (newApplication: ApplicationFormData) => {
     try {
       await addApplication(newApplication);
@@ -329,7 +363,7 @@ const DashboardPage: React.FC = () => {
           </p>
           <Button
             onClick={() => setIsModalOpen(true)}
-            className="bg-white text-primary-blue hover:bg-blue-50 border-none rounded-full px-8 py-3 font-bold shadow-lg shadow-black/10"
+            className="!bg-white !text-primary-blue hover:!bg-blue-50 !border-none rounded-full px-8 py-3 font-bold shadow-lg shadow-black/10"
           >
             Add New Application
           </Button>
@@ -379,7 +413,7 @@ const DashboardPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
         {/* Activity Chart */}
         <div className="lg:col-span-2">
-          <ActivityChart />
+          <ActivityChart data={weeklyActivityData} />
         </div>
 
         {/* Recent Activity / Mentor style list */}
@@ -389,20 +423,36 @@ const DashboardPage: React.FC = () => {
             <button className="text-primary-blue text-sm font-medium hover:underline">See All</button>
           </div>
           <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="flex items-center gap-4 p-3 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors cursor-pointer">
-                <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center text-lg">
-                  {i === 1 ? '🚀' : i === 2 ? '📅' : '❌'}
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-neutral-900 dark:text-white">Application Updated</p>
-                  <p className="text-xs text-neutral-500">2 hours ago</p>
-                </div>
-                <button className="ml-auto px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-xs font-medium hover:bg-neutral-100 dark:hover:bg-neutral-800">
-                  View
-                </button>
+            {recentActivity.length === 0 ? (
+              <div className="text-center text-neutral-gray py-10">
+                No recent activity
               </div>
-            ))}
+            ) : (
+              recentActivity.map((app) => (
+                <div 
+                  key={app.id} 
+                  className="flex items-center gap-4 p-3 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+                  onClick={() => handleEditApplication(app.id)}
+                >
+                  <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center text-lg">
+                    {app.status === ApplicationStatus.OFFER ? '🎉' : 
+                     app.status === ApplicationStatus.REJECTED ? '❌' : 
+                     app.status === ApplicationStatus.INTERVIEW ? '📅' : '🚀'}
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-neutral-900 dark:text-white">
+                      {app.position} <span className="font-normal text-neutral-500">at</span> {app.company}
+                    </p>
+                    <p className="text-xs text-neutral-500">
+                      {app.dateApplied ? new Date(app.dateApplied).toLocaleDateString() : 'No date'}
+                    </p>
+                  </div>
+                  <button className="ml-auto px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-xs font-medium hover:bg-neutral-100 dark:hover:bg-neutral-800">
+                    View
+                  </button>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

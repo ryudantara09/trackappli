@@ -12,17 +12,11 @@ import {
 } from 'recharts';
 import { motion } from 'framer-motion';
 
-const data = [
-    { name: 'Mon', apps: 2 },
-    { name: 'Tue', apps: 5 },
-    { name: 'Wed', apps: 3 },
-    { name: 'Thu', apps: 8 },
-    { name: 'Fri', apps: 12 },
-    { name: 'Sat', apps: 4 },
-    { name: 'Sun', apps: 6 },
-];
+interface ActivityChartProps {
+    data: { name: string; apps: number }[];
+}
 
-export const ActivityChart = () => {
+export const ActivityChart: React.FC<ActivityChartProps> = ({ data }) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
