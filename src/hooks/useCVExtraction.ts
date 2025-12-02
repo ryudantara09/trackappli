@@ -3,18 +3,28 @@
 import { useState } from 'react';
 import { CVExtractionResponse } from '../types/api.types';
 
+export interface CVExtractionRequestOptions {
+  modelId?: string;
+}
+
 export function useCVExtraction() {
   const [extracting, setExtracting] = useState(false);
   const [extractedData, setExtractedData] = useState<CVExtractionResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const extractCV = async (file: File): Promise<CVExtractionResponse | null> => {
+  const extractCV = async (
+    file: File,
+    options?: CVExtractionRequestOptions
+  ): Promise<CVExtractionResponse | null> => {
     setExtracting(true);
     setError(null);
     
     try {
       const formData = new FormData();
       formData.append('cv', file);
+      if (options?.modelId) {
+        formData.append('model', options.modelId);
+      }
 
       const response = await fetch('/api/profile/cv', {
         method: 'POST',

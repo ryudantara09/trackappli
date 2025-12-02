@@ -5,6 +5,7 @@
  */
 
 import { generateContent } from '../gemini';
+import { generateContentWithOpenRouter } from '../openrouter';
 import { createCVPrompt } from '../prompts/cv';
 import {
   CVExtraction,
@@ -14,6 +15,35 @@ import {
   CVTechnicalSkill,
   ExtractionResult
 } from '../../../types/ai.types';
+
+export type CVExtractionProvider = 'gemini' | 'openrouter';
+
+export interface CVExtractionOptions {
+  provider?: CVExtractionProvider;
+  modelId?: string;
+  systemPrompt?: string;
+}
+
+async function generateExtractionResponse(
+  prompt: string,
+  options?: CVExtractionOptions
+): Promise<string> {
+  const provider = options?.provider ?? 'gemini';
+  const modelId = options?.modelId;
+
+  if (provider === 'openrouter') {
+    if (!modelId) {
+      throw new Error('OpenRouter provider requires a model id');
+    }
+
+    return generateContentWithOpenRouter(prompt, {
+      model: modelId,
+      systemPrompt: options?.systemPrompt,
+    });
+  }
+
+  return generateContent(prompt, modelId);
+}
 
 /**
  * Validate and clean personal info
@@ -171,7 +201,10 @@ function parseGeminiResponse(responseText: string): any {
  * @param cvText - The raw CV/resume text (extracted from PDF or provided directly)
  * @returns Extraction result with structured profile data
  */
-export async function extractCV(cvText: string): Promise<ExtractionResult<CVExtraction>> {
+export async function extractCV(
+  cvText: string,
+  options?: CVExtractionOptions
+): Promise<ExtractionResult<CVExtraction>> {
   try {
     // Validate input
     if (!cvText || cvText.trim().length === 0) {
@@ -193,7 +226,7 @@ export async function extractCV(cvText: string): Promise<ExtractionResult<CVExtr
     const prompt = createCVPrompt({ cvText });
     
     // Call Gemini API with retry logic
-    const responseText = await generateContent(prompt);
+    const responseText = await generateExtractionResponse(prompt, options);
     
     // Parse JSON response
     let parsedData: any;
@@ -252,8 +285,11 @@ export async function extractCV(cvText: string): Promise<ExtractionResult<CVExtr
  * @param cvText - The raw CV/resume text
  * @returns Extraction result, always with data (even if empty)
  */
-export async function extractCVWithFallback(cvText: string): Promise<ExtractionResult<CVExtraction>> {
-  const result = await extractCV(cvText);
+export async function extractCVWithFallback(
+  cvText: string,
+  options?: CVExtractionOptions
+): Promise<ExtractionResult<CVExtraction>> {
+  const result = await extractCV(cvText, options);
   
   // If extraction failed but we have partial data, mark as success
   if (!result.success && result.data) {

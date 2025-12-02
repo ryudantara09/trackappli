@@ -13,6 +13,8 @@ import { WorkExperience, Education, TechnicalSkill } from '../../../src/types/ap
 import ReviewCVModal from '../../../src/components/profile/ReviewCVModal';
 import { CVExtraction } from '../../../src/types/ai.types';
 import { SkillAutocomplete } from '../../../src/components/ui/SkillAutocomplete';
+import { CV_MODEL_OPTIONS, DEFAULT_CV_MODEL_ID } from '../../../src/config/aiModels';
+import { useAuth } from '../../../src/contexts/AuthContext';
 
 type Tab = 'personal' | 'experience' | 'education' | 'skills';
 
@@ -21,8 +23,10 @@ export default function ProfilePage() {
   const { profile, loading, error, saveExtractedCV } = useProfile();
   const { extractCV, extracting } = useCVExtraction();
   const { showSuccess, showError } = useToastContext();
+  const { isAdmin } = useAuth();
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [extractedData, setExtractedData] = useState<CVExtraction | null>(null);
+  const [selectedModel, setSelectedModel] = useState(DEFAULT_CV_MODEL_ID);
 
   const tabs: { id: Tab; label: string }[] = [
     { id: 'personal', label: 'Personal Info' },
@@ -35,7 +39,7 @@ export default function ProfilePage() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const result = await extractCV(file);
+    const result = await extractCV(file, isAdmin ? { modelId: selectedModel } : undefined);
     if (result) {
       setExtractedData(result);
       setReviewModalOpen(true);
@@ -105,6 +109,9 @@ export default function ProfilePage() {
           onCVUpload={handleCVUpload} 
           extracting={extracting} 
           profile={profile?.profile || null}
+          isAdmin={isAdmin}
+          selectedModel={selectedModel}
+          onModelChange={setSelectedModel}
         />
       )}
 
@@ -143,11 +150,17 @@ import { Profile } from '../../../src/repositories/profile.repository';
 function PersonalInfoTab({ 
   onCVUpload, 
   extracting,
-  profile 
+  profile,
+  isAdmin,
+  selectedModel,
+  onModelChange,
 }: { 
   onCVUpload: (e: React.ChangeEvent<HTMLInputElement>) => void; 
   extracting: boolean;
   profile: Profile | null;
+  isAdmin: boolean;
+  selectedModel: string;
+  onModelChange: (modelId: string) => void;
 }) {
   const { uploadAvatar } = useProfile();
   const { showSuccess, showError } = useToastContext();
@@ -188,6 +201,44 @@ function PersonalInfoTab({
           </label>
         </div>
       </div>
+
+      {isAdmin && (
+        <div className="mb-8 rounded-xl border border-dashed border-neutral-border-light dark:border-neutral-border-dark p-4 sm:p-6">
+          <h3 className="text-lg font-semibold mb-1">CV Extraction Model</h3>
+          <p className="text-sm text-neutral-gray dark:text-neutral-text-secondary-dark">
+            Choose which OpenRouter model should process the next CV upload. This selection only applies to your account.
+          </p>
+          <div className="mt-4 grid gap-3">
+            {CV_MODEL_OPTIONS.map(option => (
+              <label
+                key={option.id}
+                className={`flex items-start gap-3 rounded-lg border p-3 transition-colors ${
+                  selectedModel === option.id
+                    ? 'border-primary-blue bg-primary-blue/5'
+                    : 'border-neutral-border-light dark:border-neutral-border-dark'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="cv-model"
+                  value={option.id}
+                  checked={selectedModel === option.id}
+                  onChange={() => onModelChange(option.id)}
+                  className="mt-1 h-4 w-4 text-primary-blue focus:ring-primary-blue"
+                />
+                <div>
+                  <p className="font-medium text-sm text-neutral-text-primary-light dark:text-neutral-text-primary-dark">
+                    {option.label}
+                  </p>
+                  {option.description && (
+                    <p className="text-xs text-neutral-gray dark:text-neutral-text-secondary-dark">{option.description}</p>
+                  )}
+                </div>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-col md:flex-row gap-8 mb-8">
         {/* Avatar Section */}

@@ -1,35 +1,47 @@
 /**
  * PDF Text Extraction Module
  * 
- * Provides functionality to extract text from PDF files by calling
- * the Python serverless function endpoint.
+ * Provides functionality to extract text from PDF files directly within
+ * the Node runtime using the pdf-parse library (no external Python dependency).
  */
 
 /**
- * Response from the PDF extraction endpoint
- */
-interface PDFExtractionResponse {
-  success: boolean;
-  text?: string;
-  library?: string;
-  error?: string;
-}
-
-/**
- * Configuration for PDF extraction
+ * Configuration for PDF extraction (kept for backwards compatibility)
  */
 interface PDFExtractionConfig {
-  endpoint?: string;
-  timeout?: number;
+  /** Minimum length (characters) required from the extracted text */
+  minLength?: number;
 }
 
-/**
- * Default configuration
- */
-const DEFAULT_CONFIG: Required<PDFExtractionConfig> = {
-  endpoint: process.env.PDF_EXTRACT_ENDPOINT || '/api/pdf-extract',
-  timeout: 30000, // 30 seconds
-};
+const DEFAULT_MIN_LENGTH = 80;
+
+type PdfParseFn = (
+  data: Buffer | Uint8Array,
+  options?: Record<string, unknown>
+) => Promise<{ text?: string | undefined }>;
+
+let cachedPdfParse: PdfParseFn | null = null;
+
+async function getPdfParse(): Promise<PdfParseFn> {
+  if (cachedPdfParse) {
+    return cachedPdfParse;
+  }
+
+  const pdfParseModule = await import('pdf-parse');
+  const moduleWithDefault = pdfParseModule as unknown as { default?: PdfParseFn };
+  const pdfParse = moduleWithDefault.default ?? (pdfParseModule as unknown as PdfParseFn);
+  cachedPdfParse = pdfParse;
+  return pdfParse;
+}
+
+function normalizeExtractedText(text: string): string {
+  return text
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 /**
  * Extract text from a PDF buffer
@@ -43,61 +55,28 @@ export async function extractTextFromPDF(
   pdfBuffer: Buffer | Uint8Array,
   config: PDFExtractionConfig = {}
 ): Promise<string> {
-  const { endpoint, timeout } = { ...DEFAULT_CONFIG, ...config };
-
-  // Convert buffer to base64
-  const base64PDF = bufferToBase64(pdfBuffer);
-
-  // Create abort controller for timeout
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  const minLength = config.minLength ?? DEFAULT_MIN_LENGTH;
+  const normalizedBuffer = Buffer.isBuffer(pdfBuffer)
+    ? pdfBuffer
+    : Buffer.from(pdfBuffer);
 
   try {
-    // Determine the full URL
-    const url = endpoint.startsWith('http') 
-      ? endpoint 
-      : `${getBaseUrl()}${endpoint}`;
+    const pdfParse = await getPdfParse();
+    const { text } = await pdfParse(normalizedBuffer);
 
-    // Call the Python serverless function
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ pdf: base64PDF }),
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-
-    // Parse response
-    const data: PDFExtractionResponse = await response.json();
-
-    // Handle error responses
-    if (!response.ok || !data.success) {
-      throw new Error(
-        data.error || `PDF extraction failed with status ${response.status}`
-      );
+    if (!text) {
+      throw new Error('pdf-parse returned no text');
     }
 
-    // Validate extracted text
-    if (!data.text || data.text.trim().length === 0) {
-      throw new Error('No text could be extracted from the PDF');
+    const cleaned = normalizeExtractedText(text);
+
+    if (cleaned.length < minLength) {
+      throw new Error('Extracted text is too short to be useful');
     }
 
-    return data.text;
+    return cleaned;
   } catch (error) {
-    clearTimeout(timeoutId);
-
-    // Handle specific error types
     if (error instanceof Error) {
-      if (error.name === 'AbortError') {
-        throw new Error(
-          `PDF extraction timed out after ${timeout}ms. The PDF may be too large or complex.`
-        );
-      }
-      
-      // Re-throw with context
       throw new Error(`PDF extraction failed: ${error.message}`);
     }
 
@@ -105,40 +84,6 @@ export async function extractTextFromPDF(
   }
 }
 
-/**
- * Convert buffer to base64 string
- * 
- * @param buffer - Buffer or Uint8Array to convert
- * @returns Base64 encoded string
- */
-function bufferToBase64(buffer: Buffer | Uint8Array): string {
-  if (Buffer.isBuffer(buffer)) {
-    return buffer.toString('base64');
-  }
-  
-  // Convert Uint8Array to Buffer first
-  return Buffer.from(buffer).toString('base64');
-}
-
-/**
- * Get the base URL for API calls
- * 
- * @returns Base URL for the application
- */
-function getBaseUrl(): string {
-  // In production (Vercel), use the actual production URL
-  if (process.env.VERCEL) {
-    return 'https://www.trakapp.li';
-  }
-
-  // In development, use localhost
-  if (process.env.NODE_ENV === 'development') {
-    return `http://localhost:${process.env.PORT || 3000}`;
-  }
-
-  // Fallback to relative URL (will use current domain)
-  return '';
-}
 
 /**
  * Validate if a buffer appears to be a valid PDF

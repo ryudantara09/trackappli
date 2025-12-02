@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '../../../../src/core/auth/middleware';
 import { extractTextFromPDFWithValidation } from '../../../../src/core/pdf/extractor';
-import { extractCV } from '../../../../src/core/ai/extractors/cv';
+import { extractCV, CVExtractionOptions } from '../../../../src/core/ai/extractors/cv';
 import { createErrorResponse, ValidationError } from '../../../../src/utils/errors';
 import { MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from '../../../../src/config/constants';
+import { isAdminEmail } from '../../../../src/utils/admin';
+import { getCVModelOption } from '../../../../src/config/aiModels';
 
 /**
  * POST /api/profile/cv
@@ -13,11 +15,12 @@ import { MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from '../../../../src/config/consta
 export async function POST(request: NextRequest) {
   try {
     // Authenticate user
-    await requireAuth();
+    const { user } = await requireAuth();
 
     // Parse multipart form data
     const formData = await request.formData();
     const file = formData.get('cv') as File | null;
+    const requestedModel = formData.get('model');
 
     // Validate file presence
     if (!file) {
@@ -52,8 +55,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const modelOption = typeof requestedModel === 'string' && isAdminEmail(user.email)
+      ? getCVModelOption(requestedModel)
+      : undefined;
+
+    const extractionOptions: CVExtractionOptions | undefined = modelOption
+      ? {
+          provider: modelOption.provider,
+          modelId: modelOption.id,
+        }
+      : undefined;
+
     // Extract structured CV data using AI
-    const extractionResult = await extractCV(extractedText);
+    const extractionResult = await extractCV(extractedText, extractionOptions);
 
     // Check if extraction was successful
     if (!extractionResult.success) {
