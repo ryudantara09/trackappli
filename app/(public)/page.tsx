@@ -245,7 +245,7 @@ export default function HomePage() {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-md border border-neutral-border-light dark:border-white/10 mb-8 shadow-sm hover:scale-105 transition-transform cursor-default"
               >
                 <span className="w-2 h-2 rounded-full bg-status-offer animate-pulse" />
-                <span className="text-sm font-semibold text-neutral-text-primary-light dark:text-white">New: AI Resume Tailoring 2.0</span>
+                <span className="text-sm font-semibold text-neutral-text-primary-light dark:text-white">New: Browser Extension</span>
               </motion.div>
 
               <motion.h1
@@ -324,10 +324,10 @@ export default function HomePage() {
 
               {/* Tall Feature */}
               <BentoCard
-                title="AI Resume Tailoring"
-                description="Instantly optimize your resume for specific job descriptions with our advanced AI engine."
+                title="Browser Extension"
+                description="Save jobs from LinkedIn, Indeed & more with a single click. Automatically extracts job details."
                 className="md:row-span-2 bg-neutral-bg-dark text-white"
-                icon={<div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center"><span className="text-2xl">✨</span></div>}
+                icon={<div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center"><span className="text-2xl">🧩</span></div>}
                 delay={1}
               />
 
@@ -339,8 +339,8 @@ export default function HomePage() {
                 delay={2}
               />
               <BentoCard
-                title="Chrome Extension"
-                description="Save jobs from LinkedIn & Indeed with a single click."
+                title="Dark Mode"
+                description="Easy on the eyes for those late-night application sessions."
                 className="bg-white dark:bg-neutral-surface-dark"
                 delay={3}
               />
