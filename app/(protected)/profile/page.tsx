@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useProfile } from '../../../src/hooks/useProfile';
 import { useCVExtraction } from '../../../src/hooks/useCVExtraction';
 import { useToastContext } from '../../../src/contexts/ToastContext';
@@ -75,8 +75,8 @@ export default function ProfilePage() {
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
       <Header />
-      <PageHeader 
-        title="Profile" 
+      <PageHeader
+        title="Profile"
         description="Manage your professional information"
       />
 
@@ -87,11 +87,10 @@ export default function ProfilePage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
-                activeTab === tab.id
-                  ? 'border-primary-blue text-primary-blue'
-                  : 'border-transparent text-neutral-gray hover:text-neutral-text-primary-light dark:hover:text-neutral-text-primary-dark hover:border-neutral-border-light dark:hover:border-neutral-border-dark'
-              }`}
+              className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${activeTab === tab.id
+                ? 'border-primary-blue text-primary-blue'
+                : 'border-transparent text-neutral-gray hover:text-neutral-text-primary-light dark:hover:text-neutral-text-primary-dark hover:border-neutral-border-light dark:hover:border-neutral-border-dark'
+                }`}
             >
               {tab.label}
             </button>
@@ -101,9 +100,9 @@ export default function ProfilePage() {
 
       {/* Personal Info Tab */}
       {activeTab === 'personal' && (
-        <PersonalInfoTab 
-          onCVUpload={handleCVUpload} 
-          extracting={extracting} 
+        <PersonalInfoTab
+          onCVUpload={handleCVUpload}
+          extracting={extracting}
           profile={profile?.profile || null}
         />
       )}
@@ -140,18 +139,39 @@ export default function ProfilePage() {
 import { Profile } from '../../../src/repositories/profile.repository';
 
 // Personal Info Tab Component
-function PersonalInfoTab({ 
-  onCVUpload, 
+function PersonalInfoTab({
+  onCVUpload,
   extracting,
-  profile 
-}: { 
-  onCVUpload: (e: React.ChangeEvent<HTMLInputElement>) => void; 
+  profile
+}: {
+  onCVUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   extracting: boolean;
   profile: Profile | null;
 }) {
-  const { uploadAvatar } = useProfile();
+  const { uploadAvatar, updateProfile } = useProfile();
   const { showSuccess, showError } = useToastContext();
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [formData, setFormData] = useState({
+    first_name: profile?.first_name || '',
+    last_name: profile?.last_name || '',
+    email: profile?.email || '',
+    phone: profile?.phone || '',
+    location: profile?.location || '',
+  });
+
+  // Update form data when profile changes (e.g. after CV extraction)
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        first_name: profile.first_name || '',
+        last_name: profile.last_name || '',
+        email: profile.email || '',
+        phone: profile.phone || '',
+        location: profile.location || '',
+      });
+    }
+  }, [profile]);
 
   const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -165,6 +185,19 @@ function PersonalInfoTab({
       showError(error instanceof Error ? error.message : 'Failed to upload avatar');
     } finally {
       setUploadingAvatar(false);
+    }
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      await updateProfile(formData);
+      showSuccess('Profile updated successfully');
+    } catch (error) {
+      showError(error instanceof Error ? error.message : 'Failed to update profile');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -194,9 +227,9 @@ function PersonalInfoTab({
         <div className="flex flex-col items-center gap-4">
           <div className="relative w-32 h-32 rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200">
             {profile?.avatar_url ? (
-              <img 
-                src={profile.avatar_url} 
-                alt="Profile" 
+              <img
+                src={profile.avatar_url}
+                alt="Profile"
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -224,38 +257,58 @@ function PersonalInfoTab({
         </div>
 
         {/* Info Section */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSave} className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name</label>
-            <div className="p-2 bg-gray-50 dark:bg-neutral-bg-dark rounded border border-gray-200 dark:border-neutral-border-dark text-gray-900 dark:text-neutral-text-primary-dark">
-              {profile?.first_name || '-'}
-            </div>
+            <input
+              type="text"
+              value={formData.first_name}
+              onChange={e => setFormData({ ...formData, first_name: e.target.value })}
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name</label>
-            <div className="p-2 bg-gray-50 dark:bg-neutral-bg-dark rounded border border-gray-200 dark:border-neutral-border-dark text-gray-900 dark:text-neutral-text-primary-dark">
-              {profile?.last_name || '-'}
-            </div>
+            <input
+              type="text"
+              value={formData.last_name}
+              onChange={e => setFormData({ ...formData, last_name: e.target.value })}
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
-            <div className="p-2 bg-gray-50 dark:bg-neutral-bg-dark rounded border border-gray-200 dark:border-neutral-border-dark text-gray-900 dark:text-neutral-text-primary-dark">
-              {profile?.email || '-'}
-            </div>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={e => setFormData({ ...formData, email: e.target.value })}
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone</label>
-            <div className="p-2 bg-gray-50 dark:bg-neutral-bg-dark rounded border border-gray-200 dark:border-neutral-border-dark text-gray-900 dark:text-neutral-text-primary-dark">
-              {profile?.phone || '-'}
-            </div>
+            <input
+              type="tel"
+              value={formData.phone}
+              onChange={e => setFormData({ ...formData, phone: e.target.value })}
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
+            />
           </div>
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Location</label>
-            <div className="p-2 bg-gray-50 dark:bg-neutral-bg-dark rounded border border-gray-200 dark:border-neutral-border-dark text-gray-900 dark:text-neutral-text-primary-dark">
-              {profile?.location || '-'}
-            </div>
+            <input
+              type="text"
+              value={formData.location}
+              onChange={e => setFormData({ ...formData, location: e.target.value })}
+              className="w-full border border-neutral-border-light dark:border-neutral-border-dark rounded-md p-2 bg-white dark:bg-neutral-bg-dark text-neutral-text-primary-light dark:text-neutral-text-primary-dark"
+            />
           </div>
-        </div>
+          <div className="md:col-span-2 flex justify-end">
+            <Button type="submit" disabled={saving}>
+              {saving ? 'Saving...' : 'Save Changes'}
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
@@ -271,7 +324,7 @@ function ExperienceTab({ experiences }: { experiences: WorkExperience[] }) {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this experience?')) return;
-    
+
     try {
       await deleteExperience(id);
       showSuccess('Experience deleted successfully');
@@ -369,7 +422,7 @@ function EducationTab({ education }: { education: Education[] }) {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this education?')) return;
-    
+
     try {
       await deleteEducation(id);
       showSuccess('Education deleted successfully');
@@ -461,7 +514,7 @@ function SkillsTab({ skills }: { skills: TechnicalSkill[] }) {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this skill?')) return;
-    
+
     try {
       await deleteSkill(id);
       showSuccess('Skill deleted successfully');
@@ -559,7 +612,7 @@ function AddExperienceModal({ onClose }: { onClose: () => void }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       await addExperience({
         ...formData,
@@ -706,7 +759,7 @@ function EditExperienceModal({ experience, onClose }: { experience: WorkExperien
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       await updateExperience(experience.id, {
         ...formData,
@@ -854,7 +907,7 @@ function AddEducationModal({ onClose }: { onClose: () => void }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       await addEducation(formData);
       showSuccess('Education added successfully');
@@ -1010,7 +1063,7 @@ function EditEducationModal({ education, onClose }: { education: Education; onCl
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       await updateEducation(education.id, formData);
       showSuccess('Education updated successfully');
@@ -1162,7 +1215,7 @@ function AddSkillModal({ onClose }: { onClose: () => void }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       await addSkill({
         ...formData,
@@ -1283,7 +1336,7 @@ function EditSkillModal({ skill, onClose }: { skill: TechnicalSkill; onClose: ()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       await updateSkill(skill.id, {
         ...formData,

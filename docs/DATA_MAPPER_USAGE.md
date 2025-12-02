@@ -16,7 +16,7 @@ The backend uses database-friendly naming conventions (snake_case, uppercase enu
   company_name: "Tech Corp",
   job_location: "Remote",
   status: "APPLIED",
-  applied_at: "2024-01-15T10:00:00Z",
+  applied_at: "2025-01-15T10:00:00Z",
   tech_stack: ["React", "TypeScript"]
 }
 ```
@@ -29,7 +29,7 @@ The backend uses database-friendly naming conventions (snake_case, uppercase enu
   company: "Tech Corp",
   location: "Remote",
   status: ApplicationStatus.APPLIED, // "Applied"
-  dateApplied: "2024-01-15T10:00:00Z",
+  dateApplied: "2025-01-15T10:00:00Z",
   skills: ["React", "TypeScript"]
 }
 ```

@@ -7,7 +7,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/Button';
 import { SparklesIcon, BoltIcon, HeartIcon, RocketIcon } from '@/components/ui/Icon';
 
-const Section: React.FC<{className?: string, children: React.ReactNode}> = ({className, children}) => (
+const Section: React.FC<{ className?: string, children: React.ReactNode }> = ({ className, children }) => (
     <section className={`py-16 ${className || ''}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {children}
@@ -37,7 +37,7 @@ const AboutPage: React.FC = () => {
     return (
         <div className="bg-neutral-bg-light dark:bg-neutral-bg-dark min-h-screen text-neutral-text-primary-light dark:text-neutral-text-primary-dark">
             <Header variant="landing" />
-            
+
             <main className="pt-24">
                 {/* Hero Section */}
                 <Section className="pt-20 pb-12 text-center">
@@ -57,7 +57,7 @@ const AboutPage: React.FC = () => {
                                 Our Story
                             </h2>
                             <p className="text-neutral-gray mb-4">
-                                In 2024, our founder was deep in a job search, applying to dozens of positions each week. Tracking everything became overwhelming—which companies had replied? Where was each application in the process? When were the follow-ups due?
+                                In 2025, our founder was deep in a job search, applying to dozens of positions each week. Tracking everything became overwhelming—which companies had replied? Where was each application in the process? When were the follow-ups due?
                             </p>
                             <p className="text-neutral-gray mb-4">
                                 After trying various spreadsheets and tools that were either too complex or too basic, we decided to build something better. Something that understands the modern job seeker&apos;s needs.
@@ -86,22 +86,22 @@ const AboutPage: React.FC = () => {
                     </div>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        <ValueCard 
+                        <ValueCard
                             icon={SparklesIcon}
                             title="Simplicity First"
                             description="Job hunting is hard enough. Your tools shouldn't be. We keep things simple and intuitive."
                         />
-                        <ValueCard 
+                        <ValueCard
                             icon={BoltIcon}
                             title="Speed Matters"
                             description="Every second counts in a competitive job market. We're fast, efficient, and built for productivity."
                         />
-                        <ValueCard 
+                        <ValueCard
                             icon={HeartIcon}
                             title="User-Centered"
                             description="We build for real job seekers, not corporate recruiters. Your success is our success."
                         />
-                        <ValueCard 
+                        <ValueCard
                             icon={RocketIcon}
                             title="Always Improving"
                             description="We ship new features every week based on your feedback. Your voice shapes our roadmap."
@@ -155,8 +155,8 @@ const AboutPage: React.FC = () => {
                         Start tracking your applications today and take control of your job search journey.
                     </p>
                     <Link href="/auth">
-                        <Button 
-                            size="large" 
+                        <Button
+                            size="large"
                             className="!bg-white !text-primary-blue hover:!bg-gray-100"
                         >
                             Get Started Free

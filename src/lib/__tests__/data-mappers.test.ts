@@ -21,7 +21,7 @@ describe('ApplicationMapper', () => {
         position_title: 'Senior Developer',
         company_name: 'Tech Corp',
         job_location: 'San Francisco, CA',
-        applied_at: '2024-01-15T10:00:00Z',
+        applied_at: '2025-01-15T10:00:00Z',
         status: 'APPLIED',
         cv_path: '/uploads/cv.pdf',
         cover_letter_path: '/uploads/cover.pdf',
@@ -60,7 +60,7 @@ describe('ApplicationMapper', () => {
         position_title: null,
         company_name: null,
         job_location: null,
-        applied_at: '2024-01-20T10:00:00Z',
+        applied_at: '2025-01-20T10:00:00Z',
         status: 'REJECTED',
         cv_path: null,
         cover_letter_path: null,
@@ -95,7 +95,7 @@ describe('ApplicationMapper', () => {
         location: 'Remote',
         url: 'https://example.com/backend-job',
         status: FrontendStatus.INTERVIEW,
-        dateApplied: '2024-02-01T10:00:00Z',
+        dateApplied: '2025-02-01T10:00:00Z',
         description: 'Backend development role',
         notes: 'Interesting startup',
         skills: ['Python', 'Django'],
@@ -111,7 +111,7 @@ describe('ApplicationMapper', () => {
       assert.strictEqual(backendData.jobLocation, 'Remote');
       assert.strictEqual(backendData.positionUrl, 'https://example.com/backend-job');
       assert.strictEqual(backendData.status, 'INTERVIEWING');
-      assert.strictEqual(backendData.appliedAt, '2024-02-01T10:00:00Z');
+      assert.strictEqual(backendData.appliedAt, '2025-02-01T10:00:00Z');
       assert.strictEqual(backendData.description, 'Backend development role');
       assert.strictEqual(backendData.notes, 'Interesting startup');
       assert.deepStrictEqual(backendData.techStack, ['Python', 'Django']);
@@ -371,7 +371,7 @@ describe('ApplicationMapper', () => {
       };
 
       const frontendApp = ApplicationMapper.toFrontend(backendApp);
-      
+
       // Empty arrays should be preserved as empty arrays, not undefined
       assert.deepStrictEqual(frontendApp.skills, []);
       assert.deepStrictEqual(frontendApp.softSkills, []);
@@ -379,7 +379,7 @@ describe('ApplicationMapper', () => {
     });
 
     it('should preserve ISO date format in toFrontend', () => {
-      const testDate = '2024-03-15T14:30:00.000Z';
+      const testDate = '2025-03-15T14:30:00.000Z';
       const backendApp: BackendApplication = {
         id: 111,
         user_id: 'user-111',
@@ -403,7 +403,7 @@ describe('ApplicationMapper', () => {
       };
 
       const frontendApp = ApplicationMapper.toFrontend(backendApp);
-      assert.strictEqual(frontendApp.dateApplied, '2024-03-15T14:30:00.000Z');
+      assert.strictEqual(frontendApp.dateApplied, '2025-03-15T14:30:00.000Z');
     });
 
     it('should handle undefined values in toBackend', () => {

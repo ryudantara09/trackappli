@@ -42,7 +42,7 @@ export const metadata: Metadata = {
       },
     ],
   },
-  manifest: "/favicon/site.webmanifest",
+
   openGraph: {
     type: "website",
     locale: "en_US",

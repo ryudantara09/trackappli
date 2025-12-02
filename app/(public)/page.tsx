@@ -14,6 +14,7 @@ import {
   SquareIcon,
   IntercomIcon,
   GrammarlyIcon,
+  ChevronDownIcon,
 } from "@/components/ui/Icon";
 
 // --- Components ---
@@ -116,6 +117,46 @@ const LogoMarquee = () => (
     </motion.div>
   </div>
 );
+
+const FAQItem = ({ question, answer, delay = 0 }: { question: string, answer: string, delay?: number }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: delay * 0.1 }}
+      className="border-b border-neutral-border-light dark:border-white/10 last:border-0"
+    >
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex w-full items-center justify-between py-6 text-left focus:outline-none group"
+      >
+        <span className="text-lg font-semibold text-neutral-text-primary-light dark:text-white group-hover:text-primary-blue transition-colors">
+          {question}
+        </span>
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+          className="ml-4 flex-shrink-0 text-neutral-gray dark:text-neutral-text-secondary-dark group-hover:text-primary-blue"
+        >
+          <ChevronDownIcon className="w-5 h-5" />
+        </motion.div>
+      </button>
+      <motion.div
+        initial={false}
+        animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="overflow-hidden"
+      >
+        <p className="pb-6 text-neutral-gray dark:text-neutral-text-secondary-dark leading-relaxed">
+          {answer}
+        </p>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const Hero3D = () => {
   const x = useMotionValue(0);
@@ -264,7 +305,7 @@ export default function HomePage() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-xl md:text-2xl text-neutral-gray dark:text-neutral-text-secondary-dark mb-10 max-w-2xl mx-auto leading-relaxed"
               >
-                The all-in-one workspace for ambitious candidates and career teams. Track, optimize, and succeed together.
+                The all-in-one workspace for ambitious candidates.<br />Track, optimize, and succeed.
               </motion.p>
 
               <motion.div
@@ -297,7 +338,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <LogoMarquee />
+        {/* <LogoMarquee /> */}
 
         {/* Features Bento Grid */}
         <section id="features" className="py-32 relative">
@@ -312,12 +353,12 @@ export default function HomePage() {
               <p className="text-lg text-neutral-gray dark:text-neutral-text-secondary-dark">Stop wrestling with spreadsheets. Trakappli brings your entire job search into one intelligent, collaborative workspace.</p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(250px,auto)]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-[minmax(250px,auto)]">
               {/* Large Feature */}
               <BentoCard
                 title="Visual Pipeline"
                 description="Drag-and-drop Kanban boards that give you instant clarity on where you stand with every application."
-                className="md:col-span-2 md:row-span-2 bg-gradient-to-br from-white to-neutral-bg-light dark:from-neutral-surface-dark dark:to-neutral-bg-dark"
+                className="bg-gradient-to-br from-white to-neutral-bg-light dark:from-neutral-surface-dark dark:to-neutral-bg-dark"
                 icon={<div className="w-12 h-12 rounded-xl bg-primary-blue/10 flex items-center justify-center"><SquareIcon className="w-6 h-6" /></div>}
                 delay={0}
               />
@@ -326,7 +367,7 @@ export default function HomePage() {
               <BentoCard
                 title="Browser Extension"
                 description="Save jobs from LinkedIn, Indeed & more with a single click. Automatically extracts job details."
-                className="md:row-span-2 bg-neutral-bg-dark text-white"
+                className="bg-neutral-bg-dark text-white"
                 icon={<div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center"><span className="text-2xl">🧩</span></div>}
                 delay={1}
               />
@@ -339,15 +380,9 @@ export default function HomePage() {
                 delay={2}
               />
               <BentoCard
-                title="Dark Mode"
-                description="Easy on the eyes for those late-night application sessions."
-                className="bg-white dark:bg-neutral-surface-dark"
-                delay={3}
-              />
-              <BentoCard
                 title="Analytics"
                 description="Track your conversion rates and optimize your strategy."
-                className="md:col-span-3 bg-gradient-to-r from-primary-blue/5 to-transparent"
+                className="bg-gradient-to-r from-primary-blue/5 to-transparent"
                 delay={4}
               />
             </div>
@@ -398,6 +433,49 @@ export default function HomePage() {
                 role="Career Coach"
                 avatar="https://avatar.vercel.sh/alexa"
                 delay={2}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="py-32 bg-neutral-bg-light dark:bg-neutral-bg-dark border-t border-neutral-border-light dark:border-neutral-border-dark">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-4xl font-bold mb-6 text-neutral-text-primary-light dark:text-white">
+                Frequently Asked <span className="text-gradient-primary">Questions</span>
+              </h2>
+              <p className="text-lg text-neutral-gray dark:text-neutral-text-secondary-dark">
+                Everything you need to know about Trakappli.
+              </p>
+            </motion.div>
+
+            <div className="bg-white dark:bg-neutral-surface-dark rounded-3xl p-8 shadow-sm border border-neutral-border-light dark:border-white/5">
+              <FAQItem
+                question="What makes Trakappli different from a spreadsheet?"
+                answer="Spreadsheets are static. Trakappli is an intelligent workspace that actively helps you land a job. We provide automated follow-up reminders, a visual Kanban board for clarity, and a browser extension to save jobs instantly from any site. Plus, our analytics help you understand what's working."
+                delay={0}
+              />
+              <FAQItem
+                question="How does the browser extension work?"
+                answer="Our browser extension sits quietly in your browser bar. When you find a job you like on LinkedIn, Indeed, or Glassdoor, just click the Trakappli icon. We'll automatically extract key details like the job title, company, and description, saving it to your dashboard in one click."
+                delay={1}
+              />
+              <FAQItem
+                question="Is Trakappli free to use?"
+                answer="Yes! Trakappli offers a generous free tier that includes unlimited job tracking, the browser extension, and basic analytics. We also offer a Pro plan for power users who want advanced AI features and priority support."
+                delay={2}
+              />
+
+              <FAQItem
+                question="Is my data private and secure?"
+                answer="Your privacy is our top priority. Your job search data is yours alone. We do not sell your data to recruiters or third parties. We use industry-standard encryption to keep your information safe and secure."
+                delay={4}
               />
             </div>
           </div>

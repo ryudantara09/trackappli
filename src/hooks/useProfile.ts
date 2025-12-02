@@ -32,7 +32,7 @@ export function useProfile() {
     try {
       setLoading(true);
       const response = await fetch('/api/profile');
-      
+
       if (!response.ok) {
         throw new Error('Failed to load profile');
       }
@@ -260,7 +260,7 @@ export function useProfile() {
     }
 
     const result = await response.json();
-    
+
     // Update profile with new avatar URL
     const updateResponse = await fetch('/api/profile', {
       method: 'PUT',
@@ -283,6 +283,22 @@ export function useProfile() {
     refresh: loadProfile,
     saveExtractedCV,
     uploadAvatar,
+    updateProfile: async (data: Partial<Profile>) => {
+      const response = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to update profile');
+      }
+
+      const result = await response.json();
+      setProfile(prev => prev ? { ...prev, profile: result.data } : null);
+      return result.data;
+    },
     // Work Experience
     addExperience,
     updateExperience,
