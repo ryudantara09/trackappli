@@ -18,6 +18,28 @@ import { NextResponse, type NextRequest } from 'next/server';
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Site-wide Password Protection
+  // Check if the user has the access cookie
+  // We use a new cookie name to invalidate previous sessions
+  const hasAccess = request.cookies.has('site_protection_token');
+  const isPasswordPage = pathname === '/password';
+  const isVerificationApi = pathname === '/api/verify-site-password';
+
+  // If no access cookie and not on password page or verification API, redirect to password page
+  if (!hasAccess && !isPasswordPage && !isVerificationApi) {
+    const url = new URL('/password', request.url);
+    // Add a redirect param so we can redirect back after password entry (optional, but good UX)
+    // url.searchParams.set('redirect', pathname); 
+    const response = NextResponse.redirect(url);
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    return response;
+  }
+
+  // If user has access and tries to go to password page, redirect to home
+  if (hasAccess && isPasswordPage) {
+    return NextResponse.redirect(new URL('/', request.url));
+  }
+
   // Create a response object that we can modify
   let response = NextResponse.next({
     request: {
@@ -130,8 +152,7 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder
-     * - api routes (handled by API middleware)
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|api).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
