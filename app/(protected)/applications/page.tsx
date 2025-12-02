@@ -20,11 +20,11 @@ const ITEMS_PER_PAGE = 20;
 
 const ApplicationsContent: React.FC = () => {
   const searchParams = useSearchParams();
-  
+
   // Search and filter state for API
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  
+
   const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus | 'all'>('all');
 
   // Fetch applications from API with filters
@@ -280,26 +280,26 @@ const ApplicationsContent: React.FC = () => {
 
         {/* Page Title Skeleton */}
         <div className="mb-6">
-          <div className="h-8 w-64 bg-gray-200 rounded animate-pulse mb-2"></div>
-          <div className="h-4 w-96 bg-gray-200 rounded animate-pulse"></div>
+          <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+          <div className="h-4 w-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
         </div>
 
         {/* Search Bar Skeleton */}
         <div className="mb-6">
-          <div className="h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+          <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
         </div>
 
         {/* List Skeleton */}
-        <div className="bg-white border border-neutral-border-light rounded-lg overflow-hidden">
+        <div className="bg-white dark:bg-neutral-surface-dark border border-neutral-border-light dark:border-neutral-border-dark rounded-lg overflow-hidden">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="px-6 py-4 border-b border-neutral-border-light">
+            <div key={i} className="px-6 py-4 border-b border-neutral-border-light dark:border-neutral-border-dark">
               <div className="flex items-center gap-4">
                 <div className="flex-1">
-                  <div className="h-5 w-48 bg-gray-200 rounded animate-pulse mb-2"></div>
-                  <div className="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="h-5 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+                  <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
                 </div>
-                <div className="h-6 w-24 bg-gray-200 rounded-full animate-pulse"></div>
-                <div className="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-6 w-24 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
               </div>
             </div>
           ))}
@@ -473,8 +473,8 @@ const ApplicationsPage: React.FC = () => {
   return (
     <Suspense fallback={
       <div className="px-4 sm:px-6 lg:px-8 py-8">
-        <div className="h-8 w-64 bg-gray-200 rounded animate-pulse mb-2"></div>
-        <div className="h-4 w-96 bg-gray-200 rounded animate-pulse"></div>
+        <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+        <div className="h-4 w-96 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
       </div>
     }>
       <ApplicationsContent />

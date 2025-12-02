@@ -5,7 +5,5 @@
  */
 
 export {
-  extractTextFromPDF,
-  extractTextFromPDFWithValidation,
-  isPDF,
-} from './extractor';
+  parsePDFWithLlamaParse
+} from './llamaparse';

@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireAuth } from '../../../../src/core/auth/middleware';
-import { extractTextFromPDFWithValidation } from '../../../../src/core/pdf/extractor';
-import { extractCV } from '../../../../src/core/ai/extractors/cv';
+import { parsePDFWithLlamaParse } from '../../../../src/core/pdf/llamaparse';
+import { extractCVFromText } from '../../../../src/core/ai/extractors/cv';
 import { createErrorResponse, ValidationError } from '../../../../src/utils/errors';
 import { MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from '../../../../src/config/constants';
+import { requireAuth } from '../../../../src/core/auth/middleware';
 
 /**
  * POST /api/profile/cv
- * Upload and extract CV data from PDF file
+ * Upload and extract CV data from PDF file using LlamaParse + AI
  * Returns extracted data for frontend to save
  */
 export async function POST(request: NextRequest) {
@@ -42,23 +42,27 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Extract text from PDF
+    // Parse PDF using LlamaParse
     let extractedText: string;
     try {
-      extractedText = await extractTextFromPDFWithValidation(buffer);
+      console.log(`Parsing PDF with LlamaParse (${(file.size / 1024).toFixed(2)}KB)...`);
+      extractedText = await parsePDFWithLlamaParse(buffer);
+      console.log(`Extracted ${extractedText.length} characters of text.`);
     } catch (error) {
+      console.error('LlamaParse Error:', error);
       throw new ValidationError(
-        `Failed to extract text from PDF: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Failed to parse PDF: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     }
 
     // Extract structured CV data using AI
-    const extractionResult = await extractCV(extractedText);
+    console.log('Sending parsed text to AI for structured extraction...');
+    const extractionResult = await extractCVFromText(extractedText);
 
     // Check if extraction was successful
     if (!extractionResult.success) {
       throw new ValidationError(
-        extractionResult.error || 'Failed to extract CV data. Please ensure the PDF contains readable text.'
+        extractionResult.error || 'Failed to extract CV data from text.'
       );
     }
 
@@ -66,9 +70,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: extractionResult.data,
-      message: 'CV data extracted successfully. Review and save the information.',
+      message: 'CV data extracted successfully using AI.',
     });
   } catch (error) {
+    console.error('CV Upload API Error:', error);
     return createErrorResponse(error);
   }
 }

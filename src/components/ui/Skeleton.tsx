@@ -33,7 +33,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 
   return (
     <div
-      className={`bg-neutral-border-light dark:bg-gray-800 ${variantClasses[variant]} ${animationClasses[animation]} ${className}`}
+      className={`bg-neutral-border-light dark:bg-gray-700 ${variantClasses[variant]} ${animationClasses[animation]} ${className}`}
       style={style}
       aria-hidden="true"
     />

@@ -3,7 +3,7 @@ import { Skeleton } from './Skeleton';
 
 export const ApplicationCardSkeleton: React.FC = () => {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-neutral-border-light p-6 animate-pulse">
+    <div className="bg-white dark:bg-neutral-surface-dark rounded-lg shadow-sm border border-neutral-border-light dark:border-neutral-border-dark p-6 animate-pulse">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
